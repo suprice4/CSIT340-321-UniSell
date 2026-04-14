@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const IconSearch = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2">
@@ -53,7 +52,6 @@ const IconLogout = () => (
   </svg>
 );
 
-// ─── Mock Data ────────────────────────────────────────────────────────────────
 
 const SUMMARY_CARDS = [
   { label: "Total Revenue",    value: "₱284,500", change: "+12.4%", icon: <IconRevenue />,   color: "#e85d04" },
@@ -96,7 +94,6 @@ const PLATFORM_BADGE = {
 const NAV_LINKS = ["Home", "Products", "Dashboard", "Orders", "Help & Support"];
 const ORDERS_PER_PAGE = 5;
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -108,7 +105,6 @@ export default function Dashboard() {
   const [currentPage, setCurrentPage]   = useState(1);
   const [greeting, setGreeting]         = useState("");
 
-  // Set greeting based on time of day
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12)      setGreeting("Good morning");
@@ -116,12 +112,10 @@ export default function Dashboard() {
     else                setGreeting("Good evening");
   }, []);
 
-  // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [filterPlatform, filterStatus, searchQuery]);
 
-  // Filter orders
   const filteredOrders = RECENT_ORDERS.filter((order) => {
     const matchesPlatform = filterPlatform === "All" || order.platform === filterPlatform;
     const matchesStatus   = filterStatus   === "All" || order.status   === filterStatus;
@@ -138,7 +132,6 @@ export default function Dashboard() {
     currentPage * ORDERS_PER_PAGE
   );
 
-  // ─── Styles ──────────────────────────────────────────────────────────────────
 
   const s = {
     page:       { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
@@ -186,12 +179,10 @@ export default function Dashboard() {
     footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
   };
 
-  // ─── Render ───────────────────────────────────────────────────────────────────
 
   return (
     <div style={s.page}>
 
-      {/* TOP NAVBAR */}
       <nav style={s.topNav}>
         <div style={s.logoArea}>
           <div style={s.logoCircle}>🛍</div>
@@ -204,30 +195,25 @@ export default function Dashboard() {
         <div style={s.topNavRight}>
           <button style={s.iconBtn}><IconCart />Cart</button>
           <button style={s.iconBtn}><IconAccount />Account</button>
-          {/* Logout → navigate back to /login */}
           <button style={s.logoutBtn} onClick={() => navigate("/login")}>
             <IconLogout /> Logout
           </button>
         </div>
       </nav>
 
-      {/* MAIN NAVBAR */}
       <nav style={s.mainNav}>
         {NAV_LINKS.map((link) => (
           <button key={link} style={s.navBtn(activeNav === link)} onClick={() => setActiveNav(link)}>{link}</button>
         ))}
       </nav>
 
-      {/* MAIN CONTENT */}
       <div style={s.main}>
 
-        {/* Greeting */}
         <div style={{ marginBottom: "28px" }}>
           <h2 style={{ fontSize: "22px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" }}>{greeting}, Admin 👋</h2>
           <p style={{ fontSize: "14px", color: "#777" }}>Here's what's happening across your platforms today.</p>
         </div>
 
-        {/* ── Sales Overview ── */}
         <p style={s.sectionTitle}>Sales Overview</p>
         <div style={s.cardsGrid}>
           {SUMMARY_CARDS.map((card) => (
@@ -242,7 +228,6 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* ── Platform Breakdown ── */}
         <p style={s.sectionTitle}>Platform Breakdown</p>
         <div style={s.platGrid}>
           {PLATFORM_DATA.map((p) => (
@@ -259,7 +244,6 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* ── Recent Orders ── */}
         <div style={s.tableCard}>
           <div style={s.tableTop}>
             <p style={{ ...s.sectionTitle, marginBottom: 0 }}>Recent Orders</p>
@@ -309,7 +293,6 @@ export default function Dashboard() {
             </tbody>
           </table>
 
-          {/* Pagination */}
           <div style={s.pagination}>
             <span>
               Showing {filteredOrders.length === 0 ? 0 : (currentPage - 1) * ORDERS_PER_PAGE + 1}–{Math.min(currentPage * ORDERS_PER_PAGE, filteredOrders.length)} of {filteredOrders.length} orders
@@ -323,7 +306,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* FOOTER */}
       <footer style={s.footer}>
         <div style={s.footerBottom}>
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
