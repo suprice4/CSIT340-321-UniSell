@@ -77,7 +77,6 @@ export default function Login() {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [formData]);
 
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -96,26 +95,35 @@ export default function Login() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    if (rememberMe) {
-      localStorage.setItem("rememberedUser", formData.emailOrUsername);
-    } else {
-      localStorage.removeItem("rememberedUser");
-    }
-    // Simulate loading then navigate to dashboard
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate("/dashboard");
-    }, 1000);
-  };
+  e.preventDefault();
 
-  const navLinks = ["Home", "Products", "Dashboard", "Orders"];
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+
+  if (rememberMe) {
+    localStorage.setItem("rememberedUser", formData.emailOrUsername);
+  } else {
+    localStorage.removeItem("rememberedUser");
+  }
+
+  localStorage.setItem("isLoggedIn", "true");
+
+  setIsLoading(true);
+  setTimeout(() => {
+    setIsLoading(false);
+    navigate("/dashboard");
+  }, 1000);
+};
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Orders", path: "/orders" },
+  ];
 
   const st = {
     page: { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
@@ -172,7 +180,16 @@ export default function Login() {
 
       <nav style={st.mainNav}>
         {navLinks.map((link) => (
-          <button key={link} style={st.navBtn(activeNav === link)} onClick={() => setActiveNav(link)}>{link}</button>
+          <button
+            key={link.name}
+            style={st.navBtn(activeNav === link.name)}
+            onClick={() => {
+              setActiveNav(link.name);
+              navigate(link.path);
+            }}
+          >
+            {link.name}
+          </button>
         ))}
       </nav>
 
@@ -222,7 +239,6 @@ export default function Login() {
 
             <p style={st.bottomLink}>
               Don't have an account?{" "}
-              {/* navigate() to /register */}
               <button type="button" style={st.anchor} onClick={() => navigate("/register")}>Sign up</button>
             </p>
           </form>

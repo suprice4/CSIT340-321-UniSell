@@ -124,6 +124,13 @@ export default function Dashboard() {
     setCurrentPage(1);
   }, [filterPlatform, filterStatus, searchQuery]);
 
+  useEffect(() => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  if (!isLoggedIn) {
+    navigate("/login");
+  }
+}, []);
+
   const filteredOrders = RECENT_ORDERS.filter((order) => {
     const matchesPlatform = filterPlatform === "All" || order.platform === filterPlatform;
     const matchesStatus   = filterStatus   === "All" || order.status   === filterStatus;

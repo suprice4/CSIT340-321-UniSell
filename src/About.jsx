@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const IconAccount = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -36,7 +35,6 @@ const IconUsers = () => (
   </svg>
 );
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
 
 const NAV_LINKS = [
   { label: "Home",       route: "/"          },
@@ -67,7 +65,6 @@ const STATS = [
   { value: "₱284K+", label: "Revenue Tracked" },
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function About() {
   const navigate = useNavigate();
@@ -94,7 +91,6 @@ export default function About() {
   const st = {
     page:        { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
 
-    // ── Top Navbar — identical to LandingPage ──
     topNav:      { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "12px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: scrolled ? "0 2px 12px rgba(0,0,0,0.07)" : "none", transition: "box-shadow 0.2s" },
     logoArea:    { display: "flex", alignItems: "center", gap: "10px" },
     logoCircle:  { width: "44px", height: "44px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", color: "white", flexShrink: 0 },
@@ -105,7 +101,6 @@ export default function About() {
     iconBtn:     { display: "flex", flexDirection: "column", alignItems: "center", fontSize: "11px", color: "#555", gap: "2px", cursor: "pointer", background: "none", border: "none" },
     loginBtn:    { background: "#e85d04", color: "white", borderRadius: "6px", padding: "8px 18px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: "none" },
 
-    // ── Main Navbar — identical to LandingPage ──
     mainNav:     { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "0 40px", display: "flex", gap: "24px" },
     navBtn:      (active) => ({
       display: "block", padding: "14px 0", fontSize: "14px", fontWeight: "500",
@@ -115,53 +110,45 @@ export default function About() {
       whiteSpace: "nowrap",
     }),
 
-    // ── Hero ──
     hero:        { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "60px 60px", color: "white" },
     heroTag:     { display: "inline-block", background: "rgba(255,255,255,0.2)", color: "white", fontSize: "12px", fontWeight: "600", padding: "5px 14px", borderRadius: "20px", marginBottom: "16px", letterSpacing: "1px", textTransform: "uppercase" },
     heroTitle:   { fontSize: "40px", fontWeight: "800", marginBottom: "12px" },
     heroSub:     { fontSize: "16px", opacity: 0.88, maxWidth: "520px", lineHeight: "1.7" },
 
-    // ── Stats Bar ──
     statsBar:    { background: "#1a1a2e", padding: "28px 60px", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" },
     statItem:    { textAlign: "center" },
     statVal:     { fontSize: "26px", fontWeight: "800", color: "#e85d04" },
     statLabel:   { fontSize: "13px", color: "#aaa", marginTop: "4px" },
 
-    // ── Sections ──
     section:     { padding: "60px 60px" },
     sectionAlt:  { padding: "60px 60px", background: "#fff" },
     sectionTag:  { fontSize: "12px", fontWeight: "700", color: "#e85d04", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" },
     sectionTitle:{ fontSize: "28px", fontWeight: "800", color: "#1a1a1a", marginBottom: "12px" },
     sectionSub:  { fontSize: "15px", color: "#777", maxWidth: "520px", lineHeight: "1.7", marginBottom: "40px" },
 
-    // ── Values Grid ──
     valGrid:     { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px" },
     valCard:     { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px", borderTop: "3px solid #e85d04" },
     valIcon:     { marginBottom: "14px" },
     valTitle:    { fontSize: "16px", fontWeight: "700", color: "#1a1a1a", marginBottom: "8px" },
     valDesc:     { fontSize: "14px", color: "#666", lineHeight: "1.7" },
 
-    // ── Who We Are ──
     whoRow:      { display: "flex", gap: "40px", flexWrap: "wrap", alignItems: "center" },
     whoLeft:     { flex: 1, minWidth: "260px" },
     whoRight:    { flex: 1, minWidth: "260px", background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px" },
     whoText:     { fontSize: "15px", color: "#555", lineHeight: "1.8", marginBottom: "16px" },
 
-    // ── Team ──
     teamGrid:    { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" },
     teamCard:    { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "24px", textAlign: "center" },
     teamAvatar:  (color) => ({ width: "60px", height: "60px", borderRadius: "50%", background: color + "18", color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "700", margin: "0 auto 14px" }),
     teamName:    { fontSize: "15px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" },
     teamRole:    { fontSize: "13px", color: "#888" },
 
-    // ── CTA ──
     cta:         { background: "linear-gradient(135deg, #e85d04, #bf3b00)", padding: "56px 60px", textAlign: "center", color: "white" },
     ctaTitle:    { fontSize: "28px", fontWeight: "800", marginBottom: "10px" },
     ctaSub:      { fontSize: "15px", opacity: 0.88, marginBottom: "24px" },
     ctaBtn:      { background: "white", color: "#e85d04", border: "none", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
     ctaBtnSec:   { background: "transparent", color: "white", border: "2px solid white", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "600", cursor: "pointer", marginLeft: "12px" },
 
-    // ── Footer ──
     footer:      { background: "#0f1923", color: "#ccc", padding: "40px 60px 20px" },
     footerGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
     footerBottom:{ borderTop: "1px solid #1e2d3d", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
@@ -170,7 +157,6 @@ export default function About() {
   return (
     <div style={st.page}>
 
-      {/* ── TOP NAVBAR — same as LandingPage ── */}
       <nav style={st.topNav}>
         <div style={st.logoArea}>
           <div style={st.logoCircle}>🛍</div>
@@ -186,7 +172,6 @@ export default function About() {
         </div>
       </nav>
 
-      {/* ── MAIN NAVBAR — same as LandingPage ── */}
       <nav style={st.mainNav}>
         {NAV_LINKS.map((link) => (
           <button
@@ -199,7 +184,6 @@ export default function About() {
         ))}
       </nav>
 
-      {/* ── HERO ── */}
       <section style={st.hero}>
         <span style={st.heroTag}>About Us</span>
         <h1 style={st.heroTitle}>Your Centralized E-Commerce Solution</h1>
@@ -209,7 +193,6 @@ export default function About() {
         </p>
       </section>
 
-      {/* ── STATS BAR ── */}
       <div style={st.statsBar}>
         {STATS.map((s) => (
           <div key={s.label} style={st.statItem}>
@@ -219,7 +202,6 @@ export default function About() {
         ))}
       </div>
 
-      {/* ── WHO WE ARE ── */}
       <section style={st.sectionAlt}>
         <p style={st.sectionTag}>Who We Are</p>
         <div style={st.whoRow}>
@@ -257,7 +239,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── MISSION, VISION, VALUES ── */}
       <section style={st.section}>
         <p style={st.sectionTag}>What Drives Us</p>
         <h2 style={st.sectionTitle}>Our mission, vision, and values</h2>
@@ -273,7 +254,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── TEAM ── */}
       <section style={st.sectionAlt}>
         <p style={st.sectionTag}>The Team</p>
         <h2 style={st.sectionTitle}>Meet the people behind the platform</h2>
@@ -289,7 +269,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── CTA ── */}
       <section style={st.cta}>
         <h2 style={st.ctaTitle}>Ready to simplify your selling?</h2>
         <p style={st.ctaSub}>Join hundreds of sellers managing their stores smarter with our platform.</p>
@@ -297,7 +276,6 @@ export default function About() {
         <button style={st.ctaBtnSec} onClick={() => navigate("/login")}>Log In</button>
       </section>
 
-      {/* ── FOOTER ── */}
       <footer style={st.footer}>
         <div style={st.footerGrid}>
           <div>

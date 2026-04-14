@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const IconAccount = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -35,7 +34,6 @@ const IconClock = () => (
   </svg>
 );
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
 
 const NAV_LINKS = [
   { label: "Home",       route: "/"          },
@@ -60,7 +58,6 @@ const FAQS = [
   { q: "How long does it take to get a response?",  a: "We aim to respond to all messages within 24 hours on business days." },
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Contact() {
   const navigate = useNavigate();
@@ -83,7 +80,6 @@ export default function Contact() {
     window.scrollTo(0, 0);
   }, []);
 
-  // Clear errors when user types
   useEffect(() => {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [form]);
@@ -120,7 +116,6 @@ export default function Contact() {
   const st = {
     page:        { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
 
-    // ── Top Navbar — identical to LandingPage ──
     topNav:      { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "12px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: scrolled ? "0 2px 12px rgba(0,0,0,0.07)" : "none", transition: "box-shadow 0.2s" },
     logoArea:    { display: "flex", alignItems: "center", gap: "10px" },
     logoCircle:  { width: "44px", height: "44px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", color: "white", flexShrink: 0 },
@@ -131,7 +126,6 @@ export default function Contact() {
     iconBtn:     { display: "flex", flexDirection: "column", alignItems: "center", fontSize: "11px", color: "#555", gap: "2px", cursor: "pointer", background: "none", border: "none" },
     loginBtn:    { background: "#e85d04", color: "white", borderRadius: "6px", padding: "8px 18px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: "none" },
 
-    // ── Main Navbar — identical to LandingPage ──
     mainNav:     { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "0 40px", display: "flex", gap: "24px" },
     navBtn:      (active) => ({
       display: "block", padding: "14px 0", fontSize: "14px", fontWeight: "500",
@@ -141,16 +135,14 @@ export default function Contact() {
       whiteSpace: "nowrap",
     }),
 
-    // ── Hero ──
     hero:        { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "60px 60px", color: "white" },
     heroTag:     { display: "inline-block", background: "rgba(255,255,255,0.2)", color: "white", fontSize: "12px", fontWeight: "600", padding: "5px 14px", borderRadius: "20px", marginBottom: "16px", letterSpacing: "1px", textTransform: "uppercase" },
     heroTitle:   { fontSize: "40px", fontWeight: "800", marginBottom: "12px" },
     heroSub:     { fontSize: "16px", opacity: 0.88, maxWidth: "520px", lineHeight: "1.7" },
 
-    // ── Main Content ──
+
     content:     { padding: "60px", display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "40px", maxWidth: "1100px", margin: "0 auto" },
 
-    // ── Contact Info ──
     infoCard:    { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px" },
     infoTitle:   { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", marginBottom: "20px" },
     infoRow:     { display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: "20px" },
@@ -158,7 +150,6 @@ export default function Contact() {
     infoLabel:   { fontSize: "12px", color: "#aaa", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" },
     infoValue:   { fontSize: "14px", color: "#333", fontWeight: "500" },
 
-    // ── Form ──
     formCard:    { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px" },
     formTitle:   { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", marginBottom: "20px" },
     formGroup:   { marginBottom: "14px" },
@@ -169,7 +160,6 @@ export default function Contact() {
     submitBtn:   { width: "100%", background: "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "13px", fontSize: "15px", fontWeight: "700", cursor: "pointer", marginTop: "4px" },
     successBox:  { background: "#f0fff4", border: "1px solid #68d391", borderRadius: "8px", padding: "20px", textAlign: "center" },
 
-    // ── FAQ ──
     faqSection:  { padding: "0 60px 60px" },
     faqTag:      { fontSize: "12px", fontWeight: "700", color: "#e85d04", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" },
     faqTitle:    { fontSize: "26px", fontWeight: "800", color: "#1a1a1a", marginBottom: "8px" },
@@ -178,7 +168,7 @@ export default function Contact() {
     faqQ:        (open) => ({ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", cursor: "pointer", background: open ? "#fff5f0" : "#fff", fontSize: "14px", fontWeight: "600", color: open ? "#e85d04" : "#222", border: "none", width: "100%", textAlign: "left" }),
     faqA:        { padding: "0 20px 16px", fontSize: "14px", color: "#666", lineHeight: "1.7" },
 
-    // ── Footer ──
+  
     footer:      { background: "#0f1923", color: "#ccc", padding: "40px 60px 20px" },
     footerGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
     footerBottom:{ borderTop: "1px solid #1e2d3d", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
@@ -187,7 +177,6 @@ export default function Contact() {
   return (
     <div style={st.page}>
 
-      {/* ── TOP NAVBAR — same as LandingPage ── */}
       <nav style={st.topNav}>
         <div style={st.logoArea}>
           <div style={st.logoCircle}>🛍</div>
@@ -203,7 +192,6 @@ export default function Contact() {
         </div>
       </nav>
 
-      {/* ── MAIN NAVBAR — same as LandingPage ── */}
       <nav style={st.mainNav}>
         {NAV_LINKS.map((link) => (
           <button
@@ -216,7 +204,6 @@ export default function Contact() {
         ))}
       </nav>
 
-      {/* ── HERO ── */}
       <section style={st.hero}>
         <span style={st.heroTag}>Contact Us</span>
         <h1 style={st.heroTitle}>We'd Love to Hear From You</h1>
@@ -226,10 +213,8 @@ export default function Contact() {
         </p>
       </section>
 
-      {/* ── CONTACT INFO + FORM ── */}
       <div style={st.content}>
 
-        {/* Contact Info */}
         <div style={st.infoCard}>
           <p style={st.infoTitle}>Contact Information</p>
           {CONTACT_INFO.map((info) => (
@@ -242,7 +227,6 @@ export default function Contact() {
             </div>
           ))}
 
-          {/* Divider */}
           <div style={{ borderTop: "1px solid #f0f0f0", margin: "20px 0" }} />
 
           {/* Social links */}
@@ -254,7 +238,6 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Contact Form */}
         <div style={st.formCard}>
           <p style={st.formTitle}>Send Us a Message</p>
 
@@ -271,28 +254,24 @@ export default function Contact() {
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
-              {/* Name */}
               <div style={st.formGroup}>
                 <label style={st.label}>Full Name</label>
                 <input name="name" type="text" placeholder="Enter your name" value={form.name} onChange={handleChange} style={st.input(!!errors.name)} />
                 {errors.name && <p style={st.errorText}>{errors.name}</p>}
               </div>
 
-              {/* Email */}
               <div style={st.formGroup}>
                 <label style={st.label}>Email Address</label>
                 <input name="email" type="email" placeholder="Enter your email" value={form.email} onChange={handleChange} style={st.input(!!errors.email)} />
                 {errors.email && <p style={st.errorText}>{errors.email}</p>}
               </div>
 
-              {/* Subject */}
               <div style={st.formGroup}>
                 <label style={st.label}>Subject</label>
                 <input name="subject" type="text" placeholder="What is this about?" value={form.subject} onChange={handleChange} style={st.input(!!errors.subject)} />
                 {errors.subject && <p style={st.errorText}>{errors.subject}</p>}
               </div>
 
-              {/* Message */}
               <div style={st.formGroup}>
                 <label style={st.label}>Message</label>
                 <textarea name="message" placeholder="Write your message here..." value={form.message} onChange={handleChange} style={st.textarea(!!errors.message)} />
@@ -305,7 +284,6 @@ export default function Contact() {
         </div>
       </div>
 
-      {/* ── FAQ ── */}
       <div style={st.faqSection}>
         <p style={st.faqTag}>FAQ</p>
         <h2 style={st.faqTitle}>Frequently Asked Questions</h2>
@@ -321,7 +299,6 @@ export default function Contact() {
         ))}
       </div>
 
-      {/* ── FOOTER ── */}
       <footer style={st.footer}>
         <div style={st.footerGrid}>
           <div>

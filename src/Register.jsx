@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const IconEmail = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8">
@@ -62,7 +61,6 @@ const IconSearch = () => (
   </svg>
 );
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Register() {
   const navigate = useNavigate();
@@ -75,12 +73,10 @@ export default function Register() {
   const [activeNav, setActiveNav] = useState("Home");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Clear errors when user types
   useEffect(() => {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [formData]);
 
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -110,7 +106,7 @@ export default function Register() {
       setErrors(validationErrors);
       return;
     }
-    // Simulate loading then navigate to login
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -118,7 +114,12 @@ export default function Register() {
     }, 1000);
   };
 
-  const navLinks = ["Home", "Products", "Dashboard", "Orders"];
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "Dashboard", path: "/dashboard" },
+    { name: "Orders", path: "/orders" },
+  ];
 
   const st = {
     page: { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
@@ -156,7 +157,6 @@ export default function Register() {
   return (
     <div style={st.page}>
 
-      {/* TOP NAVBAR */}
       <nav style={st.topNav}>
         <div style={st.logoArea}>
           <div style={st.logoCircle}>🛍</div>
@@ -172,21 +172,27 @@ export default function Register() {
         </div>
       </nav>
 
-      {/* MAIN NAVBAR */}
       <nav style={st.mainNav}>
         {navLinks.map((link) => (
-          <button key={link} style={st.navBtn(activeNav === link)} onClick={() => setActiveNav(link)}>{link}</button>
+          <button
+            key={link.name}
+            style={st.navBtn(activeNav === link.name)}
+            onClick={() => {
+              setActiveNav(link.name);
+              navigate(link.path);
+            }}
+          >
+            {link.name}
+          </button>
         ))}
       </nav>
 
-      {/* HERO */}
       <div style={st.hero}>
         <h2 style={{ fontSize: "28px", fontWeight: "700", marginBottom: "6px" }}>Special Offers</h2>
         <p style={{ fontSize: "14px", opacity: 0.9 }}>Up to 50% off on selected items</p>
         <button style={st.heroBtn}>Shop Now</button>
       </div>
 
-      {/* REGISTER FORM */}
       <div style={st.section}>
         <div style={st.card}>
           <div style={st.cardLogo}>🛍</div>
@@ -249,7 +255,6 @@ export default function Register() {
         </div>
       </div>
 
-      {/* FOOTER */}
       <footer style={st.footer}>
         <div style={st.footerGrid}>
           <div>

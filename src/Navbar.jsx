@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const IconSearch = () => (
@@ -26,6 +26,18 @@ const IconLogout = () => (
 export default function Navbar({ activePage }) {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    navigate("/login");
+  };
 
   const NAV_LINKS = [
     { label: "Home", route: "/" },
@@ -45,13 +57,7 @@ export default function Navbar({ activePage }) {
       alignItems: "center",
       justifyContent: "space-between"
     },
-
-    logoArea: {
-      display: "flex",
-      alignItems: "center",
-      gap: "10px"
-    },
-
+    logoArea: { display: "flex", alignItems: "center", gap: "10px" },
     logoCircle: {
       width: "44px",
       height: "44px",
@@ -63,15 +69,12 @@ export default function Navbar({ activePage }) {
       fontSize: "20px",
       color: "#fff"
     },
-
     logoText: {
       fontSize: "12px",
       fontWeight: "700",
       color: "#e85d04",
-      lineHeight: "1.3",
-      textTransform: "uppercase"
+      lineHeight: "1.3"
     },
-
     searchBar: {
       flex: 1,
       maxWidth: "480px",
@@ -84,67 +87,44 @@ export default function Navbar({ activePage }) {
       padding: "8px 14px",
       gap: "8px"
     },
-
     searchInput: {
       border: "none",
       background: "transparent",
       outline: "none",
-      width: "100%",
-      fontSize: "14px",
-      color: "#444"
+      width: "100%"
     },
-
     topNavRight: {
       display: "flex",
       gap: "16px",
       alignItems: "center"
     },
-
-    iconBtn: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      fontSize: "11px",
-      color: "#555",
-      gap: "2px",
-      cursor: "pointer",
-      background: "none",
-      border: "none"
-    },
-
-    logoutBtn: {
-      background: "#e85d04",
-      color: "white",
-      borderRadius: "6px",
-      padding: "8px 18px",
-      fontSize: "13px",
-      fontWeight: "600",
-      cursor: "pointer",
+    btn: {
       border: "none",
-      display: "flex",
-      alignItems: "center",
-      gap: "6px"
+      background: "none",
+      cursor: "pointer"
     },
-
+    logoutBtn: {
+      border: "1px solid #e85d04",
+      color: "#e85d04",
+      padding: "6px 14px",
+      borderRadius: "6px",
+      background: "none",
+      cursor: "pointer"
+    },
     mainNav: {
       background: "#fff",
       borderBottom: "1px solid #e0e0e0",
       padding: "0 40px",
       display: "flex",
-      gap: "24px"
+      gap: "32px"
     },
-
     navBtn: (active) => ({
-      display: "block",
       padding: "14px 0",
-      fontSize: "14px",
-      fontWeight: "500",
-      color: active ? "#e85d04" : "#333",
-      cursor: "pointer",
       background: "none",
       border: "none",
-      borderBottom: active ? "2px solid #e85d04" : "2px solid transparent",
-      whiteSpace: "nowrap"
+      cursor: "pointer",
+      color: active ? "#e85d04" : "#333",
+      borderBottom: active ? "2px solid #e85d04" : "2px solid transparent"
     })
   };
 
@@ -153,9 +133,7 @@ export default function Navbar({ activePage }) {
       <nav style={s.topNav}>
         <div style={s.logoArea}>
           <div style={s.logoCircle}>🛍</div>
-          <div style={s.logoText}>
-            E-Commerce<br />Market Place
-          </div>
+          <div style={s.logoText}>E-Commerce<br />Market Place</div>
         </div>
 
         <div style={s.searchBar}>
@@ -163,22 +141,25 @@ export default function Navbar({ activePage }) {
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search for products..."
+            placeholder="Search..."
             style={s.searchInput}
           />
         </div>
 
         <div style={s.topNavRight}>
-
-          <button style={s.iconBtn}>
-            <IconAccount />
-            Account
+          <button style={s.btn}>
+            <IconAccount /> Account
           </button>
 
-          <button style={s.logoutBtn} onClick={() => navigate("/login")}>
-            <IconLogout />
-            Logout
-          </button>
+          {isLoggedIn ? (
+            <button style={s.logoutBtn} onClick={handleLogout}>
+              <IconLogout /> Logout
+            </button>
+          ) : (
+            <button style={s.logoutBtn} onClick={() => navigate("/login")}>
+              Login
+            </button>
+          )}
         </div>
       </nav>
 
