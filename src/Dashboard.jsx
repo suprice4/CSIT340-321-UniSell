@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 
 
 const IconSearch = () => (
@@ -91,7 +92,14 @@ const PLATFORM_BADGE = {
   "TikTok Shop": { bg: "#f3f3f3", color: "#010101" },
 };
 
-const NAV_LINKS = ["Home", "Products", "Dashboard", "Orders"];
+const NAV_LINKS = [
+  { label: "Home", route: "/" },
+  { label: "Products", route: null },
+  { label: "Dashboard", route: "/dashboard" },
+  { label: "Orders", route: null },
+  { label: "About Us", route: "/about" },
+  { label: "Contact Us", route: "/contact" },
+];
 const ORDERS_PER_PAGE = 5;
 
 
@@ -183,28 +191,7 @@ export default function Dashboard() {
   return (
     <div style={s.page}>
 
-      <nav style={s.topNav}>
-        <div style={s.logoArea}>
-          <div style={s.logoCircle}>🛍</div>
-          <div style={s.logoText}>E-Commerce<br />Market Place</div>
-        </div>
-        <div style={s.searchBar}>
-          <IconSearch />
-          <input type="text" placeholder="Search for products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={s.searchInput} />
-        </div>
-        <div style={s.topNavRight}>
-          <button style={s.iconBtn}><IconAccount />Account</button>
-          <button style={s.logoutBtn} onClick={() => navigate("/login")}>
-            <IconLogout /> Logout
-          </button>
-        </div>
-      </nav>
-
-      <nav style={s.mainNav}>
-        {NAV_LINKS.map((link) => (
-          <button key={link} style={s.navBtn(activeNav === link)} onClick={() => setActiveNav(link)}>{link}</button>
-        ))}
-      </nav>
+      <Navbar activePage="/dashboard" />
 
       <div style={s.main}>
 

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const IconEmail = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8">
@@ -55,8 +54,6 @@ const IconSearch = () => (
   </svg>
 );
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function Login() {
   const navigate = useNavigate();
 
@@ -68,7 +65,6 @@ export default function Login() {
   const [activeNav, setActiveNav] = useState("Home");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Pre-fill from localStorage if remember me was used before
   useEffect(() => {
     const savedUser = localStorage.getItem("rememberedUser");
     if (savedUser) {
@@ -77,7 +73,6 @@ export default function Login() {
     }
   }, []);
 
-  // Clear errors when user types
   useEffect(() => {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [formData]);
@@ -160,7 +155,6 @@ export default function Login() {
   return (
     <div style={st.page}>
 
-      {/* TOP NAVBAR */}
       <nav style={st.topNav}>
         <div style={st.logoArea}>
           <div style={st.logoCircle}>🛍</div>
@@ -176,21 +170,18 @@ export default function Login() {
         </div>
       </nav>
 
-      {/* MAIN NAVBAR */}
       <nav style={st.mainNav}>
         {navLinks.map((link) => (
           <button key={link} style={st.navBtn(activeNav === link)} onClick={() => setActiveNav(link)}>{link}</button>
         ))}
       </nav>
 
-      {/* HERO */}
       <div style={st.hero}>
         <h2 style={{ fontSize: "28px", fontWeight: "700", marginBottom: "6px" }}>Special Offers</h2>
         <p style={{ fontSize: "14px", opacity: 0.9 }}>Up to 50% off on selected items</p>
         <button style={st.heroBtn}>Shop Now</button>
       </div>
 
-      {/* LOGIN FORM */}
       <div style={st.section}>
         <div style={st.card}>
           <div style={st.cardLogo}>🛍</div>
@@ -238,7 +229,6 @@ export default function Login() {
         </div>
       </div>
 
-      {/* FOOTER */}
       <footer style={st.footer}>
         <div style={st.footerGrid}>
           <div>
