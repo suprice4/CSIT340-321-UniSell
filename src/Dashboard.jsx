@@ -91,7 +91,7 @@ const PLATFORM_BADGE = {
   "TikTok Shop": { bg: "#f3f3f3", color: "#010101" },
 };
 
-const NAV_LINKS = ["Home", "Products", "Dashboard", "Orders", "Help & Support"];
+const NAV_LINKS = ["Home", "Products", "Dashboard", "Orders"];
 const ORDERS_PER_PAGE = 5;
 
 
@@ -193,7 +193,6 @@ export default function Dashboard() {
           <input type="text" placeholder="Search for products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={s.searchInput} />
         </div>
         <div style={s.topNavRight}>
-          <button style={s.iconBtn}><IconCart />Cart</button>
           <button style={s.iconBtn}><IconAccount />Account</button>
           <button style={s.logoutBtn} onClick={() => navigate("/login")}>
             <IconLogout /> Logout
