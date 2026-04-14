@@ -118,7 +118,7 @@ export default function Register() {
     }, 1000);
   };
 
-  const navLinks = ["Home", "Products", "Dashboard", "Orders", "Help & Support"];
+  const navLinks = ["Home", "Products", "Dashboard", "Orders"];
 
   const st = {
     page: { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },

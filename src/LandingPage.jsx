@@ -106,7 +106,7 @@ const STATS = [
   { value: "₱284K+",  label: "Revenue Tracked" },
 ];
 
-const NAV_LINKS = ["Home", "Products", "Dashboard", "Orders", "Help & Support"];
+const NAV_LINKS = ["Home", "Products", "Dashboard", "Orders"];
 
 
 export default function LandingPage() {
@@ -215,7 +215,6 @@ export default function LandingPage() {
           <input type="text" placeholder="Search for products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={st.searchInput} />
         </div>
         <div style={st.topNavRight}>
-          <button style={st.iconBtn}><IconCart />Cart</button>
           <button style={st.iconBtn}><IconAccount />Account</button>
           <button style={{ ...st.iconBtn, background: "#e85d04", color: "white", borderRadius: "6px", padding: "6px 14px", fontSize: "13px", fontWeight: "600", flexDirection: "row", gap: "0" }} onClick={() => navigate("/login")}>
             Login
