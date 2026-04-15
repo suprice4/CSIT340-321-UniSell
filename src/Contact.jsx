@@ -1,17 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 
-
-const IconAccount = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-  </svg>
-);
-const IconSearch = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-  </svg>
-);
 const IconPin = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e85d04" strokeWidth="1.8">
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
@@ -34,16 +24,6 @@ const IconClock = () => (
   </svg>
 );
 
-
-const NAV_LINKS = [
-  { label: "Home",       route: "/"          },
-  { label: "Products",   route: null         },
-  { label: "Dashboard",  route: "/dashboard" },
-  { label: "Orders",     route: null         },
-  { label: "About Us",   route: "/about"     },
-  { label: "Contact Us", route: "/contact"   },
-];
-
 const CONTACT_INFO = [
   { icon: <IconPin />,   label: "Address",       value: "123 Commerce Street, New York, NY 10001" },
   { icon: <IconPhone />, label: "Phone",          value: "+1 (555) 123-4567" },
@@ -52,29 +32,19 @@ const CONTACT_INFO = [
 ];
 
 const FAQS = [
-  { q: "How do I connect my Shopee store?",         a: "After logging in, go to the Dashboard and click 'Connect Platform'. Follow the steps to link your Shopee account." },
-  { q: "Is the platform free to use?",              a: "Yes! All features are completely free for registered sellers. No hidden fees or subscriptions." },
-  { q: "Which platforms are supported?",            a: "We currently support Shopee, Lazada, and TikTok Shop, with more platforms coming soon." },
-  { q: "How long does it take to get a response?",  a: "We aim to respond to all messages within 24 hours on business days." },
+  { q: "How do I connect my Shopee store?",        a: "After logging in, go to the Dashboard and click 'Connect Platform'. Follow the steps to link your Shopee account." },
+  { q: "Is the platform free to use?",             a: "Yes! All features are completely free for registered sellers. No hidden fees or subscriptions." },
+  { q: "Which platforms are supported?",           a: "We currently support Shopee, Lazada, and TikTok Shop, with more platforms coming soon." },
+  { q: "How long does it take to get a response?", a: "We aim to respond to all messages within 24 hours on business days." },
 ];
-
 
 export default function Contact() {
   const navigate = useNavigate();
 
-  const [activeNav, setActiveNav]     = useState("Contact Us");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [scrolled, setScrolled]       = useState(false);
-  const [form, setForm]               = useState({ name: "", email: "", subject: "", message: "" });
-  const [errors, setErrors]           = useState({});
-  const [submitted, setSubmitted]     = useState(false);
-  const [openFaq, setOpenFaq]         = useState(null);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [form, setForm]           = useState({ name: "", email: "", subject: "", message: "" });
+  const [errors, setErrors]       = useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [openFaq, setOpenFaq]     = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -83,11 +53,6 @@ export default function Contact() {
   useEffect(() => {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [form]);
-
-  const handleNavClick = (link) => {
-    setActiveNav(link.label);
-    if (link.route) navigate(link.route);
-  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -116,30 +81,10 @@ export default function Contact() {
   const st = {
     page:        { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
 
-    topNav:      { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "12px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: scrolled ? "0 2px 12px rgba(0,0,0,0.07)" : "none", transition: "box-shadow 0.2s" },
-    logoArea:    { display: "flex", alignItems: "center", gap: "10px" },
-    logoCircle:  { width: "44px", height: "44px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", color: "white", flexShrink: 0 },
-    logoText:    { fontSize: "12px", fontWeight: "700", color: "#e85d04", lineHeight: "1.3", textTransform: "uppercase" },
-    searchBar:   { flex: 1, maxWidth: "480px", margin: "0 24px", display: "flex", alignItems: "center", border: "1px solid #ccc", borderRadius: "6px", background: "#f9f9f9", padding: "8px 14px", gap: "8px" },
-    searchInput: { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "#444" },
-    topNavRight: { display: "flex", gap: "16px", alignItems: "center" },
-    iconBtn:     { display: "flex", flexDirection: "column", alignItems: "center", fontSize: "11px", color: "#555", gap: "2px", cursor: "pointer", background: "none", border: "none" },
-    loginBtn:    { background: "#e85d04", color: "white", borderRadius: "6px", padding: "8px 18px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: "none" },
-
-    mainNav:     { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "0 40px", display: "flex", gap: "24px" },
-    navBtn:      (active) => ({
-      display: "block", padding: "14px 0", fontSize: "14px", fontWeight: "500",
-      color: active ? "#e85d04" : "#333", cursor: "pointer",
-      background: "none", border: "none",
-      borderBottom: active ? "2px solid #e85d04" : "2px solid transparent",
-      whiteSpace: "nowrap",
-    }),
-
     hero:        { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "60px 60px", color: "white" },
     heroTag:     { display: "inline-block", background: "rgba(255,255,255,0.2)", color: "white", fontSize: "12px", fontWeight: "600", padding: "5px 14px", borderRadius: "20px", marginBottom: "16px", letterSpacing: "1px", textTransform: "uppercase" },
     heroTitle:   { fontSize: "40px", fontWeight: "800", marginBottom: "12px" },
     heroSub:     { fontSize: "16px", opacity: 0.88, maxWidth: "520px", lineHeight: "1.7" },
-
 
     content:     { padding: "60px", display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "40px", maxWidth: "1100px", margin: "0 auto" },
 
@@ -168,7 +113,6 @@ export default function Contact() {
     faqQ:        (open) => ({ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", cursor: "pointer", background: open ? "#fff5f0" : "#fff", fontSize: "14px", fontWeight: "600", color: open ? "#e85d04" : "#222", border: "none", width: "100%", textAlign: "left" }),
     faqA:        { padding: "0 20px 16px", fontSize: "14px", color: "#666", lineHeight: "1.7" },
 
-  
     footer:      { background: "#0f1923", color: "#ccc", padding: "40px 60px 20px" },
     footerGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
     footerBottom:{ borderTop: "1px solid #1e2d3d", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
@@ -177,32 +121,8 @@ export default function Contact() {
   return (
     <div style={st.page}>
 
-      <nav style={st.topNav}>
-        <div style={st.logoArea}>
-          <div style={st.logoCircle}>🛍</div>
-          <div style={st.logoText}>E-Commerce<br />Market Place</div>
-        </div>
-        <div style={st.searchBar}>
-          <IconSearch />
-          <input type="text" placeholder="Search for products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={st.searchInput} />
-        </div>
-        <div style={st.topNavRight}>
-          <button style={st.iconBtn}><IconAccount />Account</button>
-          <button style={st.loginBtn} onClick={() => navigate("/login")}>Login</button>
-        </div>
-      </nav>
-
-      <nav style={st.mainNav}>
-        {NAV_LINKS.map((link) => (
-          <button
-            key={link.label}
-            style={st.navBtn(activeNav === link.label)}
-            onClick={() => handleNavClick(link)}
-          >
-            {link.label}
-          </button>
-        ))}
-      </nav>
+      {/* ── SHARED NAVBAR (handles login/logout automatically) ── */}
+      <Navbar activePage="/contact" />
 
       <section style={st.hero}>
         <span style={st.heroTag}>Contact Us</span>
@@ -214,7 +134,6 @@ export default function Contact() {
       </section>
 
       <div style={st.content}>
-
         <div style={st.infoCard}>
           <p style={st.infoTitle}>Contact Information</p>
           {CONTACT_INFO.map((info) => (
@@ -226,10 +145,7 @@ export default function Contact() {
               </div>
             </div>
           ))}
-
           <div style={{ borderTop: "1px solid #f0f0f0", margin: "20px 0" }} />
-
-          {/* Social links */}
           <p style={{ fontSize: "13px", fontWeight: "600", color: "#333", marginBottom: "10px" }}>Follow Us</p>
           <div style={{ display: "flex", gap: "10px" }}>
             {["f", "t", "ig", "yt"].map((s) => (
@@ -248,7 +164,10 @@ export default function Contact() {
               <p style={{ fontSize: "13px", color: "#555", marginTop: "6px" }}>
                 Thanks, <strong>{form.name}</strong>! We'll get back to you within 24 hours.
               </p>
-              <button onClick={() => { setSubmitted(false); setForm({ name: "", email: "", subject: "", message: "" }); }} style={{ marginTop: "14px", background: "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "8px 20px", fontSize: "13px", fontWeight: "600", cursor: "pointer" }}>
+              <button
+                onClick={() => { setSubmitted(false); setForm({ name: "", email: "", subject: "", message: "" }); }}
+                style={{ marginTop: "14px", background: "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "8px 20px", fontSize: "13px", fontWeight: "600", cursor: "pointer" }}
+              >
                 Send Another
               </button>
             </div>
@@ -259,25 +178,21 @@ export default function Contact() {
                 <input name="name" type="text" placeholder="Enter your name" value={form.name} onChange={handleChange} style={st.input(!!errors.name)} />
                 {errors.name && <p style={st.errorText}>{errors.name}</p>}
               </div>
-
               <div style={st.formGroup}>
                 <label style={st.label}>Email Address</label>
                 <input name="email" type="email" placeholder="Enter your email" value={form.email} onChange={handleChange} style={st.input(!!errors.email)} />
                 {errors.email && <p style={st.errorText}>{errors.email}</p>}
               </div>
-
               <div style={st.formGroup}>
                 <label style={st.label}>Subject</label>
                 <input name="subject" type="text" placeholder="What is this about?" value={form.subject} onChange={handleChange} style={st.input(!!errors.subject)} />
                 {errors.subject && <p style={st.errorText}>{errors.subject}</p>}
               </div>
-
               <div style={st.formGroup}>
                 <label style={st.label}>Message</label>
                 <textarea name="message" placeholder="Write your message here..." value={form.message} onChange={handleChange} style={st.textarea(!!errors.message)} />
                 {errors.message && <p style={st.errorText}>{errors.message}</p>}
               </div>
-
               <button type="submit" style={st.submitBtn}>Send Message</button>
             </form>
           )}

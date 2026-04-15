@@ -133,7 +133,7 @@ export default function Navbar({ activePage }) {
       <nav style={s.topNav}>
         <div style={s.logoArea}>
           <div style={s.logoCircle}>🛍</div>
-          <div style={s.logoText}>E-Commerce<br />Market Place</div>
+          <div style={s.logoText}>E-COMMERCE <br />MARKET PLACE</div>
         </div>
 
         <div style={s.searchBar}>

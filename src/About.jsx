@@ -2,17 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 
-
-const IconAccount = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-  </svg>
-);
-const IconSearch = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-  </svg>
-);
 const IconTarget = () => (
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e85d04" strokeWidth="1.8">
     <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
@@ -35,27 +24,17 @@ const IconUsers = () => (
   </svg>
 );
 
-
-const NAV_LINKS = [
-  { label: "Home",       route: "/"          },
-  { label: "Products",   route: null         },
-  { label: "Dashboard",  route: "/dashboard" },
-  { label: "Orders",     route: null         },
-  { label: "About Us",   route: "/about"     },
-  { label: "Contact Us", route: "/contact"   },
-];
-
 const TEAM = [
-  { name: "Alex Rivera",   role: "Project Lead & Frontend",  initial: "AR", color: "#e85d04" },
-  { name: "Jamie Santos",  role: "Backend & Database",        initial: "JS", color: "#2563eb" },
-  { name: "Chris Reyes",   role: "UI/UX & Frontend",          initial: "CR", color: "#16a34a" },
+  { name: "Alex Rivera",  role: "Project Lead & Frontend", initial: "AR", color: "#e85d04" },
+  { name: "Jamie Santos", role: "Backend & Database",       initial: "JS", color: "#2563eb" },
+  { name: "Chris Reyes",  role: "UI/UX & Frontend",         initial: "CR", color: "#16a34a" },
 ];
 
 const VALUES = [
-  { icon: <IconTarget />, title: "Our Mission",  desc: "To simplify online selling by giving multi-platform sellers one unified system to manage their orders, products, and revenue across Shopee, Lazada, and TikTok Shop." },
-  { icon: <IconEye />,    title: "Our Vision",   desc: "To become the go-to platform for multi-channel e-commerce management in Southeast Asia, empowering sellers of all sizes to grow smarter." },
-  { icon: <IconHeart />,  title: "Our Values",   desc: "We believe in simplicity, transparency, and putting sellers first. Every feature we build is designed to save you time and help you sell more." },
-  { icon: <IconUsers />,  title: "Our People",   desc: "We're a small team of developers and designers who are passionate about e-commerce and building tools that actually make a difference." },
+  { icon: <IconTarget />, title: "Our Mission", desc: "To simplify online selling by giving multi-platform sellers one unified system to manage their orders, products, and revenue across Shopee, Lazada, and TikTok Shop." },
+  { icon: <IconEye />,    title: "Our Vision",  desc: "To become the go-to platform for multi-channel e-commerce management in Southeast Asia, empowering sellers of all sizes to grow smarter." },
+  { icon: <IconHeart />,  title: "Our Values",  desc: "We believe in simplicity, transparency, and putting sellers first. Every feature we build is designed to save you time and help you sell more." },
+  { icon: <IconUsers />,  title: "Our People",  desc: "We're a small team of developers and designers who are passionate about e-commerce and building tools that actually make a difference." },
 ];
 
 const STATS = [
@@ -65,50 +44,15 @@ const STATS = [
   { value: "₱284K+", label: "Revenue Tracked" },
 ];
 
-
 export default function About() {
   const navigate = useNavigate();
-
-  const [activeNav, setActiveNav]     = useState("About Us");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [scrolled, setScrolled]       = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const handleNavClick = (link) => {
-    setActiveNav(link.label);
-    if (link.route) navigate(link.route);
-  };
-
   const st = {
     page:        { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
-
-    topNav:      { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "12px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: scrolled ? "0 2px 12px rgba(0,0,0,0.07)" : "none", transition: "box-shadow 0.2s" },
-    logoArea:    { display: "flex", alignItems: "center", gap: "10px" },
-    logoCircle:  { width: "44px", height: "44px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", color: "white", flexShrink: 0 },
-    logoText:    { fontSize: "12px", fontWeight: "700", color: "#e85d04", lineHeight: "1.3", textTransform: "uppercase" },
-    searchBar:   { flex: 1, maxWidth: "480px", margin: "0 24px", display: "flex", alignItems: "center", border: "1px solid #ccc", borderRadius: "6px", background: "#f9f9f9", padding: "8px 14px", gap: "8px" },
-    searchInput: { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "#444" },
-    topNavRight: { display: "flex", gap: "16px", alignItems: "center" },
-    iconBtn:     { display: "flex", flexDirection: "column", alignItems: "center", fontSize: "11px", color: "#555", gap: "2px", cursor: "pointer", background: "none", border: "none" },
-    loginBtn:    { background: "#e85d04", color: "white", borderRadius: "6px", padding: "8px 18px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: "none" },
-
-    mainNav:     { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "0 40px", display: "flex", gap: "24px" },
-    navBtn:      (active) => ({
-      display: "block", padding: "14px 0", fontSize: "14px", fontWeight: "500",
-      color: active ? "#e85d04" : "#333", cursor: "pointer",
-      background: "none", border: "none",
-      borderBottom: active ? "2px solid #e85d04" : "2px solid transparent",
-      whiteSpace: "nowrap",
-    }),
 
     hero:        { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "60px 60px", color: "white" },
     heroTag:     { display: "inline-block", background: "rgba(255,255,255,0.2)", color: "white", fontSize: "12px", fontWeight: "600", padding: "5px 14px", borderRadius: "20px", marginBottom: "16px", letterSpacing: "1px", textTransform: "uppercase" },
@@ -157,32 +101,8 @@ export default function About() {
   return (
     <div style={st.page}>
 
-      <nav style={st.topNav}>
-        <div style={st.logoArea}>
-          <div style={st.logoCircle}>🛍</div>
-          <div style={st.logoText}>E-Commerce<br />Market Place</div>
-        </div>
-        <div style={st.searchBar}>
-          <IconSearch />
-          <input type="text" placeholder="Search for products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={st.searchInput} />
-        </div>
-        <div style={st.topNavRight}>
-          <button style={st.iconBtn}><IconAccount />Account</button>
-          <button style={st.loginBtn} onClick={() => navigate("/login")}>Login</button>
-        </div>
-      </nav>
-
-      <nav style={st.mainNav}>
-        {NAV_LINKS.map((link) => (
-          <button
-            key={link.label}
-            style={st.navBtn(activeNav === link.label)}
-            onClick={() => handleNavClick(link)}
-          >
-            {link.label}
-          </button>
-        ))}
-      </nav>
+      {/* ── SHARED NAVBAR (handles login/logout automatically) ── */}
+      <Navbar activePage="/about" />
 
       <section style={st.hero}>
         <span style={st.heroTag}>About Us</span>

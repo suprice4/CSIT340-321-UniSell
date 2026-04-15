@@ -1,25 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar"; // ← adjust path if needed
 
-const IconCart = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-    <line x1="3" y1="6" x2="21" y2="6"/>
-    <path d="M16 10a4 4 0 01-8 0"/>
-  </svg>
-);
-const IconAccount = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
-  </svg>
-);
-const IconSearch = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"/>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-  </svg>
-);
 const IconCheck = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e85d04" strokeWidth="2.5">
     <polyline points="20 6 9 17 4 12"/>
@@ -85,60 +67,15 @@ const STATS = [
   { value: "₱284K+", label: "Revenue Tracked" },
 ];
 
-const NAV_LINKS = [
-  { label: "Home", route: "/" },
-  { label: "Products", route: null },
-  { label: "Dashboard", route: "/dashboard" },
-  { label: "Orders", route: null },
-  { label: "About Us", route: "/about" },
-  { label: "Contact Us", route: "/contact" },
-];
-
-
 export default function LandingPage() {
   const navigate = useNavigate();
-
-  const [activeNav, setActiveNav]     = useState("Home");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [scrolled, setScrolled]       = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Handle nav click — navigate if route exists, otherwise just highlight
-  const handleNavClick = (link) => {
-    setActiveNav(link.label);
-    if (link.route) navigate(link.route);
-  };
-
   const st = {
     page:        { fontFamily: "'Segoe UI', sans-serif", background: "#fff", color: "#222", minHeight: "100vh" },
-    topNav:      { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "12px 40px", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 100, boxShadow: scrolled ? "0 2px 12px rgba(0,0,0,0.07)" : "none", transition: "box-shadow 0.2s" },
-    logoArea:    { display: "flex", alignItems: "center", gap: "10px" },
-    logoCircle:  { width: "44px", height: "44px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", color: "white", flexShrink: 0 },
-    logoText:    { fontSize: "12px", fontWeight: "700", color: "#e85d04", lineHeight: "1.3", textTransform: "uppercase" },
-    searchBar:   { flex: 1, maxWidth: "480px", margin: "0 24px", display: "flex", alignItems: "center", border: "1px solid #ccc", borderRadius: "6px", background: "#f9f9f9", padding: "8px 14px", gap: "8px" },
-    searchInput: { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "#444" },
-    topNavRight: { display: "flex", gap: "16px", alignItems: "center" },
-    iconBtn:     { display: "flex", flexDirection: "column", alignItems: "center", fontSize: "11px", color: "#555", gap: "2px", cursor: "pointer", background: "none", border: "none" },
-    loginBtn:    { background: "#e85d04", color: "white", borderRadius: "6px", padding: "8px 18px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: "none" },
-
-    // Main navbar — slightly smaller font to fit all 6 links comfortably
-    mainNav:     { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "0 40px", display: "flex", gap: "24px" },
-    navBtn:      (active) => ({
-      display: "block", padding: "14px 0", fontSize: "14px", fontWeight: "500",
-      color: active ? "#e85d04" : "#333", cursor: "pointer",
-      background: "none", border: "none",
-      borderBottom: active ? "2px solid #e85d04" : "2px solid transparent",
-      whiteSpace: "nowrap",
-    }),
 
     hero:         { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "80px 60px", color: "white", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "40px", flexWrap: "wrap" },
     heroLeft:     { flex: 1, minWidth: "280px" },
@@ -203,37 +140,14 @@ export default function LandingPage() {
     footerBottom: { borderTop: "1px solid #1e2d3d", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
   };
 
+  // Read auth state for the hero CTA buttons
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
   return (
     <div style={st.page}>
 
-      {/* ── TOP NAVBAR ── */}
-      <nav style={st.topNav}>
-        <div style={st.logoArea}>
-          <div style={st.logoCircle}>🛍</div>
-          <div style={st.logoText}>E-Commerce<br />Market Place</div>
-        </div>
-        <div style={st.searchBar}>
-          <IconSearch />
-          <input type="text" placeholder="Search for products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={st.searchInput} />
-        </div>
-        <div style={st.topNavRight}>
-          <button style={st.iconBtn}><IconAccount />Account</button>
-          <button style={st.loginBtn} onClick={() => navigate("/login")}>Login</button>
-        </div>
-      </nav>
-
-      {/* ── MAIN NAVBAR ── */}
-      <nav style={st.mainNav}>
-        {NAV_LINKS.map((link) => (
-          <button
-            key={link.label}
-            style={st.navBtn(activeNav === link.label)}
-            onClick={() => handleNavClick(link)}
-          >
-            {link.label}
-          </button>
-        ))}
-      </nav>
+      {/* ── SHARED NAVBAR ── */}
+      <Navbar activePage="/" />
 
       {/* ── HERO ── */}
       <section style={st.hero}>
@@ -248,8 +162,14 @@ export default function LandingPage() {
             and manage products all from a single dashboard.
           </p>
           <div style={st.heroBtns}>
-            <button style={st.heroPrimary} onClick={() => navigate("/register")}>Get Started Free</button>
-            <button style={st.heroSecondary} onClick={() => navigate("/login")}>Log In</button>
+            {isLoggedIn ? (
+              <button style={st.heroPrimary} onClick={() => navigate("/dashboard")}>Go to Dashboard</button>
+            ) : (
+              <>
+                <button style={st.heroPrimary} onClick={() => navigate("/register")}>Get Started Free</button>
+                <button style={st.heroSecondary} onClick={() => navigate("/login")}>Log In</button>
+              </>
+            )}
           </div>
         </div>
         <div style={st.heroRight}>
@@ -387,8 +307,14 @@ export default function LandingPage() {
       <section style={st.cta}>
         <h2 style={st.ctaTitle}>Ready to simplify your selling?</h2>
         <p style={st.ctaSub}>Join hundreds of sellers managing their stores smarter with our platform.</p>
-        <button style={st.ctaBtn} onClick={() => navigate("/register")}>Create Free Account</button>
-        <button style={st.ctaBtnSec} onClick={() => navigate("/login")}>Log In</button>
+        {isLoggedIn ? (
+          <button style={st.ctaBtn} onClick={() => navigate("/dashboard")}>Go to Dashboard</button>
+        ) : (
+          <>
+            <button style={st.ctaBtn} onClick={() => navigate("/register")}>Create Free Account</button>
+            <button style={st.ctaBtnSec} onClick={() => navigate("/login")}>Log In</button>
+          </>
+        )}
       </section>
 
       {/* ── FOOTER ── */}
@@ -412,7 +338,7 @@ export default function LandingPage() {
               { label: "Dashboard",  route: "/dashboard"},
               { label: "Register",   route: "/register" },
             ].map((l) => (
-              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", textDecoration: "none", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
+              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
             ))}
           </div>
           <div>
