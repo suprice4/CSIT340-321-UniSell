@@ -1,36 +1,32 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import DarkModeToggle from "./components/DarkModeToggle";
+import NotificationBell from "./components/NotificationBell";
+import UserProfileDropdown from "./components/UserProfileDropdown";
 
 const IconSearch = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted, #aaa)" strokeWidth="2">
     <circle cx="11" cy="11" r="8"/>
     <line x1="21" y1="21" x2="16.65" y2="16.65"/>
   </svg>
 );
 
-const IconAccount = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <circle cx="12" cy="7" r="4"/>
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-  </svg>
-);
-
-const IconLogout = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-    <polyline points="16 17 21 12 16 7"/>
-    <line x1="21" y1="12" x2="9" y2="12"/>
-  </svg>
-);
+const NAV_LINKS = [
+  { label: "Home",       route: "/"          },
+  { label: "Products",   route: null         },
+  { label: "Dashboard",  route: "/dashboard" },
+  { label: "Orders",     route: null         },
+  { label: "About Us",   route: "/about"     },
+  { label: "Contact Us", route: "/contact"   },
+];
 
 export default function Navbar({ activePage }) {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn]   = useState(false);
 
   useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-    setIsLoggedIn(loggedIn);
+    setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
   }, []);
 
   const handleLogout = () => {
@@ -39,97 +35,88 @@ export default function Navbar({ activePage }) {
     navigate("/login");
   };
 
-  const NAV_LINKS = [
-    { label: "Home", route: "/" },
-    { label: "Products", route: null },
-    { label: "Dashboard", route: "/dashboard" },
-    { label: "Orders", route: null },
-    { label: "About Us", route: "/about" },
-    { label: "Contact Us", route: "/contact" },
-  ];
-
   const s = {
     topNav: {
-      background: "#fff",
-      borderBottom: "1px solid #e0e0e0",
-      padding: "12px 40px",
+      background: "var(--nav-bg, #fff)",
+      borderBottom: "1px solid var(--border-color, #e0e0e0)",
+      padding: "10px 40px",
       display: "flex",
       alignItems: "center",
-      justifyContent: "space-between"
+      justifyContent: "space-between",
+      gap: "16px",
     },
-    logoArea: { display: "flex", alignItems: "center", gap: "10px" },
+    logoArea: { display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 },
     logoCircle: {
-      width: "44px",
-      height: "44px",
-      background: "#e85d04",
-      borderRadius: "50%",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: "20px",
-      color: "#fff"
+      width: "44px", height: "44px", background: "#e85d04",
+      borderRadius: "50%", display: "flex", alignItems: "center",
+      justifyContent: "center", fontSize: "20px", color: "#fff",
     },
-    logoText: {
-      fontSize: "12px",
-      fontWeight: "700",
-      color: "#e85d04",
-      lineHeight: "1.3"
-    },
+    logoText: { fontSize: "12px", fontWeight: "700", color: "#e85d04", lineHeight: "1.3" },
     searchBar: {
-      flex: 1,
-      maxWidth: "480px",
-      margin: "0 24px",
-      display: "flex",
-      alignItems: "center",
-      border: "1px solid #ccc",
-      borderRadius: "6px",
-      background: "#f9f9f9",
-      padding: "8px 14px",
-      gap: "8px"
+      flex: 1, maxWidth: "480px", margin: "0 16px",
+      display: "flex", alignItems: "center",
+      border: "1px solid var(--border-color, #ccc)",
+      borderRadius: "6px", background: "var(--input-bg, #f9f9f9)",
+      padding: "8px 14px", gap: "8px",
     },
     searchInput: {
-      border: "none",
-      background: "transparent",
-      outline: "none",
-      width: "100%"
+      border: "none", background: "transparent", outline: "none",
+      width: "100%", color: "var(--text-primary, #333)", fontSize: "14px",
     },
     topNavRight: {
-      display: "flex",
-      gap: "16px",
-      alignItems: "center"
+      display: "flex", gap: "10px", alignItems: "center", flexShrink: 0,
     },
-    btn: {
-      border: "none",
-      background: "none",
-      cursor: "pointer"
-    },
-    logoutBtn: {
-      border: "1px solid #e85d04",
-      color: "#e85d04",
-      padding: "6px 14px",
-      borderRadius: "6px",
-      background: "none",
-      cursor: "pointer"
+    divider: {
+      width: "1px", height: "22px",
+      background: "var(--border-color, #e0e0e0)",
+      margin: "0 4px",
     },
     mainNav: {
-      background: "#fff",
-      borderBottom: "1px solid #e0e0e0",
-      padding: "0 40px",
-      display: "flex",
-      gap: "32px"
+      background: "var(--nav-bg, #fff)",
+      borderBottom: "1px solid var(--border-color, #e0e0e0)",
+      padding: "0 40px", display: "flex", gap: "32px",
     },
     navBtn: (active) => ({
-      padding: "14px 0",
-      background: "none",
-      border: "none",
+      padding: "14px 0", background: "none", border: "none",
       cursor: "pointer",
-      color: active ? "#e85d04" : "#333",
-      borderBottom: active ? "2px solid #e85d04" : "2px solid transparent"
-    })
+      color: active ? "#e85d04" : "var(--text-primary, #333)",
+      borderBottom: active ? "2px solid #e85d04" : "2px solid transparent",
+      fontSize: "14px", fontWeight: "500", transition: "color 0.2s",
+    }),
   };
 
   return (
     <>
+      <style>{`
+        :root {
+          --nav-bg: #fff;
+          --card-bg: #fff;
+          --input-bg: #f9f9f9;
+          --border-color: #e0e0e0;
+          --text-primary: #222;
+          --text-muted: #888;
+          --hover-bg: #f9f9f9;
+          --nav-icon-color: #555;
+          --notif-unread-bg: #fff8f5;
+        }
+        [data-theme="dark"] {
+          --nav-bg: #1a1a2e;
+          --card-bg: #16213e;
+          --input-bg: #0f3460;
+          --border-color: #2d3561;
+          --text-primary: #e0e0e0;
+          --text-muted: #9ca3af;
+          --hover-bg: #0f3460;
+          --nav-icon-color: #d1d5db;
+          --notif-unread-bg: #1f2a40;
+        }
+        [data-theme="dark"] body,
+        [data-theme="dark"] #root {
+          background: #0f0f23;
+          color: #e0e0e0;
+        }
+      `}</style>
+
       <nav style={s.topNav}>
         <div style={s.logoArea}>
           <div style={s.logoCircle}>🛍</div>
@@ -141,25 +128,17 @@ export default function Navbar({ activePage }) {
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search..."
+            placeholder="Search products, orders..."
             style={s.searchInput}
           />
         </div>
 
         <div style={s.topNavRight}>
-          <button style={s.btn}>
-            <IconAccount /> Account
-          </button>
-
-          {isLoggedIn ? (
-            <button style={s.logoutBtn} onClick={handleLogout}>
-              <IconLogout /> Logout
-            </button>
-          ) : (
-            <button style={s.logoutBtn} onClick={() => navigate("/login")}>
-              Login
-            </button>
-          )}
+          <DarkModeToggle />
+          <div style={s.divider} />
+          <NotificationBell />
+          <div style={s.divider} />
+          <UserProfileDropdown isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         </div>
       </nav>
 
