@@ -5,6 +5,7 @@ import Register from "./Register";
 import Dashboard from "./Dashboard";
 import About from "./About";
 import Contact from "./Contact";
+import Products from "./Products";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/products" element={<Products />} />
       </Routes>
     </BrowserRouter>
   );
