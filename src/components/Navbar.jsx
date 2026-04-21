@@ -43,7 +43,7 @@ export default function Navbar({ activePage }) {
     { label: "Home", route: "/" },
     { label: "Products", route: "/products" },
     { label: "Dashboard", route: "/dashboard" },
-    { label: "Orders", route: null },
+    { label: "Orders", route: "/orders" },
     { label: "About Us", route: "/about" },
     { label: "Contact Us", route: "/contact" },
   ];
