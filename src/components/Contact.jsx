@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import "../styles/Contact.css";
 
 const IconPin = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e85d04" strokeWidth="1.8">
@@ -79,7 +80,7 @@ export default function Contact() {
   };
 
   const st = {
-    page:        { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
+    page:        { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
 
     hero:        { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "60px 60px", color: "white" },
     heroTag:     { display: "inline-block", background: "rgba(255,255,255,0.2)", color: "white", fontSize: "12px", fontWeight: "600", padding: "5px 14px", borderRadius: "20px", marginBottom: "16px", letterSpacing: "1px", textTransform: "uppercase" },
@@ -88,34 +89,34 @@ export default function Contact() {
 
     content:     { padding: "60px", display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "40px", maxWidth: "1100px", margin: "0 auto" },
 
-    infoCard:    { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px" },
-    infoTitle:   { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", marginBottom: "20px" },
+    infoCard:    { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "12px", padding: "28px" },
+    infoTitle:   { fontSize: "18px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "20px" },
     infoRow:     { display: "flex", gap: "14px", alignItems: "flex-start", marginBottom: "20px" },
     infoIconBox: { width: "40px", height: "40px", background: "#fff5f0", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
-    infoLabel:   { fontSize: "12px", color: "#aaa", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" },
-    infoValue:   { fontSize: "14px", color: "#333", fontWeight: "500" },
+    infoLabel:   { fontSize: "12px", color: "var(--text-muted, #aaa)", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" },
+    infoValue:   { fontSize: "14px", color: "var(--text-primary, #333)", fontWeight: "500" },
 
-    formCard:    { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px" },
-    formTitle:   { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", marginBottom: "20px" },
+    formCard:    { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "12px", padding: "28px" },
+    formTitle:   { fontSize: "18px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "20px" },
     formGroup:   { marginBottom: "14px" },
-    label:       { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "#333" },
-    input:       (hasError) => ({ width: "100%", padding: "10px 12px", border: `1px solid ${hasError ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "#333", outline: "none", boxSizing: "border-box", background: "#fafafa" }),
-    textarea:    (hasError) => ({ width: "100%", padding: "10px 12px", border: `1px solid ${hasError ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "#333", outline: "none", boxSizing: "border-box", background: "#fafafa", height: "120px", resize: "vertical" }),
+    label:       { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "var(--text-primary, #333)" },
+    input:       (hasError) => ({ width: "100%", padding: "10px 12px", border: `1px solid var(--border-color, ${hasError ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "var(--text-primary, #333)", outline: "none", boxSizing: "border-box", background: "var(--section-alt-bg, #fafafa)" }),
+    textarea:    (hasError) => ({ width: "100%", padding: "10px 12px", border: `1px solid var(--border-color, ${hasError ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "var(--text-primary, #333)", outline: "none", boxSizing: "border-box", background: "var(--section-alt-bg, #fafafa)", height: "120px", resize: "vertical" }),
     errorText:   { fontSize: "12px", color: "#e53e3e", marginTop: "4px" },
     submitBtn:   { width: "100%", background: "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "13px", fontSize: "15px", fontWeight: "700", cursor: "pointer", marginTop: "4px" },
     successBox:  { background: "#f0fff4", border: "1px solid #68d391", borderRadius: "8px", padding: "20px", textAlign: "center" },
 
     faqSection:  { padding: "0 60px 60px" },
     faqTag:      { fontSize: "12px", fontWeight: "700", color: "#e85d04", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" },
-    faqTitle:    { fontSize: "26px", fontWeight: "800", color: "#1a1a1a", marginBottom: "8px" },
-    faqSub:      { fontSize: "15px", color: "#777", marginBottom: "28px" },
-    faqItem:     { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", marginBottom: "10px", overflow: "hidden" },
+    faqTitle:    { fontSize: "26px", fontWeight: "800", color: "var(--text-primary, #1a1a1a)", marginBottom: "8px" },
+    faqSub:      { fontSize: "15px", color: "var(--text-muted, #777)", marginBottom: "28px" },
+    faqItem:     { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", marginBottom: "10px", overflow: "hidden" },
     faqQ:        (open) => ({ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", cursor: "pointer", background: open ? "#fff5f0" : "#fff", fontSize: "14px", fontWeight: "600", color: open ? "#e85d04" : "#222", border: "none", width: "100%", textAlign: "left" }),
-    faqA:        { padding: "0 20px 16px", fontSize: "14px", color: "#666", lineHeight: "1.7" },
+    faqA:        { padding: "0 20px 16px", fontSize: "14px", color: "var(--text-muted, #666)", lineHeight: "1.7" },
 
-    footer:      { background: "#0f1923", color: "#ccc", padding: "40px 60px 20px" },
+    footer:      { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
     footerGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
-    footerBottom:{ borderTop: "1px solid #1e2d3d", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
+    footerBottom:{ borderTop: "1px solid var(--border-color, #1e2d3d)", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
@@ -146,10 +147,10 @@ export default function Contact() {
             </div>
           ))}
           <div style={{ borderTop: "1px solid #f0f0f0", margin: "20px 0" }} />
-          <p style={{ fontSize: "13px", fontWeight: "600", color: "#333", marginBottom: "10px" }}>Follow Us</p>
+          <p style={{ fontSize: "13px", fontWeight: "600", color: "var(--text-primary, #333)", marginBottom: "10px" }}>Follow Us</p>
           <div style={{ display: "flex", gap: "10px" }}>
             {["f", "t", "ig", "yt"].map((s) => (
-              <span key={s} style={{ width: "32px", height: "32px", background: "#f5f5f5", border: "1px solid #e0e0e0", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "#555", cursor: "pointer" }}>{s}</span>
+              <span key={s} style={{ width: "32px", height: "32px", background: "var(--page-bg, #f5f5f5)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "6px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-muted, #555)", cursor: "pointer" }}>{s}</span>
             ))}
           </div>
         </div>
@@ -161,7 +162,7 @@ export default function Contact() {
             <div style={st.successBox}>
               <p style={{ fontSize: "20px", marginBottom: "8px" }}>✅</p>
               <p style={{ fontWeight: "700", color: "#276749", fontSize: "16px" }}>Message Sent!</p>
-              <p style={{ fontSize: "13px", color: "#555", marginTop: "6px" }}>
+              <p style={{ fontSize: "13px", color: "var(--text-muted, #555)", marginTop: "6px" }}>
                 Thanks, <strong>{form.name}</strong>! We'll get back to you within 24 hours.
               </p>
               <button
@@ -218,10 +219,10 @@ export default function Contact() {
         <div style={st.footerGrid}>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>About Us</h4>
-            <p style={{ fontSize: "13px", color: "#aaa", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               {["f", "t", "ig", "yt"].map((s) => (
-                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "#aaa", cursor: "pointer" }}>{s}</span>
+                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-muted, #aaa)", cursor: "pointer" }}>{s}</span>
               ))}
             </div>
           </div>
@@ -234,27 +235,27 @@ export default function Contact() {
               { label: "Dashboard",  route: "/dashboard" },
               { label: "Register",   route: "/register"  },
             ].map((l) => (
-              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
+              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
             ))}
           </div>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Platforms</h4>
             {["Shopee", "Lazada", "TikTok Shop", "Returns & Refunds", "FAQs"].map((l) => (
-              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
+              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
             ))}
           </div>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Contact Us</h4>
-            <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
-            <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
-            <p style={{ fontSize: "13px", color: "#aaa" }}>✉ ecommercemarketplace@gmail.com</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)" }}>✉ ecommercemarketplace@gmail.com</p>
           </div>
         </div>
         <div style={st.footerBottom}>
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
           <div>
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "#666", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
+              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
             ))}
           </div>
         </div>

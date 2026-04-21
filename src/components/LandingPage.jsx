@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar"; // ← adjust path if needed
+import Navbar from "./Navbar";
+import "../styles/Landingpage.css";
 
 const IconCheck = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e85d04" strokeWidth="2.5">
@@ -51,9 +52,9 @@ const FEATURES = [
   { icon: <IconShield />,    title: "Secure & Reliable",    desc: "Your store data is safe with us. We use secure authentication and data encryption." },
 ];
 const PLATFORMS = [
-  { name: "Shopee",      color: "#ee4d2d", bg: "#fff1ee", desc: "Connect your Shopee store and manage orders, products, and sales all in one tab." },
-  { name: "Lazada",      color: "#0f146b", bg: "#eef0ff", desc: "Sync your Lazada listings and track your performance without switching apps." },
-  { name: "TikTok Shop", color: "#010101", bg: "#f3f3f3", desc: "Manage your TikTok Shop orders and see what's trending alongside your other platforms." },
+  { name: "Shopee",      color: "#ee4d2d", bg: "var(--plat-shopee-bg, #fff1ee)", desc: "Connect your Shopee store and manage orders, products, and sales all in one tab." },
+  { name: "Lazada",      color: "#0f146b", bg: "var(--plat-lazada-bg, #eef0ff)", desc: "Sync your Lazada listings and track your performance without switching apps." },
+  { name: "TikTok Shop", color: "#333",    bg: "var(--plat-tiktok-bg, #f3f3f3)", desc: "Manage your TikTok Shop orders and see what's trending alongside your other platforms." },
 ];
 const TESTIMONIALS = [
   { name: "Maria Santos",   role: "Shopee Seller",          stars: 5, review: "I used to open 3 different apps just to check my orders. Now everything is in one dashboard. Game changer!" },
@@ -75,7 +76,7 @@ export default function LandingPage() {
   }, []);
 
   const st = {
-    page:        { fontFamily: "'Segoe UI', sans-serif", background: "#fff", color: "#222", minHeight: "100vh" },
+    page:        { fontFamily: "'Segoe UI', sans-serif", background: "var(--card-bg, #fff)", color: "var(--text-primary, #222)", minHeight: "100vh" },
 
     hero:         { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "80px 60px", color: "white", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "40px", flexWrap: "wrap" },
     heroLeft:     { flex: 1, minWidth: "280px" },
@@ -83,7 +84,7 @@ export default function LandingPage() {
     heroTitle:    { fontSize: "44px", fontWeight: "800", lineHeight: "1.15", marginBottom: "16px" },
     heroSub:      { fontSize: "16px", opacity: 0.88, lineHeight: "1.7", marginBottom: "28px", maxWidth: "480px" },
     heroBtns:     { display: "flex", gap: "14px", flexWrap: "wrap" },
-    heroPrimary:  { background: "white", color: "#e85d04", border: "none", borderRadius: "8px", padding: "13px 28px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
+    heroPrimary:  { background: "var(--card-bg, #fff)", color: "#e85d04", border: "none", borderRadius: "8px", padding: "13px 28px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
     heroSecondary:{ background: "transparent", color: "white", border: "2px solid white", borderRadius: "8px", padding: "13px 28px", fontSize: "15px", fontWeight: "600", cursor: "pointer" },
     heroRight:    { flex: 1, minWidth: "260px", display: "flex", justifyContent: "center" },
     heroCard:     { background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.25)", borderRadius: "14px", padding: "24px", width: "300px" },
@@ -93,51 +94,51 @@ export default function LandingPage() {
     heroStatVal:  { fontSize: "13px", color: "white", fontWeight: "700" },
     heroDivider:  { borderTop: "1px solid rgba(255,255,255,0.15)", margin: "14px 0" },
 
-    statsBar:  { background: "#1a1a2e", padding: "32px 60px", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" },
+    statsBar:  { background: "#000000", padding: "32px 60px", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" },
     statItem:  { textAlign: "center" },
     statVal:   { fontSize: "28px", fontWeight: "800", color: "#e85d04" },
-    statLabel: { fontSize: "13px", color: "#aaa", marginTop: "4px" },
+    statLabel: { fontSize: "13px", color: "var(--text-muted, #aaa)", marginTop: "4px" },
 
     section:      { padding: "64px 60px" },
-    sectionAlt:   { padding: "64px 60px", background: "#fafafa" },
+    sectionAlt:   { padding: "64px 60px", background: "var(--section-alt-bg, #fafafa)" },
     sectionTag:   { fontSize: "12px", fontWeight: "700", color: "#e85d04", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" },
-    sectionTitle: { fontSize: "30px", fontWeight: "800", color: "#1a1a1a", marginBottom: "12px" },
-    sectionSub:   { fontSize: "15px", color: "#777", maxWidth: "520px", lineHeight: "1.7", marginBottom: "40px" },
+    sectionTitle: { fontSize: "30px", fontWeight: "800", color: "var(--text-primary, #1a1a1a)", marginBottom: "12px" },
+    sectionSub:   { fontSize: "15px", color: "var(--text-muted, #777)", maxWidth: "520px", lineHeight: "1.7", marginBottom: "40px" },
 
     featGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "24px" },
-    featCard:  { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "24px", borderTop: "3px solid #e85d04" },
+    featCard:  { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "12px", padding: "24px", borderTop: "3px solid #e85d04" },
     featIcon:  { marginBottom: "14px" },
-    featTitle: { fontSize: "15px", fontWeight: "700", color: "#1a1a1a", marginBottom: "8px" },
-    featDesc:  { fontSize: "13px", color: "#777", lineHeight: "1.6" },
+    featTitle: { fontSize: "15px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "8px" },
+    featDesc:  { fontSize: "13px", color: "var(--text-muted, #777)", lineHeight: "1.6" },
 
     platGrid: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" },
-    platCard: (color, bg) => ({ background: bg, border: `1px solid ${color}22`, borderRadius: "12px", padding: "28px", borderLeft: `4px solid ${color}` }),
-    platName: (color) => ({ fontSize: "20px", fontWeight: "800", color, marginBottom: "12px" }),
-    platDesc: { fontSize: "14px", color: "#555", lineHeight: "1.7", marginBottom: "16px" },
+    platCard: (color, bg) => ({ background: bg, border: `1px solid var(--border-color, ${color}22)`, borderRadius: "12px", padding: "28px", borderLeft: `4px solid ${color}` }),
+    platName: (color) => ({ fontSize: "20px", fontWeight: "800", color: `var(--plat-name-color, ${color})`, marginBottom: "12px" }),
+    platDesc: { fontSize: "14px", color: "var(--text-muted, #555)", lineHeight: "1.7", marginBottom: "16px" },
     platLink: (color) => ({ display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", fontWeight: "700", color, cursor: "pointer", background: "none", border: "none", padding: 0 }),
 
     stepsRow:  { display: "flex", gap: "0px", alignItems: "flex-start", flexWrap: "wrap" },
     step:      { flex: 1, minWidth: "180px", textAlign: "center", padding: "0 16px" },
     stepNum:   { width: "48px", height: "48px", background: "#e85d04", color: "white", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", fontWeight: "800", margin: "0 auto 16px" },
-    stepTitle: { fontSize: "15px", fontWeight: "700", color: "#1a1a1a", marginBottom: "8px" },
-    stepDesc:  { fontSize: "13px", color: "#777", lineHeight: "1.6" },
+    stepTitle: { fontSize: "15px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "8px" },
+    stepDesc:  { fontSize: "13px", color: "var(--text-muted, #777)", lineHeight: "1.6" },
 
     testGrid:   { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "24px" },
-    testCard:   { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "24px" },
+    testCard:   { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "12px", padding: "24px" },
     testStars:  { display: "flex", gap: "2px", marginBottom: "12px" },
-    testReview: { fontSize: "14px", color: "#444", lineHeight: "1.7", marginBottom: "16px", fontStyle: "italic" },
-    testName:   { fontSize: "14px", fontWeight: "700", color: "#1a1a1a" },
-    testRole:   { fontSize: "12px", color: "#999" },
+    testReview: { fontSize: "14px", color: "var(--text-primary, #444)", lineHeight: "1.7", marginBottom: "16px", fontStyle: "italic" },
+    testName:   { fontSize: "14px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)" },
+    testRole:   { fontSize: "12px", color: "var(--text-muted, #999)" },
 
     cta:       { background: "linear-gradient(135deg, #e85d04, #bf3b00)", padding: "64px 60px", textAlign: "center", color: "white" },
     ctaTitle:  { fontSize: "32px", fontWeight: "800", marginBottom: "12px" },
     ctaSub:    { fontSize: "16px", opacity: 0.88, marginBottom: "28px" },
-    ctaBtn:    { background: "white", color: "#e85d04", border: "none", borderRadius: "8px", padding: "14px 36px", fontSize: "16px", fontWeight: "700", cursor: "pointer" },
+    ctaBtn:    { background: "var(--card-bg, #fff)", color: "#e85d04", border: "none", borderRadius: "8px", padding: "14px 36px", fontSize: "16px", fontWeight: "700", cursor: "pointer" },
     ctaBtnSec: { background: "transparent", color: "white", border: "2px solid white", borderRadius: "8px", padding: "14px 36px", fontSize: "16px", fontWeight: "600", cursor: "pointer", marginLeft: "14px" },
 
-    footer:       { background: "#0f1923", color: "#ccc", padding: "40px 60px 20px" },
+    footer:       { background: "#000000", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
     footerGrid:   { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
-    footerBottom: { borderTop: "1px solid #1e2d3d", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
+    footerBottom: { borderTop: "1px solid var(--border-color, #1e2d3d)", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   // Read auth state for the hero CTA buttons
@@ -226,15 +227,15 @@ export default function LandingPage() {
       </section>
 
       {/* ── PLATFORMS ── */}
-      <section style={st.sectionAlt}>
+      <section className="landing-section--alt" style={st.sectionAlt}>
         <p style={st.sectionTag}>Supported Platforms</p>
         <h2 style={st.sectionTitle}>All your platforms, one dashboard</h2>
         <p style={st.sectionSub}>We support the biggest e-commerce platforms in Southeast Asia.</p>
         <div style={st.platGrid}>
           {PLATFORMS.map((p) => (
-            <div key={p.name} style={st.platCard(p.color, p.bg)}>
-              <p style={st.platName(p.color)}>{p.name}</p>
-              <p style={st.platDesc}>{p.desc}</p>
+            <div key={p.name} className="platform-landing-card" style={st.platCard(p.color, p.bg)}>
+              <p className="platform-landing-card__name" style={st.platName(p.color)}>{p.name}</p>
+              <p className="platform-landing-card__desc" style={st.platDesc}>{p.desc}</p>
               <button style={st.platLink(p.color)} onClick={() => navigate("/dashboard")}>
                 View Dashboard <IconArrow />
               </button>
@@ -264,7 +265,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── WHAT'S INCLUDED ── */}
-      <section style={st.sectionAlt}>
+      <section className="landing-section--alt" style={st.sectionAlt}>
         <p style={st.sectionTag}>What's Included</p>
         <h2 style={st.sectionTitle}>Everything is free for sellers</h2>
         <p style={st.sectionSub}>No hidden fees. All features are available to all registered sellers.</p>
@@ -277,7 +278,7 @@ export default function LandingPage() {
             "Order search and filtering",
             "Secure account management",
           ].map((item) => (
-            <div key={item} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", color: "#444" }}>
+            <div key={item} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "14px", color: "var(--text-primary, #444)" }}>
               <IconCheck />{item}
             </div>
           ))}
@@ -322,10 +323,10 @@ export default function LandingPage() {
         <div style={st.footerGrid}>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>About Us</h4>
-            <p style={{ fontSize: "13px", color: "#aaa", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               {["f", "t", "ig", "yt"].map((s) => (
-                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "#aaa", cursor: "pointer" }}>{s}</span>
+                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-muted, #aaa)", cursor: "pointer" }}>{s}</span>
               ))}
             </div>
           </div>
@@ -338,27 +339,27 @@ export default function LandingPage() {
               { label: "Dashboard",  route: "/dashboard"},
               { label: "Register",   route: "/register" },
             ].map((l) => (
-              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
+              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
             ))}
           </div>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Platforms</h4>
             {["Shopee", "Lazada", "TikTok Shop", "Returns & Refunds", "FAQs"].map((l) => (
-              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
+              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
             ))}
           </div>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Contact Us</h4>
-            <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
-            <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
-            <p style={{ fontSize: "13px", color: "#aaa" }}>✉ ecommercemarketplace@gmail.com</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)" }}>✉ ecommercemarketplace@gmail.com</p>
           </div>
         </div>
         <div style={st.footerBottom}>
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
           <div>
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "#666", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
+              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
             ))}
           </div>
         </div>

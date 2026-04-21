@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import "../styles/Exportorders.css";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -130,27 +131,27 @@ export default function ExportOrders() {
   const allSelected = selectedIds.length === filteredOrders.length && filteredOrders.length > 0;
 
   const s = {
-    page:        { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
+    page:        { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
     main:        { padding: "32px 40px", maxWidth: "1200px", margin: "0 auto" },
-    pageTitle:   { fontSize: "22px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" },
-    pageSub:     { fontSize: "14px", color: "#777", marginBottom: "16px" },
+    pageTitle:   { fontSize: "22px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "4px" },
+    pageSub:     { fontSize: "14px", color: "var(--text-muted, #777)", marginBottom: "16px" },
     infoBar:     { background: "#fff5f0", border: "1px solid #e85d0433", borderRadius: "8px", padding: "12px 16px", marginBottom: "20px", fontSize: "13px", color: "#bf3b00", display: "flex", alignItems: "center", gap: "8px" },
-    card:        { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "20px" },
+    card:        { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "20px" },
     topRow:      { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "12px" },
     filterRow:   { display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" },
-    searchWrap:  { display: "flex", alignItems: "center", gap: "8px", border: "1px solid #ddd", borderRadius: "6px", padding: "7px 12px", background: "#fafafa" },
-    searchInput: { border: "none", background: "transparent", outline: "none", fontSize: "13px", color: "#444", width: "180px" },
-    select:      { fontSize: "13px", padding: "7px 12px", border: "1px solid #ddd", borderRadius: "6px", background: "#fafafa", color: "#444", outline: "none", cursor: "pointer" },
+    searchWrap:  { display: "flex", alignItems: "center", gap: "8px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", padding: "7px 12px", background: "var(--section-alt-bg, #fafafa)" },
+    searchInput: { border: "none", background: "transparent", outline: "none", fontSize: "13px", color: "var(--text-primary, #444)", width: "180px" },
+    select:      { fontSize: "13px", padding: "7px 12px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", background: "var(--section-alt-bg, #fafafa)", color: "var(--text-primary, #444)", outline: "none", cursor: "pointer" },
     exportBtn:   (disabled) => ({ display: "flex", alignItems: "center", gap: "6px", background: disabled ? "#ccc" : "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", cursor: disabled ? "not-allowed" : "pointer" }),
     table:       { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
-    th:          { padding: "10px 14px", textAlign: "left", fontWeight: "600", color: "#888", borderBottom: "1px solid #f0f0f0", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" },
-    td:          { padding: "12px 14px", borderBottom: "1px solid #f7f7f7", color: "#333" },
+    th:          { padding: "10px 14px", textAlign: "left", fontWeight: "600", color: "var(--text-muted, #888)", borderBottom: "1px solid var(--border-color, #f0f0f0)", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" },
+    td:          { padding: "12px 14px", borderBottom: "1px solid var(--border-color, #f7f7f7)", color: "var(--text-primary, #333)" },
     badge:       (bg, color) => ({ display: "inline-block", background: bg, color, padding: "3px 10px", borderRadius: "12px", fontSize: "11px", fontWeight: "600" }),
     selectedRow: { background: "#fff8f5" },
-    summaryBar:  { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "#888", flexWrap: "wrap", gap: "8px" },
+    summaryBar:  { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "var(--text-muted, #888)", flexWrap: "wrap", gap: "8px" },
     toast:       { position: "fixed", bottom: "24px", right: "24px", background: "#276749", color: "white", padding: "12px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", zIndex: 300, display: "flex", alignItems: "center", gap: "8px" },
-    footer:      { background: "#0f1923", color: "#ccc", padding: "24px 40px", marginTop: "40px" },
-    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
+    footer:      { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "24px 40px", marginTop: "40px" },
+    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
@@ -228,11 +229,11 @@ export default function ExportOrders() {
                     <td style={s.td}>{order.product}</td>
                     <td style={{ ...s.td, fontWeight: "600" }}>₱{Number(order.amount).toLocaleString()}</td>
                     <td style={s.td}><span style={s.badge(STATUS_COLORS[order.status]?.bg, STATUS_COLORS[order.status]?.color)}>{order.status}</span></td>
-                    <td style={{ ...s.td, color: "#888" }}>{order.date}</td>
+                    <td style={{ ...s.td, color: "var(--text-muted, #888)" }}>{order.date}</td>
                   </tr>
                 );
               }) : (
-                <tr><td colSpan={8} style={{ textAlign: "center", padding: "32px", color: "#aaa", fontSize: "14px" }}>No orders found.</td></tr>
+                <tr><td colSpan={8} style={{ textAlign: "center", padding: "32px", color: "var(--text-muted, #aaa)", fontSize: "14px" }}>No orders found.</td></tr>
               )}
             </tbody>
           </table>
@@ -262,7 +263,7 @@ export default function ExportOrders() {
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
           <div>
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "#666", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
+              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
             ))}
           </div>
         </div>

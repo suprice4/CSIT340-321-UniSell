@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import "../styles/About.css";
 
 const IconTarget = () => (
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e85d04" strokeWidth="1.8">
@@ -52,7 +53,7 @@ export default function About() {
   }, []);
 
   const st = {
-    page:        { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
+    page:        { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
 
     hero:        { background: "linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%)", padding: "60px 60px", color: "white" },
     heroTag:     { display: "inline-block", background: "rgba(255,255,255,0.2)", color: "white", fontSize: "12px", fontWeight: "600", padding: "5px 14px", borderRadius: "20px", marginBottom: "16px", letterSpacing: "1px", textTransform: "uppercase" },
@@ -62,40 +63,40 @@ export default function About() {
     statsBar:    { background: "#1a1a2e", padding: "28px 60px", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" },
     statItem:    { textAlign: "center" },
     statVal:     { fontSize: "26px", fontWeight: "800", color: "#e85d04" },
-    statLabel:   { fontSize: "13px", color: "#aaa", marginTop: "4px" },
+    statLabel:   { fontSize: "13px", color: "var(--text-muted, #aaa)", marginTop: "4px" },
 
     section:     { padding: "60px 60px" },
-    sectionAlt:  { padding: "60px 60px", background: "#fff" },
+    sectionAlt:  { padding: "60px 60px", background: "var(--card-bg, #fff)" },
     sectionTag:  { fontSize: "12px", fontWeight: "700", color: "#e85d04", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "10px" },
-    sectionTitle:{ fontSize: "28px", fontWeight: "800", color: "#1a1a1a", marginBottom: "12px" },
-    sectionSub:  { fontSize: "15px", color: "#777", maxWidth: "520px", lineHeight: "1.7", marginBottom: "40px" },
+    sectionTitle:{ fontSize: "28px", fontWeight: "800", color: "var(--text-primary, #1a1a1a)", marginBottom: "12px" },
+    sectionSub:  { fontSize: "15px", color: "var(--text-muted, #777)", maxWidth: "520px", lineHeight: "1.7", marginBottom: "40px" },
 
     valGrid:     { display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "24px" },
-    valCard:     { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px", borderTop: "3px solid #e85d04" },
+    valCard:     { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "12px", padding: "28px", borderTop: "3px solid #e85d04" },
     valIcon:     { marginBottom: "14px" },
-    valTitle:    { fontSize: "16px", fontWeight: "700", color: "#1a1a1a", marginBottom: "8px" },
-    valDesc:     { fontSize: "14px", color: "#666", lineHeight: "1.7" },
+    valTitle:    { fontSize: "16px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "8px" },
+    valDesc:     { fontSize: "14px", color: "var(--text-muted, #666)", lineHeight: "1.7" },
 
     whoRow:      { display: "flex", gap: "40px", flexWrap: "wrap", alignItems: "center" },
     whoLeft:     { flex: 1, minWidth: "260px" },
-    whoRight:    { flex: 1, minWidth: "260px", background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "28px" },
-    whoText:     { fontSize: "15px", color: "#555", lineHeight: "1.8", marginBottom: "16px" },
+    whoRight:    { flex: 1, minWidth: "260px", background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "12px", padding: "28px" },
+    whoText:     { fontSize: "15px", color: "var(--text-muted, #555)", lineHeight: "1.8", marginBottom: "16px" },
 
     teamGrid:    { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" },
-    teamCard:    { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "12px", padding: "24px", textAlign: "center" },
+    teamCard:    { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "12px", padding: "24px", textAlign: "center" },
     teamAvatar:  (color) => ({ width: "60px", height: "60px", borderRadius: "50%", background: color + "18", color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "700", margin: "0 auto 14px" }),
-    teamName:    { fontSize: "15px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" },
-    teamRole:    { fontSize: "13px", color: "#888" },
+    teamName:    { fontSize: "15px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "4px" },
+    teamRole:    { fontSize: "13px", color: "var(--text-muted, #888)" },
 
     cta:         { background: "linear-gradient(135deg, #e85d04, #bf3b00)", padding: "56px 60px", textAlign: "center", color: "white" },
     ctaTitle:    { fontSize: "28px", fontWeight: "800", marginBottom: "10px" },
     ctaSub:      { fontSize: "15px", opacity: 0.88, marginBottom: "24px" },
-    ctaBtn:      { background: "white", color: "#e85d04", border: "none", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
+    ctaBtn:      { background: "var(--card-bg, #fff)", color: "#e85d04", border: "none", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
     ctaBtnSec:   { background: "transparent", color: "white", border: "2px solid white", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "600", cursor: "pointer", marginLeft: "12px" },
 
-    footer:      { background: "#0f1923", color: "#ccc", padding: "40px 60px 20px" },
+    footer:      { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
     footerGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
-    footerBottom:{ borderTop: "1px solid #1e2d3d", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
+    footerBottom:{ borderTop: "1px solid var(--border-color, #1e2d3d)", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
@@ -150,9 +151,9 @@ export default function About() {
               { label: "Users",      value: "876+ Sellers" },
               { label: "Technology", value: "ReactJS + Node.js" },
             ].map((item) => (
-              <div key={item.label} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #f0f0f0", fontSize: "14px" }}>
-                <span style={{ color: "#888" }}>{item.label}</span>
-                <span style={{ fontWeight: "600", color: "#222" }}>{item.value}</span>
+              <div key={item.label} style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--border-color, #f0f0f0)", fontSize: "14px" }}>
+                <span style={{ color: "var(--text-muted, #888)" }}>{item.label}</span>
+                <span style={{ fontWeight: "600", color: "var(--text-primary, #222)" }}>{item.value}</span>
               </div>
             ))}
           </div>
@@ -200,10 +201,10 @@ export default function About() {
         <div style={st.footerGrid}>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>About Us</h4>
-            <p style={{ fontSize: "13px", color: "#aaa", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
             <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
               {["f", "t", "ig", "yt"].map((s) => (
-                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "#aaa", cursor: "pointer" }}>{s}</span>
+                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-muted, #aaa)", cursor: "pointer" }}>{s}</span>
               ))}
             </div>
           </div>
@@ -216,27 +217,27 @@ export default function About() {
               { label: "Dashboard",  route: "/dashboard" },
               { label: "Register",   route: "/register"  },
             ].map((l) => (
-              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
+              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
             ))}
           </div>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Platforms</h4>
             {["Shopee", "Lazada", "TikTok Shop", "Returns & Refunds", "FAQs"].map((l) => (
-              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "#aaa", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
+              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
             ))}
           </div>
           <div>
             <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Contact Us</h4>
-            <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
-            <p style={{ fontSize: "13px", color: "#aaa", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
-            <p style={{ fontSize: "13px", color: "#aaa" }}>✉ ecommercemarketplace@gmail.com</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
+            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)" }}>✉ ecommercemarketplace@gmail.com</p>
           </div>
         </div>
         <div style={st.footerBottom}>
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
           <div>
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "#666", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
+              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
             ))}
           </div>
         </div>

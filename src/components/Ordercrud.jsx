@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import "../styles/Ordercrud.css";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -174,42 +175,42 @@ export default function OrderCRUD() {
   // ── Styles ────────────────────────────────────────────────────────────────
 
   const s = {
-    page:       { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
+    page:       { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
     main:       { padding: "32px 40px", maxWidth: "1200px", margin: "0 auto" },
-    pageTitle:  { fontSize: "22px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" },
-    pageSub:    { fontSize: "14px", color: "#777", marginBottom: "24px" },
-    card:       { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "20px" },
+    pageTitle:  { fontSize: "22px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "4px" },
+    pageSub:    { fontSize: "14px", color: "var(--text-muted, #777)", marginBottom: "24px" },
+    card:       { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "20px" },
     topRow:     { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", flexWrap: "wrap", gap: "12px" },
     filterRow:  { display: "flex", gap: "10px", flexWrap: "wrap", alignItems: "center" },
-    searchWrap: { display: "flex", alignItems: "center", gap: "8px", border: "1px solid #ddd", borderRadius: "6px", padding: "7px 12px", background: "#fafafa" },
-    searchInput:{ border: "none", background: "transparent", outline: "none", fontSize: "13px", color: "#444", width: "180px" },
-    select:     { fontSize: "13px", padding: "7px 12px", border: "1px solid #ddd", borderRadius: "6px", background: "#fafafa", color: "#444", outline: "none", cursor: "pointer" },
+    searchWrap: { display: "flex", alignItems: "center", gap: "8px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", padding: "7px 12px", background: "var(--section-alt-bg, #fafafa)" },
+    searchInput:{ border: "none", background: "transparent", outline: "none", fontSize: "13px", color: "var(--text-primary, #444)", width: "180px" },
+    select:     { fontSize: "13px", padding: "7px 12px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", background: "var(--section-alt-bg, #fafafa)", color: "var(--text-primary, #444)", outline: "none", cursor: "pointer" },
     addBtn:     { display: "flex", alignItems: "center", gap: "6px", background: "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "8px 16px", fontSize: "13px", fontWeight: "600", cursor: "pointer" },
     table:      { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
-    th:         { padding: "10px 14px", textAlign: "left", fontWeight: "600", color: "#888", borderBottom: "1px solid #f0f0f0", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" },
-    td:         { padding: "12px 14px", borderBottom: "1px solid #f7f7f7", color: "#333" },
+    th:         { padding: "10px 14px", textAlign: "left", fontWeight: "600", color: "var(--text-muted, #888)", borderBottom: "1px solid var(--border-color, #f0f0f0)", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" },
+    td:         { padding: "12px 14px", borderBottom: "1px solid var(--border-color, #f7f7f7)", color: "var(--text-primary, #333)" },
     badge:      (bg, color) => ({ display: "inline-block", background: bg, color, padding: "3px 10px", borderRadius: "12px", fontSize: "11px", fontWeight: "600" }),
-    actionBtn:  (color) => ({ display: "inline-flex", alignItems: "center", gap: "4px", padding: "5px 10px", borderRadius: "6px", border: `1px solid ${color}22`, background: color + "11", color, cursor: "pointer", fontSize: "12px", fontWeight: "600", marginRight: "6px" }),
-    pagination: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "#888" },
-    pageBtn:    (active) => ({ padding: "5px 11px", borderRadius: "6px", border: "1px solid #ddd", background: active ? "#e85d04" : "#fff", color: active ? "#fff" : "#555", cursor: "pointer", fontSize: "13px", marginLeft: "4px" }),
-    emptyRow:   { textAlign: "center", padding: "32px", color: "#aaa", fontSize: "14px" },
+    actionBtn:  (color) => ({ display: "inline-flex", alignItems: "center", gap: "4px", padding: "5px 10px", borderRadius: "6px", border: `1px solid var(--border-color, ${color}22`, background: color + "11", color, cursor: "pointer", fontSize: "12px", fontWeight: "600", marginRight: "6px" }),
+    pagination: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "var(--text-muted, #888)" },
+    pageBtn:    (active) => ({ padding: "5px 11px", borderRadius: "6px", border: "1px solid var(--border-color, #ddd)", background: active ? "#e85d04" : "#fff", color: active ? "#fff" : "#555", cursor: "pointer", fontSize: "13px", marginLeft: "4px" }),
+    emptyRow:   { textAlign: "center", padding: "32px", color: "var(--text-muted, #aaa)", fontSize: "14px" },
     overlay:    { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200 },
-    modal:      { background: "#fff", borderRadius: "12px", padding: "28px", width: "100%", maxWidth: "480px", position: "relative" },
-    modalTitle: { fontSize: "18px", fontWeight: "700", color: "#1a1a1a", marginBottom: "20px" },
-    closeBtn:   { position: "absolute", top: "16px", right: "16px", background: "none", border: "none", cursor: "pointer", color: "#888" },
+    modal:      { background: "var(--card-bg, #fff)", borderRadius: "12px", padding: "28px", width: "100%", maxWidth: "480px", position: "relative" },
+    modalTitle: { fontSize: "18px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "20px" },
+    closeBtn:   { position: "absolute", top: "16px", right: "16px", background: "none", border: "none", cursor: "pointer", color: "var(--text-muted, #888)" },
     formGroup:  { marginBottom: "14px" },
-    label:      { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "#333" },
-    input:      (err) => ({ width: "100%", padding: "9px 12px", border: `1px solid ${err ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "#333", outline: "none", boxSizing: "border-box", background: "#fafafa" }),
+    label:      { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "var(--text-primary, #333)" },
+    input:      (err) => ({ width: "100%", padding: "9px 12px", border: `1px solid var(--border-color, ${err ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "var(--text-primary, #333)", outline: "none", boxSizing: "border-box", background: "var(--section-alt-bg, #fafafa)" }),
     errorText:  { fontSize: "12px", color: "#e53e3e", marginTop: "4px" },
     modalBtns:  { display: "flex", gap: "10px", marginTop: "20px", justifyContent: "flex-end" },
-    cancelBtn:  { padding: "9px 20px", border: "1px solid #ddd", borderRadius: "6px", background: "#fff", color: "#555", cursor: "pointer", fontSize: "14px" },
+    cancelBtn:  { padding: "9px 20px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", background: "var(--card-bg, #fff)", color: "var(--text-muted, #555)", cursor: "pointer", fontSize: "14px" },
     confirmBtn: (color) => ({ padding: "9px 20px", border: "none", borderRadius: "6px", background: color, color: "white", cursor: "pointer", fontSize: "14px", fontWeight: "600" }),
-    viewRow:    { display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #f7f7f7", fontSize: "14px" },
-    viewLabel:  { color: "#888" },
-    viewVal:    { fontWeight: "600", color: "#222" },
+    viewRow:    { display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid var(--border-color, #f7f7f7)", fontSize: "14px" },
+    viewLabel:  { color: "var(--text-muted, #888)" },
+    viewVal:    { fontWeight: "600", color: "var(--text-primary, #222)" },
     toast:      (type) => ({ position: "fixed", bottom: "24px", right: "24px", background: type === "success" ? "#276749" : "#9b2c2c", color: "white", padding: "12px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", zIndex: 300 }),
-    footer:     { background: "#0f1923", color: "#ccc", padding: "24px 40px", marginTop: "40px" },
-    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
+    footer:     { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "24px 40px", marginTop: "40px" },
+    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   // ── Reusable Form Fields ──────────────────────────────────────────────────
@@ -312,7 +313,7 @@ export default function OrderCRUD() {
                   <td style={s.td}>{order.product}</td>
                   <td style={{ ...s.td, fontWeight: "600" }}>₱{Number(order.amount).toLocaleString()}</td>
                   <td style={s.td}><span style={s.badge(STATUS_COLORS[order.status]?.bg, STATUS_COLORS[order.status]?.color)}>{order.status}</span></td>
-                  <td style={{ ...s.td, color: "#888" }}>{order.date}</td>
+                  <td style={{ ...s.td, color: "var(--text-muted, #888)" }}>{order.date}</td>
                   <td style={s.td}>
                     <button style={s.actionBtn("#2563eb")} onClick={() => openView(order)}><IconEye /> View</button>
                     <button style={s.actionBtn("#e85d04")} onClick={() => openEdit(order)}><IconEdit /> Edit</button>
@@ -403,7 +404,7 @@ export default function OrderCRUD() {
           <div style={s.modal}>
             <button style={s.closeBtn} onClick={() => setShowDeleteModal(false)}><IconX /></button>
             <p style={s.modalTitle}>Delete Order</p>
-            <p style={{ fontSize: "14px", color: "#555", lineHeight: "1.7" }}>
+            <p style={{ fontSize: "14px", color: "var(--text-muted, #555)", lineHeight: "1.7" }}>
               Are you sure you want to delete order <strong>{selectedOrder.id}</strong> from <strong>{selectedOrder.customer}</strong>? This action cannot be undone.
             </p>
             <div style={s.modalBtns}>
@@ -423,7 +424,7 @@ export default function OrderCRUD() {
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
           <div>
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "#666", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
+              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
             ))}
           </div>
         </div>

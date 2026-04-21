@@ -1,3 +1,4 @@
+import "../styles/Orderfilters.css";
 import { useState, useEffect } from "react";
 
 
@@ -20,20 +21,20 @@ export default function OrderFilters({ onFilterChange, filters }) {
     searchInput: {
       fontSize: "13px",
       padding: "7px 12px",
-      border: "1px solid #ddd",
+      border: "1px solid var(--border-color, #ddd)",
       borderRadius: "6px",
-      background: "#fafafa",
-      color: "#444",
+      background: "var(--section-alt-bg, #fafafa)",
+      color: "var(--text-primary, #444)",
       outline: "none",
       width: "200px",
     },
     select: {
       fontSize: "13px",
       padding: "7px 12px",
-      border: "1px solid #ddd",
+      border: "1px solid var(--border-color, #ddd)",
       borderRadius: "6px",
-      background: "#fafafa",
-      color: "#444",
+      background: "var(--section-alt-bg, #fafafa)",
+      color: "var(--text-primary, #444)",
       outline: "none",
       cursor: "pointer",
     },

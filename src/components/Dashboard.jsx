@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import "../styles/Dashboard.css";
 
 
 const IconSearch = () => (
@@ -149,49 +150,49 @@ export default function Dashboard() {
 
 
   const s = {
-    page:       { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
-    topNav:     { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "12px 40px", display: "flex", alignItems: "center", justifyContent: "space-between" },
+    page:       { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
+    topNav:     { background: "var(--card-bg, #fff)", borderBottom: "1px solid var(--border-color, #e0e0e0)", padding: "12px 40px", display: "flex", alignItems: "center", justifyContent: "space-between" },
     logoArea:   { display: "flex", alignItems: "center", gap: "10px" },
     logoCircle: { width: "44px", height: "44px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", color: "white", flexShrink: 0 },
     logoText:   { fontSize: "12px", fontWeight: "700", color: "#e85d04", lineHeight: "1.3", textTransform: "uppercase" },
-    searchBar:  { flex: 1, maxWidth: "480px", margin: "0 24px", display: "flex", alignItems: "center", border: "1px solid #ccc", borderRadius: "6px", background: "#f9f9f9", padding: "8px 14px", gap: "8px" },
-    searchInput:{ border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "#444" },
+    searchBar:  { flex: 1, maxWidth: "480px", margin: "0 24px", display: "flex", alignItems: "center", border: "1px solid var(--border-color, #ccc)", borderRadius: "6px", background: "var(--input-bg, #f9f9f9)", padding: "8px 14px", gap: "8px" },
+    searchInput:{ border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "var(--text-primary, #444)" },
     topNavRight:{ display: "flex", gap: "16px", alignItems: "center" },
-    iconBtn:    { display: "flex", flexDirection: "column", alignItems: "center", fontSize: "11px", color: "#555", gap: "2px", cursor: "pointer", background: "none", border: "none" },
+    iconBtn:    { display: "flex", flexDirection: "column", alignItems: "center", fontSize: "11px", color: "var(--text-muted, #555)", gap: "2px", cursor: "pointer", background: "none", border: "none" },
     logoutBtn:  { display: "flex", alignItems: "center", gap: "6px", fontSize: "13px", color: "#e85d04", fontWeight: "600", cursor: "pointer", background: "none", border: "1px solid #e85d04", borderRadius: "6px", padding: "6px 14px" },
-    mainNav:    { background: "#fff", borderBottom: "1px solid #e0e0e0", padding: "0 40px", display: "flex", gap: "32px" },
+    mainNav:    { background: "var(--card-bg, #fff)", borderBottom: "1px solid var(--border-color, #e0e0e0)", padding: "0 40px", display: "flex", gap: "32px" },
     navBtn:     (active) => ({ display: "block", padding: "14px 0", fontSize: "15px", fontWeight: "500", color: active ? "#e85d04" : "#333", cursor: "pointer", background: "none", border: "none", borderBottom: active ? "2px solid #e85d04" : "2px solid transparent" }),
     main:       { padding: "32px 40px", maxWidth: "1200px", margin: "0 auto" },
-    sectionTitle: { fontSize: "16px", fontWeight: "700", color: "#222", marginBottom: "16px" },
+    sectionTitle: { fontSize: "16px", fontWeight: "700", color: "var(--text-primary, #222)", marginBottom: "16px" },
     cardsGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "16px", marginBottom: "32px" },
-    summaryCard:(accent) => ({ background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "20px", display: "flex", flexDirection: "column", gap: "10px", borderTop: `3px solid ${accent}` }),
+    summaryCard:(accent) => ({ background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "20px", display: "flex", flexDirection: "column", gap: "10px", borderTop: `3px solid ${accent}` }),
     cardTop:    { display: "flex", alignItems: "center", justifyContent: "space-between" },
-    cardLabel:  { fontSize: "13px", color: "#888", fontWeight: "500" },
+    cardLabel:  { fontSize: "13px", color: "var(--text-muted, #888)", fontWeight: "500" },
     cardIcon:   (color) => ({ width: "36px", height: "36px", borderRadius: "50%", background: color + "18", color, display: "flex", alignItems: "center", justifyContent: "center" }),
-    cardValue:  { fontSize: "24px", fontWeight: "700", color: "#1a1a1a" },
+    cardValue:  { fontSize: "24px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)" },
     cardChange: { display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", color: "#16a34a" },
     platGrid:   { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "32px" },
-    platCard:   (color) => ({ background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "20px", borderTop: `3px solid ${color}` }),
+    platCard:   (color) => ({ background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "20px", borderTop: `3px solid ${color}` }),
     platHeader: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" },
     platName:   (color) => ({ fontSize: "16px", fontWeight: "700", color }),
     platBadge:  { fontSize: "11px", background: "#f0fff4", color: "#276749", padding: "3px 10px", borderRadius: "12px", fontWeight: "600" },
-    platRow:    { display: "flex", justifyContent: "space-between", fontSize: "13px", color: "#555", marginBottom: "8px" },
-    platVal:    { fontWeight: "600", color: "#222" },
+    platRow:    { display: "flex", justifyContent: "space-between", fontSize: "13px", color: "var(--text-muted, #555)", marginBottom: "8px" },
+    platVal:    { fontWeight: "600", color: "var(--text-primary, #222)" },
     platGrowth: { display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", color: "#16a34a", marginTop: "10px", fontWeight: "600" },
-    tableCard:  { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "20px" },
+    tableCard:  { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "20px" },
     tableTop:   { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", flexWrap: "wrap", gap: "12px" },
     filterRow:  { display: "flex", gap: "10px", flexWrap: "wrap" },
-    filterSel:  { fontSize: "13px", padding: "7px 12px", border: "1px solid #ddd", borderRadius: "6px", background: "#fafafa", color: "#444", outline: "none", cursor: "pointer" },
-    orderSearch:{ fontSize: "13px", padding: "7px 12px", border: "1px solid #ddd", borderRadius: "6px", background: "#fafafa", color: "#444", outline: "none", width: "200px" },
+    filterSel:  { fontSize: "13px", padding: "7px 12px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", background: "var(--section-alt-bg, #fafafa)", color: "var(--text-primary, #444)", outline: "none", cursor: "pointer" },
+    orderSearch:{ fontSize: "13px", padding: "7px 12px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", background: "var(--section-alt-bg, #fafafa)", color: "var(--text-primary, #444)", outline: "none", width: "200px" },
     table:      { width: "100%", borderCollapse: "collapse", fontSize: "13px" },
-    th:         { padding: "10px 14px", textAlign: "left", fontWeight: "600", color: "#888", borderBottom: "1px solid #f0f0f0", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" },
-    td:         { padding: "12px 14px", borderBottom: "1px solid #f7f7f7", color: "#333" },
+    th:         { padding: "10px 14px", textAlign: "left", fontWeight: "600", color: "var(--text-muted, #888)", borderBottom: "1px solid var(--border-color, #f0f0f0)", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" },
+    td:         { padding: "12px 14px", borderBottom: "1px solid var(--border-color, #f7f7f7)", color: "var(--text-primary, #333)" },
     badge:      (bg, color) => ({ display: "inline-block", background: bg, color, padding: "3px 10px", borderRadius: "12px", fontSize: "11px", fontWeight: "600" }),
-    pagination: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "#888" },
-    pageBtn:    (active) => ({ padding: "5px 11px", borderRadius: "6px", border: "1px solid #ddd", background: active ? "#e85d04" : "#fff", color: active ? "#fff" : "#555", cursor: "pointer", fontSize: "13px", fontWeight: active ? "600" : "400", marginLeft: "4px" }),
-    emptyRow:   { textAlign: "center", padding: "32px", color: "#aaa", fontSize: "14px" },
+    pagination: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "var(--text-muted, #888)" },
+    pageBtn:    (active) => ({ padding: "5px 11px", borderRadius: "6px", border: "1px solid var(--border-color, #ddd)", background: active ? "#e85d04" : "#fff", color: active ? "#fff" : "#555", cursor: "pointer", fontSize: "13px", fontWeight: active ? "600" : "400", marginLeft: "4px" }),
+    emptyRow:   { textAlign: "center", padding: "32px", color: "var(--text-muted, #aaa)", fontSize: "14px" },
     footer:     { background: "#0f1923", color: "#ccc", padding: "24px 40px", marginTop: "40px" },
-    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
+    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
 
@@ -203,8 +204,8 @@ export default function Dashboard() {
       <div style={s.main}>
 
         <div style={{ marginBottom: "28px" }}>
-          <h2 style={{ fontSize: "22px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" }}>{greeting}, Admin 👋</h2>
-          <p style={{ fontSize: "14px", color: "#777" }}>Here's what's happening across your platforms today.</p>
+          <h2 style={{ fontSize: "22px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "4px" }}>{greeting}, Admin 👋</h2>
+          <p style={{ fontSize: "14px", color: "var(--text-muted, #777)" }}>Here's what's happening across your platforms today.</p>
         </div>
 
         <p style={s.sectionTitle}>Sales Overview</p>
@@ -277,7 +278,7 @@ export default function Dashboard() {
                     <td style={s.td}>{order.product}</td>
                     <td style={{ ...s.td, fontWeight: "600" }}>{order.amount}</td>
                     <td style={s.td}><span style={s.badge(STATUS_COLORS[order.status]?.bg, STATUS_COLORS[order.status]?.color)}>{order.status}</span></td>
-                    <td style={{ ...s.td, color: "#888" }}>{order.date}</td>
+                    <td style={{ ...s.td, color: "var(--text-muted, #888)" }}>{order.date}</td>
                   </tr>
                 ))
               ) : (
@@ -304,7 +305,7 @@ export default function Dashboard() {
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
           <div>
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "#666", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
+              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
             ))}
           </div>
         </div>

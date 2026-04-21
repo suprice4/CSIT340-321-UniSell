@@ -107,7 +107,7 @@
 
 /* ── Stats bar ────────────────────────────────────────────── */
 .landing-stats-bar {
-  background: #1a1a2e;
+  background: #000;
   padding: 32px 60px;
   display: flex;
   justify-content: space-around;
@@ -258,7 +258,7 @@
 
 /* ── Footer ───────────────────────────────────────────────── */
 .landing-footer {
-  background: #0f1923;
+  background: #000;
   color: #ccc;
   padding: 40px 60px 20px;
 }
@@ -292,7 +292,7 @@
 .landing-footer__social-icon {
   width: 28px;
   height: 28px;
-  background: #1e2d3d;
+  background: #222;
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -303,7 +303,7 @@
 }
 
 .landing-footer__bottom {
-  border-top: 1px solid #1e2d3d;
+  border-top: 1px solid #222;
   padding-top: 16px;
   display: flex;
   justify-content: space-between;

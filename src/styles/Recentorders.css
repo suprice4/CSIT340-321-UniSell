@@ -1,0 +1,52 @@
+/* ============================================================
+   RecentOrders.css — Styles for RecentOrders.jsx
+   ============================================================ */
+
+.recent-orders-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.recent-orders-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.recent-orders-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+}
+
+/* ── Table ────────────────────────────────────────────────── */
+.recent-orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.recent-orders-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: #888;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.recent-orders-table .empty-row {
+  text-align: center;
+  padding: 32px;
+  color: #aaa;
+  font-size: 14px;
+}

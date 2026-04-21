@@ -1,0 +1,55 @@
+/* ============================================================
+   OrderRow.css — Styles for OrderRow.jsx
+   ============================================================ */
+
+.order-row td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f7f7f7;
+  color: #333;
+  font-size: 13px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.order-row__id {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f7f7f7;
+  color: #e85d04;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.order-row__amount {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f7f7f7;
+  color: #333;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.order-row__date {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f7f7f7;
+  color: #888;
+  font-size: 13px;
+}
+
+/* Badges */
+.order-row__badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Status */
+.order-row__badge--delivered  { background: #f0fff4; color: #276749; }
+.order-row__badge--shipped    { background: #ebf8ff; color: #2b6cb0; }
+.order-row__badge--pending    { background: #fefce8; color: #854d0e; }
+.order-row__badge--processing { background: #faf5ff; color: #6b21a8; }
+.order-row__badge--cancelled  { background: #fff5f5; color: #9b2c2c; }
+
+/* Platform */
+.order-row__badge--shopee { background: #fff1ee; color: #ee4d2d; }
+.order-row__badge--lazada { background: #eef0ff; color: #0f146b; }
+.order-row__badge--tiktok { background: #f3f3f3; color: #010101; }

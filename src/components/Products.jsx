@@ -1,53 +1,39 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import "../styles/Products.css";
 
 const CATEGORIES = ["All", "Electronics", "Clothing", "Shoes", "Accessories"];
 
 const SAMPLE_PRODUCTS = [
-  { name: "iPhone 13", price: 45000, category: "Electronics" },
-  { name: "Nike Air Max", price: 5500, category: "Shoes" },
-  { name: "T-Shirt", price: 300, category: "Clothing" }
+  { name: "iPhone 13",    price: 45000, category: "Electronics" },
+  { name: "Nike Air Max", price: 5500,  category: "Shoes" },
+  { name: "T-Shirt",      price: 300,   category: "Clothing" },
 ];
 
 export default function Products() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-  const [form, setForm] = useState({
-    name: "",
-    price: "",
-    category: "Electronics"
-  });
-  const [editIndex, setEditIndex] = useState(null);
-
+  const [form, setForm]         = useState({ name: "", price: "", category: "Electronics" });
+  const [editIndex, setEditIndex]       = useState(null);
   const [filterCategory, setFilterCategory] = useState("All");
-  const [search, setSearch] = useState("");
+  const [search, setSearch]     = useState("");
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("products"));
-    if (!data || data.length === 0) {
-      setProducts(SAMPLE_PRODUCTS);
-    } else {
-      setProducts(data);
-    }
+    setProducts(!data || data.length === 0 ? SAMPLE_PRODUCTS : data);
   }, []);
 
   useEffect(() => {
     localStorage.setItem("products", JSON.stringify(products));
   }, [products]);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!form.name || !form.price) return;
-
-    const newProduct = {
-      ...form,
-      price: Number(form.price),
-      createdAt: Date.now()
-    };
-
+    const newProduct = { ...form, price: Number(form.price), createdAt: Date.now() };
     if (editIndex !== null) {
       const updated = [...products];
       updated[editIndex] = newProduct;
@@ -56,192 +42,68 @@ export default function Products() {
     } else {
       setProducts([newProduct, ...products]);
     }
-
     setForm({ name: "", price: "", category: "Electronics" });
   };
 
-  const handleEdit = (index) => {
-    setForm(products[index]);
-    setEditIndex(index);
-  };
+  const handleEdit   = (i) => { setForm(products[i]); setEditIndex(i); };
+  const handleDelete = (i) => setProducts(products.filter((_, idx) => idx !== i));
 
-  const handleDelete = (index) => {
-    setProducts(products.filter((_, i) => i !== index));
-  };
-
-  // FILTER LOGIC
   const filteredProducts = products.filter((p) => {
-    const matchCategory =
-      filterCategory === "All" || p.category === filterCategory;
-
-    const matchSearch =
-      p.name.toLowerCase().includes(search.toLowerCase());
-
+    const matchCategory = filterCategory === "All" || p.category === filterCategory;
+    const matchSearch   = p.name.toLowerCase().includes(search.toLowerCase());
     return matchCategory && matchSearch;
   });
 
-  const s = {
-    container: {
-      padding: "40px",
-      background: "#f7f7f7",
-      minHeight: "100vh"
-    },
-    grid: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: "30px"
-    },
-    card: {
-      background: "#fff",
-      padding: "25px",
-      borderRadius: "10px",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
-    },
-    title: {
-      fontSize: "18px",
-      fontWeight: "600",
-      marginBottom: "15px"
-    },
-    input: {
-      width: "100%",
-      padding: "10px",
-      marginBottom: "10px",
-      border: "1px solid #ccc",
-      borderRadius: "6px"
-    },
-    button: {
-      width: "100%",
-      padding: "10px",
-      background: "#e85d04",
-      color: "#fff",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer"
-    },
-    productItem: {
-      padding: "10px 0",
-      borderBottom: "1px solid #eee"
-    },
-    filterBar: {
-      display: "flex",
-      gap: "10px",
-      marginBottom: "15px"
-    },
-    actions: { marginTop: "5px" },
-    editBtn: {
-      marginRight: "8px",
-      background: "#2a9d8f",
-      color: "#fff",
-      border: "none",
-      padding: "5px 10px",
-      borderRadius: "4px",
-      cursor: "pointer"
-    },
-    deleteBtn: {
-      background: "#e63946",
-      color: "#fff",
-      border: "none",
-      padding: "5px 10px",
-      borderRadius: "4px",
-      cursor: "pointer"
-    }
-  };
-
   return (
-    <div style={s.container}>
-      <div style={s.grid}>
+    <div className="products-container" style={{ padding: 0, background: "#f7f7f7" }}>
+      <Navbar activePage="/products" />
 
-        {/* LEFT */}
-        <div style={s.card}>
-          <div style={s.title}>Add / Update Product</div>
-
-          <form onSubmit={handleSubmit}>
-            <input
-              name="name"
-              placeholder="Product Name"
-              value={form.name}
-              onChange={handleChange}
-              style={s.input}
-            />
-
-            <input
-              name="price"
-              type="number"
-              placeholder="Price"
-              value={form.price}
-              onChange={handleChange}
-              style={s.input}
-            />
-
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              style={s.input}
-            >
-              {CATEGORIES.slice(1).map((cat) => (
-                <option key={cat}>{cat}</option>
-              ))}
-            </select>
-
-            <button style={s.button}>
+      <div style={{ padding: "32px 40px", maxWidth: "1100px", margin: "0 auto" }}>
+        <div className="products-grid">
+          {/* LEFT — Add/Edit form */}
+          <div className="products-card">
+            <div className="products-card__title">
               {editIndex !== null ? "Update Product" : "Add Product"}
-            </button>
-          </form>
-        </div>
-
-        {/* RIGHT */}
-        <div style={s.card}>
-          <div style={s.title}>Product List</div>
-
-          {/* FILTERS */}
-          <div style={s.filterBar}>
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              style={s.input}
-            >
-              {CATEGORIES.map((cat) => (
-                <option key={cat}>{cat}</option>
-              ))}
-            </select>
-
-            <input
-              placeholder="Search product..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              style={s.input}
-            />
+            </div>
+            <form onSubmit={handleSubmit}>
+              <input name="name" placeholder="Product Name" value={form.name} onChange={handleChange} className="products-input" />
+              <input name="price" type="number" placeholder="Price" value={form.price} onChange={handleChange} className="products-input" />
+              <select name="category" value={form.category} onChange={handleChange} className="products-input">
+                {CATEGORIES.slice(1).map((cat) => <option key={cat}>{cat}</option>)}
+              </select>
+              <button className="products-submit-btn">
+                {editIndex !== null ? "Update Product" : "Add Product"}
+              </button>
+            </form>
           </div>
 
-          {filteredProducts.length === 0 ? (
-            <p>No matching products</p>
-          ) : (
-            filteredProducts.map((p, i) => (
-              <div key={i} style={s.productItem}>
-                <strong>{p.name}</strong><br />
-                <small>{p.category}</small><br />
-                ₱{p.price}
+          {/* RIGHT — Product list */}
+          <div className="products-card">
+            <div className="products-card__title">Product List</div>
+            <div className="products-filter-bar">
+              <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="products-input">
+                {CATEGORIES.map((cat) => <option key={cat}>{cat}</option>)}
+              </select>
+              <input placeholder="Search product..." value={search} onChange={(e) => setSearch(e.target.value)} className="products-input" />
+            </div>
 
-                <div style={s.actions}>
-                  <button
-                    style={s.editBtn}
-                    onClick={() => handleEdit(i)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    style={s.deleteBtn}
-                    onClick={() => handleDelete(i)}
-                  >
-                    Delete
-                  </button>
+            {filteredProducts.length === 0 ? (
+              <p className="products-empty">No matching products</p>
+            ) : (
+              filteredProducts.map((p, i) => (
+                <div key={i} className="product-item">
+                  <strong>{p.name}</strong><br />
+                  <small>{p.category}</small><br />
+                  ₱{p.price}
+                  <div className="product-item__actions">
+                    <button className="product-item__edit-btn"   onClick={() => handleEdit(i)}>Edit</button>
+                    <button className="product-item__delete-btn" onClick={() => handleDelete(i)}>Delete</button>
+                  </div>
                 </div>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
         </div>
-
       </div>
     </div>
   );

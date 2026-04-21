@@ -1,0 +1,91 @@
+/* ============================================================
+   Products.css — Styles for Products.jsx
+   ============================================================ */
+
+.products-container {
+  padding: 40px;
+  background: #f7f7f7;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.products-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.products-card__title { font-size: 18px; font-weight: 600; margin-bottom: 15px; }
+
+/* ── Form ─────────────────────────────────────────────────── */
+.products-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+  box-sizing: border-box;
+}
+
+.products-submit-btn {
+  width: 100%;
+  padding: 10px;
+  background: #e85d04;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── Filter bar ───────────────────────────────────────────── */
+.products-filter-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+
+/* ── Product list item ────────────────────────────────────── */
+.product-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.product-item__actions { margin-top: 5px; }
+
+.product-item__edit-btn {
+  margin-right: 8px;
+  background: #2a9d8f;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.product-item__delete-btn {
+  background: #e63946;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.products-empty { font-size: 14px; color: #aaa; }
+
+@media (max-width: 768px) {
+  .products-container { padding: 24px 16px; }
+  .products-grid      { grid-template-columns: 1fr; }
+}

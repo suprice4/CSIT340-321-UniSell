@@ -1,0 +1,46 @@
+/* ============================================================
+   OrderFilters.css — Styles for OrderFilters.jsx
+   ============================================================ */
+
+.order-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.order-filters__search {
+  font-size: 13px;
+  padding: 7px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #444;
+  outline: none;
+  width: 200px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.order-filters__select {
+  font-size: 13px;
+  padding: 7px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #444;
+  outline: none;
+  cursor: pointer;
+}
+
+.order-filters__clear {
+  font-size: 12px;
+  padding: 7px 12px;
+  border: 1px solid #e85d04;
+  border-radius: 6px;
+  background: transparent;
+  color: #e85d04;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Segoe UI', sans-serif;
+}

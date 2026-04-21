@@ -1,0 +1,328 @@
+/* ============================================================
+   DarkModeToggle.css — Toggle styles + global dark mode vars
+   ============================================================ */
+
+/* ── Toggle button (pill track) ───────────────────────────── */
+.dark-toggle {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  border-radius: 13px;
+  border: none;
+  cursor: pointer;
+  background: #d1d5db;
+  transition: background 0.3s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.dark-toggle.dark-toggle--on {
+  background: #e85d04;
+}
+
+/* ── Sliding knob ─────────────────────────────────────────── */
+.dark-toggle__knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.dark-toggle--on .dark-toggle__knob {
+  left: 25px;
+}
+
+/* ============================================================
+   LIGHT MODE — CSS Variables (default)
+   ============================================================ */
+:root {
+  --nav-bg:          #fff;
+  --card-bg:         #fff;
+  --input-bg:        #f9f9f9;
+  --border-color:    #e0e0e0;
+  --text-primary:    #222;
+  --text-muted:      #888;
+  --hover-bg:        #f9f9f9;
+  --nav-icon-color:  #555;
+  --notif-unread-bg: #fff8f5;
+  --page-bg:         #f5f5f5;
+  --section-alt-bg:  #fafafa;
+  --table-row-bg:    #f7f7f7;
+  --select-bg:       #fafafa;
+}
+
+/* ============================================================
+   DARK MODE — True black palette
+   ============================================================ */
+[data-theme="dark"] {
+  --nav-bg:          #111;
+  --card-bg:         #1a1a1a;
+  --input-bg:        #222;
+  --border-color:    #333;
+  --text-primary:    #e8e8e8;
+  --text-muted:      #888;
+  --hover-bg:        #2a2a2a;
+  --nav-icon-color:  #ccc;
+  --notif-unread-bg: #1f1a17;
+  --page-bg:         #0d0d0d;
+  --section-alt-bg:  #151515;
+  --table-row-bg:    #222;
+  --select-bg:       #222;
+}
+
+/* ── Body & root ──────────────────────────────────────────── */
+[data-theme="dark"] body,
+[data-theme="dark"] #root {
+  background: #0d0d0d;
+  color: #e8e8e8;
+}
+
+/* ── Navbar ───────────────────────────────────────────────── */
+[data-theme="dark"] .navbar-top,
+[data-theme="dark"] .navbar-main {
+  background: var(--nav-bg);
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .navbar-search-bar {
+  background: var(--input-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .navbar-search-bar input,
+[data-theme="dark"] .navbar-link,
+[data-theme="dark"] .navbar-icon-btn {
+  color: var(--text-primary);
+}
+
+/* ── Page backgrounds ─────────────────────────────────────── */
+[data-theme="dark"] .dashboard-page,
+[data-theme="dark"] .login-page,
+[data-theme="dark"] .register-page,
+[data-theme="dark"] .about-page,
+[data-theme="dark"] .contact-page,
+[data-theme="dark"] .landing-page,
+[data-theme="dark"] .ordercrud-page,
+[data-theme="dark"] .profile-page {
+  background: var(--page-bg);
+  color: var(--text-primary);
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+[data-theme="dark"] .dashboard-summary-card,
+[data-theme="dark"] .dashboard-platform-card,
+[data-theme="dark"] .dashboard-table-card,
+[data-theme="dark"] .ordercrud-card,
+[data-theme="dark"] .recent-orders-card,
+[data-theme="dark"] .login-card,
+[data-theme="dark"] .register-card,
+[data-theme="dark"] .contact-info-card,
+[data-theme="dark"] .contact-form-card,
+[data-theme="dark"] .about-value-card,
+[data-theme="dark"] .about-team-card,
+[data-theme="dark"] .about-who-row__right,
+[data-theme="dark"] .products-card,
+[data-theme="dark"] .profile-card,
+[data-theme="dark"] .profile-header,
+[data-theme="dark"] .profile-tabs,
+[data-theme="dark"] .ordercrud-modal,
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .testimonial-card,
+[data-theme="dark"] .hero-card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ── Inputs, selects, textareas ───────────────────────────── */
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background: var(--input-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .login-input-wrapper,
+[data-theme="dark"] .register-input-wrapper,
+[data-theme="dark"] .contact-form-input,
+[data-theme="dark"] .contact-form-textarea,
+[data-theme="dark"] .profile-form-input,
+[data-theme="dark"] .profile-form-textarea,
+[data-theme="dark"] .profile-pass-wrapper,
+[data-theme="dark"] .ordercrud-form-input,
+[data-theme="dark"] .ordercrud-search-wrap,
+[data-theme="dark"] .order-filters__search,
+[data-theme="dark"] .order-filters__select,
+[data-theme="dark"] .dashboard-order-search,
+[data-theme="dark"] .dashboard-filter-select,
+[data-theme="dark"] .products-input {
+  background: var(--input-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ── Tables ───────────────────────────────────────────────── */
+[data-theme="dark"] .dashboard-table td,
+[data-theme="dark"] .ordercrud-table td,
+[data-theme="dark"] .recent-orders-table td {
+  border-bottom-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .dashboard-table th,
+[data-theme="dark"] .ordercrud-table th,
+[data-theme="dark"] .recent-orders-table th {
+  border-bottom-color: var(--border-color);
+}
+
+/* ── Section alt backgrounds ──────────────────────────────── */
+[data-theme="dark"] .about-section--alt,
+[data-theme="dark"] .landing-section--alt,
+[data-theme="dark"] .login-section,
+[data-theme="dark"] .register-section {
+  background: var(--section-alt-bg);
+}
+
+/* ── Text colors ──────────────────────────────────────────── */
+[data-theme="dark"] .dashboard-greeting__title,
+[data-theme="dark"] .dashboard-section-title,
+[data-theme="dark"] .dashboard-summary-card__value,
+[data-theme="dark"] .ordercrud-page-title,
+[data-theme="dark"] .profile-page-title,
+[data-theme="dark"] .about-section__title,
+[data-theme="dark"] .about-hero__title,
+[data-theme="dark"] .contact-hero__title,
+[data-theme="dark"] .landing-hero__title,
+[data-theme="dark"] .landing-section__title,
+[data-theme="dark"] .profile-card__title,
+[data-theme="dark"] .profile-header__name,
+[data-theme="dark"] .ordercrud-modal__title {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .dashboard-greeting__sub,
+[data-theme="dark"] .dashboard-summary-card__label,
+[data-theme="dark"] .dashboard-platform-card__row,
+[data-theme="dark"] .ordercrud-page-sub,
+[data-theme="dark"] .profile-page-sub,
+[data-theme="dark"] .about-section__subtitle,
+[data-theme="dark"] .landing-section__subtitle,
+[data-theme="dark"] .profile-header__role,
+[data-theme="dark"] .profile-info-row__label {
+  color: var(--text-muted);
+}
+
+/* ── FAQ items ────────────────────────────────────────────── */
+[data-theme="dark"] .contact-faq__item {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .contact-faq__question {
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .contact-faq__question--open {
+  background: #1f1008;
+  color: #e85d04;
+}
+
+[data-theme="dark"] .contact-faq__answer { color: var(--text-muted); }
+
+/* ── Profile tabs ─────────────────────────────────────────── */
+[data-theme="dark"] .profile-tab {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .profile-tab.active {
+  background: #e85d04;
+  color: #fff;
+}
+
+/* ── Pagination buttons ───────────────────────────────────── */
+[data-theme="dark"] .dashboard-page-btn,
+[data-theme="dark"] .ordercrud-page-btn,
+[data-theme="dark"] .pagination__page-btn,
+[data-theme="dark"] .pagination__nav-btn {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ── Order/platform badges — keep colours but darken bg ──── */
+[data-theme="dark"] .badge--delivered  { background: #0a2416; color: #4ade80; }
+[data-theme="dark"] .badge--shipped    { background: #0a1f2e; color: #60a5fa; }
+[data-theme="dark"] .badge--pending    { background: #2a1a00; color: #fbbf24; }
+[data-theme="dark"] .badge--processing { background: #1a0a2e; color: #c084fc; }
+[data-theme="dark"] .badge--cancelled  { background: #2e0a0a; color: #f87171; }
+[data-theme="dark"] .badge--shopee     { background: #2e1008; color: #f97316; }
+[data-theme="dark"] .badge--lazada     { background: #080c2e; color: #818cf8; }
+[data-theme="dark"] .badge--tiktok     { background: #222;    color: #e8e8e8; }
+
+/* Same for ordercrud badges */
+[data-theme="dark"] .ordercrud-badge--delivered  { background: #0a2416; color: #4ade80; }
+[data-theme="dark"] .ordercrud-badge--shipped    { background: #0a1f2e; color: #60a5fa; }
+[data-theme="dark"] .ordercrud-badge--pending    { background: #2a1a00; color: #fbbf24; }
+[data-theme="dark"] .ordercrud-badge--processing { background: #1a0a2e; color: #c084fc; }
+[data-theme="dark"] .ordercrud-badge--cancelled  { background: #2e0a0a; color: #f87171; }
+[data-theme="dark"] .ordercrud-badge--shopee     { background: #2e1008; color: #f97316; }
+[data-theme="dark"] .ordercrud-badge--lazada     { background: #080c2e; color: #818cf8; }
+[data-theme="dark"] .ordercrud-badge--tiktok     { background: #222;    color: #e8e8e8; }
+
+/* ── Notification & profile dropdowns ────────────────────── */
+[data-theme="dark"] .notif-dropdown,
+[data-theme="dark"] .profile-drop-menu {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .notif-header,
+[data-theme="dark"] .profile-drop-header {
+  border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .notif-footer,
+[data-theme="dark"] .profile-drop-divider {
+  border-top-color: var(--border-color);
+  background: var(--card-bg);
+}
+
+[data-theme="dark"] .notif-item:hover,
+[data-theme="dark"] .profile-drop-item:hover {
+  background: var(--hover-bg);
+}
+
+/* ── Order clear/filter button ────────────────────────────── */
+[data-theme="dark"] .order-filters__clear {
+  border-color: #e85d04;
+  color: #e85d04;
+  background: transparent;
+}
+
+/* ── Stats bars (dark bg sections stay dark) ──────────────── */
+[data-theme="dark"] .about-stats-bar,
+[data-theme="dark"] .landing-stats-bar {
+  background: #0a0a0a;
+}
+
+/* ── Footers ──────────────────────────────────────────────── */
+[data-theme="dark"] .about-footer,
+[data-theme="dark"] .contact-footer,
+[data-theme="dark"] .login-footer,
+[data-theme="dark"] .register-footer,
+[data-theme="dark"] .landing-footer,
+[data-theme="dark"] .dashboard-footer,
+[data-theme="dark"] .ordercrud-footer,
+[data-theme="dark"] .profile-footer {
+  background: #050505;
+}

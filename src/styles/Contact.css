@@ -1,0 +1,299 @@
+/* ============================================================
+   Contact.css — Styles for Contact.jsx
+   ============================================================ */
+
+.contact-page {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+  color: #222;
+  min-height: 100vh;
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.contact-hero {
+  background: linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%);
+  padding: 60px;
+  color: #fff;
+}
+
+.contact-hero__tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.contact-hero__title    { font-size: 40px; font-weight: 800; margin-bottom: 12px; }
+.contact-hero__subtitle { font-size: 16px; opacity: 0.88; max-width: 520px; line-height: 1.7; }
+
+/* ── Content layout ───────────────────────────────────────── */
+.contact-content {
+  padding: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── Info card ────────────────────────────────────────────── */
+.contact-info-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.contact-info-card__title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px; }
+
+.contact-info-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.contact-info-row__icon-box {
+  width: 40px;
+  height: 40px;
+  background: #fff5f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contact-info-row__label {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+.contact-info-row__value { font-size: 14px; color: #333; font-weight: 500; }
+
+.contact-info-divider { border-top: 1px solid #f0f0f0; margin: 20px 0; }
+
+.contact-info-follow-label { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 10px; }
+
+.contact-info-social { display: flex; gap: 10px; }
+
+.contact-info-social__icon {
+  width: 32px;
+  height: 32px;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #555;
+  cursor: pointer;
+}
+
+/* ── Form card ────────────────────────────────────────────── */
+.contact-form-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.contact-form-card__title { font-size: 18px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px; }
+
+.contact-form-group { margin-bottom: 14px; }
+
+.contact-form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.contact-form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  box-sizing: border-box;
+  background: #fafafa;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.contact-form-input--error { border-color: #e53e3e; }
+
+.contact-form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  box-sizing: border-box;
+  background: #fafafa;
+  height: 120px;
+  resize: vertical;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.contact-form-textarea--error { border-color: #e53e3e; }
+
+.contact-error-text { font-size: 12px; color: #e53e3e; margin-top: 4px; }
+
+.contact-submit-btn {
+  width: 100%;
+  background: #e85d04;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Success box */
+.contact-success-box {
+  background: #f0fff4;
+  border: 1px solid #68d391;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.contact-success-box__icon  { font-size: 20px; margin-bottom: 8px; }
+.contact-success-box__title { font-weight: 700; color: #276749; font-size: 16px; }
+.contact-success-box__sub   { font-size: 13px; color: #555; margin-top: 6px; }
+
+.contact-success-box__btn {
+  margin-top: 14px;
+  background: #e85d04;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── FAQ ──────────────────────────────────────────────────── */
+.contact-faq { padding: 0 60px 60px; }
+
+.contact-faq__tag   { font-size: 12px; font-weight: 700; color: #e85d04; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.contact-faq__title { font-size: 26px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px; }
+.contact-faq__sub   { font-size: 15px; color: #777; margin-bottom: 28px; }
+
+.contact-faq__item {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.contact-faq__question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #222;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.contact-faq__question--open { background: #fff5f0; color: #e85d04; }
+
+.contact-faq__answer { padding: 0 20px 16px; font-size: 14px; color: #666; line-height: 1.7; }
+
+/* ── Footer ───────────────────────────────────────────────── */
+.contact-footer {
+  background: #0f1923;
+  color: #ccc;
+  padding: 40px 60px 20px;
+}
+
+.contact-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.contact-footer__col-heading { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.contact-footer__col-text    { font-size: 13px; color: #aaa; line-height: 1.6; }
+
+.contact-footer__col-link {
+  display: block;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 6px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.contact-footer__social { display: flex; gap: 10px; margin-top: 10px; }
+
+.contact-footer__social-icon {
+  width: 28px;
+  height: 28px;
+  background: #1e2d3d;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.contact-footer__bottom {
+  border-top: 1px solid #1e2d3d;
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.contact-footer__bottom a { color: #666; text-decoration: none; margin-left: 16px; }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .contact-hero    { padding: 40px 24px; }
+  .contact-content { grid-template-columns: 1fr; padding: 24px; }
+  .contact-faq     { padding: 0 24px 40px; }
+  .contact-footer__grid { grid-template-columns: 1fr; }
+  .contact-footer  { padding: 32px 24px 16px; }
+}

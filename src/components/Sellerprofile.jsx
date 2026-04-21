@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import "../styles/Sellerprofile.css";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -156,42 +157,42 @@ export default function SellerProfile() {
   // ── Styles ────────────────────────────────────────────────────────────────
 
   const s = {
-    page:          { fontFamily: "'Segoe UI', sans-serif", background: "#f5f5f5", color: "#222", minHeight: "100vh" },
+    page:          { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
     main:          { padding: "32px 40px", maxWidth: "900px", margin: "0 auto" },
-    pageTitle:     { fontSize: "22px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" },
-    pageSub:       { fontSize: "14px", color: "#777", marginBottom: "24px" },
-    profileHeader: { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "24px", marginBottom: "20px", display: "flex", alignItems: "center", gap: "20px" },
+    pageTitle:     { fontSize: "22px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "4px" },
+    pageSub:       { fontSize: "14px", color: "var(--text-muted, #777)", marginBottom: "24px" },
+    profileHeader: { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "24px", marginBottom: "20px", display: "flex", alignItems: "center", gap: "20px" },
     avatar:        { width: "80px", height: "80px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 },
-    profileName:   { fontSize: "20px", fontWeight: "700", color: "#1a1a1a", marginBottom: "4px" },
-    profileRole:   { fontSize: "13px", color: "#888", marginBottom: "8px" },
+    profileName:   { fontSize: "20px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", marginBottom: "4px" },
+    profileRole:   { fontSize: "13px", color: "var(--text-muted, #888)", marginBottom: "8px" },
     platformTags:  { display: "flex", gap: "8px", flexWrap: "wrap" },
     platTag:       (color, bg) => ({ fontSize: "11px", fontWeight: "600", color, background: bg, padding: "3px 10px", borderRadius: "12px" }),
-    tabs:          { display: "flex", gap: "4px", background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "6px", marginBottom: "20px" },
+    tabs:          { display: "flex", gap: "4px", background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "6px", marginBottom: "20px" },
     tab:           (active) => ({ flex: 1, padding: "10px", border: "none", borderRadius: "7px", background: active ? "#e85d04" : "transparent", color: active ? "white" : "#555", fontWeight: active ? "700" : "500", fontSize: "14px", cursor: "pointer" }),
-    card:          { background: "#fff", border: "1px solid #e0e0e0", borderRadius: "10px", padding: "24px", marginBottom: "20px" },
-    cardHeader:    { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", paddingBottom: "12px", borderBottom: "1px solid #f0f0f0" },
-    cardTitle:     { fontSize: "16px", fontWeight: "700", color: "#1a1a1a", margin: 0 },
+    card:          { background: "var(--card-bg, #fff)", border: "1px solid var(--border-color, #e0e0e0)", borderRadius: "10px", padding: "24px", marginBottom: "20px" },
+    cardHeader:    { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", paddingBottom: "12px", borderBottom: "1px solid var(--border-color, #f0f0f0)" },
+    cardTitle:     { fontSize: "16px", fontWeight: "700", color: "var(--text-primary, #1a1a1a)", margin: 0 },
     grid2:         { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" },
     formGroup:     { marginBottom: "16px" },
-    label:         { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "#333" },
-    input:         (err) => ({ width: "100%", padding: "9px 12px", border: `1px solid ${err ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "#333", outline: "none", boxSizing: "border-box", background: "#fafafa" }),
-    textarea:      { width: "100%", padding: "9px 12px", border: "1px solid #ddd", borderRadius: "6px", fontSize: "14px", color: "#333", outline: "none", boxSizing: "border-box", background: "#fafafa", height: "80px", resize: "vertical" },
+    label:         { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "var(--text-primary, #333)" },
+    input:         (err) => ({ width: "100%", padding: "9px 12px", border: `1px solid var(--border-color, ${err ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", fontSize: "14px", color: "var(--text-primary, #333)", outline: "none", boxSizing: "border-box", background: "var(--section-alt-bg, #fafafa)" }),
+    textarea:      { width: "100%", padding: "9px 12px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", fontSize: "14px", color: "var(--text-primary, #333)", outline: "none", boxSizing: "border-box", background: "var(--section-alt-bg, #fafafa)", height: "80px", resize: "vertical" },
     errorText:     { fontSize: "12px", color: "#e53e3e", marginTop: "4px" },
-    passWrapper:   (err) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid ${err ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", padding: "9px 12px", background: "#fafafa" }),
-    passInput:     { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "#333" },
+    passWrapper:   (err) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid var(--border-color, ${err ? "#e53e3e" : "#ddd"}`, borderRadius: "6px", padding: "9px 12px", background: "var(--section-alt-bg, #fafafa)" }),
+    passInput:     { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "var(--text-primary, #333)" },
     platGrid:      { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" },
     platCheck:     (selected) => ({ border: `2px solid ${selected ? "#e85d04" : "#ddd"}`, borderRadius: "8px", padding: "12px", cursor: "pointer", background: selected ? "#fff5f0" : "#fafafa", display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", fontWeight: selected ? "600" : "400", color: selected ? "#e85d04" : "#555" }),
     btnRow:        { display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "20px" },
-    cancelBtn:     { padding: "9px 20px", border: "1px solid #ddd", borderRadius: "6px", background: "#fff", color: "#555", cursor: "pointer", fontSize: "14px" },
+    cancelBtn:     { padding: "9px 20px", border: "1px solid var(--border-color, #ddd)", borderRadius: "6px", background: "var(--card-bg, #fff)", color: "var(--text-muted, #555)", cursor: "pointer", fontSize: "14px" },
     saveBtn:       { display: "flex", alignItems: "center", gap: "6px", padding: "9px 20px", border: "none", borderRadius: "6px", background: "#e85d04", color: "white", cursor: "pointer", fontSize: "14px", fontWeight: "600" },
     editBtn:       { display: "flex", alignItems: "center", gap: "6px", padding: "9px 20px", border: "1px solid #e85d04", borderRadius: "6px", background: "transparent", color: "#e85d04", cursor: "pointer", fontSize: "14px", fontWeight: "600" },
     infoGrid:      { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0" },
-    infoRow:       { padding: "12px 0", borderBottom: "1px solid #f7f7f7" },
-    infoLabel:     { fontSize: "12px", color: "#aaa", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" },
-    infoValue:     { fontSize: "14px", color: "#333", fontWeight: "500" },
+    infoRow:       { padding: "12px 0", borderBottom: "1px solid var(--border-color, #f7f7f7)" },
+    infoLabel:     { fontSize: "12px", color: "var(--text-muted, #aaa)", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" },
+    infoValue:     { fontSize: "14px", color: "var(--text-primary, #333)", fontWeight: "500" },
     toast:         { position: "fixed", bottom: "24px", right: "24px", background: "#276749", color: "white", padding: "12px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", zIndex: 300, display: "flex", alignItems: "center", gap: "8px" },
-    footer:        { background: "#0f1923", color: "#ccc", padding: "24px 40px", marginTop: "40px" },
-    footerBottom:  { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "#666" },
+    footer:        { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "24px 40px", marginTop: "40px" },
+    footerBottom:  { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
@@ -356,7 +357,7 @@ export default function SellerProfile() {
             <div style={s.cardHeader}>
               <p style={s.cardTitle}>Connected Platforms</p>
             </div>
-            <p style={{ fontSize: "14px", color: "#777", marginBottom: "20px" }}>Select which platforms your store is connected to.</p>
+            <p style={{ fontSize: "14px", color: "var(--text-muted, #777)", marginBottom: "20px" }}>Select which platforms your store is connected to.</p>
             <div style={s.platGrid}>
               {["Shopee", "Lazada", "TikTok Shop"].map((platform) => {
                 const selected = editProfile.platforms.includes(platform);
@@ -393,7 +394,7 @@ export default function SellerProfile() {
           <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
           <div>
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "#666", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
+              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
             ))}
           </div>
         </div>

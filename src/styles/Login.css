@@ -1,0 +1,198 @@
+/* ============================================================
+   Login.css — Styles for Login.jsx
+   ============================================================ */
+
+.login-page {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+  color: #222;
+  min-height: 100vh;
+}
+
+.login-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 20px;
+  background: #f5f5f5;
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+.login-card {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 36px 40px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-card__logo {
+  width: 56px;
+  height: 56px;
+  background: #e85d04;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.login-card__title    { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.login-card__subtitle { font-size: 13px; color: #777; margin-bottom: 24px; text-align: center; }
+
+/* ── Form ─────────────────────────────────────────────────── */
+.login-form { width: 100%; }
+
+.login-form-group { width: 100%; margin-bottom: 14px; }
+
+.login-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.login-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 9px 12px;
+  background: #fafafa;
+}
+
+.login-input-wrapper--error { border-color: #e53e3e; }
+
+.login-input-wrapper input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.login-error-text { font-size: 12px; color: #e53e3e; margin-top: 4px; }
+
+/* Remember me row */
+.login-remember-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.login-remember-left { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.login-remember-label { font-size: 14px; font-weight: 500; color: #333; cursor: pointer; }
+
+.login-forgot-btn {
+  font-size: 13px;
+  color: #e85d04;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Submit button */
+.login-submit-btn {
+  width: 100%;
+  background: #e85d04;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.15s;
+}
+
+.login-submit-btn:disabled { background: #f0a070; cursor: not-allowed; }
+
+.login-bottom-link { margin-top: 14px; font-size: 13px; color: #777; }
+
+.login-anchor {
+  color: #e85d04;
+  font-weight: 600;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── Footer ───────────────────────────────────────────────── */
+.login-footer {
+  background: #0f1923;
+  color: #ccc;
+  padding: 40px 60px 20px;
+}
+
+.login-footer__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-bottom: 32px;
+}
+
+.login-footer__col-heading { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+.login-footer__col-text    { font-size: 13px; color: #aaa; line-height: 1.6; }
+
+.login-footer__col-link {
+  display: block;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 6px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.login-footer__social { display: flex; gap: 10px; margin-top: 10px; }
+
+.login-footer__social-icon {
+  width: 28px;
+  height: 28px;
+  background: #1e2d3d;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.login-footer__bottom {
+  border-top: 1px solid #1e2d3d;
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.login-footer__bottom a { color: #666; text-decoration: none; margin-left: 16px; }
+
+@media (max-width: 768px) {
+  .login-footer__grid { grid-template-columns: 1fr; }
+  .login-footer       { padding: 32px 24px 16px; }
+}

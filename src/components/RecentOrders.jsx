@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import "../styles/Recentorders.css";
 import OrderFilters from "./OrderFilters.jsx";
 import OrderRow from "./OrderRow";
 import Pagination from "./Pagination";
@@ -51,8 +52,8 @@ export default function RecentOrders() {
 
   const st = {
     card: {
-      background: "#fff",
-      border: "1px solid #e0e0e0",
+      background: "var(--card-bg, #fff)",
+      border: "1px solid var(--border-color, #e0e0e0)",
       borderRadius: "10px",
       padding: "20px",
     },
@@ -67,7 +68,7 @@ export default function RecentOrders() {
     sectionTitle: {
       fontSize: "16px",
       fontWeight: "700",
-      color: "#222",
+      color: "var(--text-primary, #222)",
       margin: 0,
     },
     table: {
@@ -79,8 +80,8 @@ export default function RecentOrders() {
       padding: "10px 14px",
       textAlign: "left",
       fontWeight: "600",
-      color: "#888",
-      borderBottom: "1px solid #f0f0f0",
+      color: "var(--text-muted, #888)",
+      borderBottom: "1px solid var(--border-color, #f0f0f0)",
       fontSize: "12px",
       textTransform: "uppercase",
       letterSpacing: "0.5px",
@@ -88,7 +89,7 @@ export default function RecentOrders() {
     emptyRow: {
       textAlign: "center",
       padding: "32px",
-      color: "#aaa",
+      color: "var(--text-muted, #aaa)",
       fontSize: "14px",
     },
   };

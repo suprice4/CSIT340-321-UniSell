@@ -1,3 +1,4 @@
+import "../styles/Orderrow.css";
 const STATUS_COLORS = {
   Delivered:  { bg: "#f0fff4", color: "#276749" },
   Shipped:    { bg: "#ebf8ff", color: "#2b6cb0" },
@@ -15,34 +16,34 @@ const PLATFORM_BADGE = {
 
 
 export default function OrderRow({ order }) {
-  const statusStyle   = STATUS_COLORS[order.status]   || { bg: "#f0f0f0", color: "#555" };
-  const platformStyle = PLATFORM_BADGE[order.platform] || { bg: "#f0f0f0", color: "#555" };
+  const statusStyle   = STATUS_COLORS[order.status]   || { bg: "#f0f0f0", color: "var(--text-muted, #555)" };
+  const platformStyle = PLATFORM_BADGE[order.platform] || { bg: "#f0f0f0", color: "var(--text-muted, #555)" };
 
   const st = {
     td: {
       padding: "12px 14px",
-      borderBottom: "1px solid #f7f7f7",
-      color: "#333",
+      borderBottom: "1px solid var(--border-color, #f7f7f7)",
+      color: "var(--text-primary, #333)",
       fontSize: "13px",
     },
     orderId: {
       padding: "12px 14px",
-      borderBottom: "1px solid #f7f7f7",
+      borderBottom: "1px solid var(--border-color, #f7f7f7)",
       color: "#e85d04",
       fontWeight: "600",
       fontSize: "13px",
     },
     amountTd: {
       padding: "12px 14px",
-      borderBottom: "1px solid #f7f7f7",
-      color: "#333",
+      borderBottom: "1px solid var(--border-color, #f7f7f7)",
+      color: "var(--text-primary, #333)",
       fontWeight: "600",
       fontSize: "13px",
     },
     dateTd: {
       padding: "12px 14px",
-      borderBottom: "1px solid #f7f7f7",
-      color: "#888",
+      borderBottom: "1px solid var(--border-color, #f7f7f7)",
+      color: "var(--text-muted, #888)",
       fontSize: "13px",
     },
     badge: (bg, color) => ({

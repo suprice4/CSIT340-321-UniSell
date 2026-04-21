@@ -1,3 +1,4 @@
+import "../styles/Pagination.css";
 export default function Pagination({ currentPage, totalPages, totalItems, itemsPerPage, onPageChange }) {
   const startItem = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const endItem   = Math.min(currentPage * itemsPerPage, totalItems);
@@ -9,12 +10,12 @@ export default function Pagination({ currentPage, totalPages, totalItems, itemsP
       alignItems: "center",
       marginTop: "16px",
       fontSize: "13px",
-      color: "#888",
+      color: "var(--text-muted, #888)",
     },
     pageBtn: (isActive) => ({
       padding: "5px 11px",
       borderRadius: "6px",
-      border: "1px solid #ddd",
+      border: "1px solid var(--border-color, #ddd)",
       background: isActive ? "#e85d04" : "#fff",
       color: isActive ? "#fff" : "#555",
       cursor: "pointer",
@@ -25,8 +26,8 @@ export default function Pagination({ currentPage, totalPages, totalItems, itemsP
     prevNextBtn: (disabled) => ({
       padding: "5px 11px",
       borderRadius: "6px",
-      border: "1px solid #ddd",
-      background: "#fff",
+      border: "1px solid var(--border-color, #ddd)",
+      background: "var(--card-bg, #fff)",
       color: disabled ? "#ccc" : "#555",
       cursor: disabled ? "not-allowed" : "pointer",
       fontSize: "13px",

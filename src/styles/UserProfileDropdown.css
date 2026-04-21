@@ -1,0 +1,188 @@
+/* ============================================================
+   UserProfileDropdown.css — Styles for UserProfileDropdown.jsx
+   ============================================================ */
+
+/* ── Wrapper ──────────────────────────────────────────────── */
+.profile-drop-wrap {
+  position: relative;
+}
+
+/* ── Trigger button (pill with avatar + name) ─────────────── */
+.profile-drop-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 24px;
+  padding: 5px 12px 5px 5px;
+  cursor: pointer;
+  color: var(--text-primary, #333);
+  transition: border-color 0.2s, background 0.2s;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.profile-drop-trigger:hover {
+  border-color: #e85d04;
+  background: var(--hover-bg, #f9f9f9);
+}
+
+/* ── Small avatar (trigger) ───────────────────────────────── */
+.profile-drop-trigger__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e85d04, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.profile-drop-trigger__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #333);
+  max-width: 80px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-drop-trigger__chevron {
+  font-size: 10px;
+  color: var(--text-muted, #888);
+  transition: transform 0.2s;
+}
+
+.profile-drop-trigger__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown panel ───────────────────────────────────────── */
+.profile-drop-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── Profile header inside dropdown ───────────────────────── */
+.profile-drop-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color, #f0f0f0);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Large avatar (dropdown header) ──────────────────────── */
+.profile-drop-header__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e85d04, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.profile-drop-header__name  { font-size: 14px; font-weight: 700; color: var(--text-primary, #1a1a1a); }
+.profile-drop-header__email { font-size: 11px; color: var(--text-muted, #888); margin-top: 2px; }
+
+/* ── Menu item list ───────────────────────────────────────── */
+.profile-drop-list { padding: 8px 0; }
+
+/* ── Single menu item ─────────────────────────────────────── */
+.profile-drop-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary, #333);
+  transition: background 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.profile-drop-item:hover { background: var(--hover-bg, #f9f9f9); }
+
+.profile-drop-item__icon {
+  font-size: 15px;
+  width: 20px;
+  text-align: center;
+}
+
+/* ── Divider ──────────────────────────────────────────────── */
+.profile-drop-divider {
+  height: 1px;
+  background: var(--border-color, #f0f0f0);
+  margin: 4px 0;
+}
+
+/* ── Logout item ──────────────────────────────────────────── */
+.profile-drop-logout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #e85d04;
+  font-weight: 600;
+  transition: background 0.15s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.profile-drop-logout:hover { background: #fff8f5; }
+
+/* ── Guest / login prompt ─────────────────────────────────── */
+.profile-drop-login-prompt {
+  padding: 16px;
+  text-align: center;
+}
+
+.profile-drop-login-prompt__text {
+  font-size: 13px;
+  color: var(--text-muted, #888);
+  margin-bottom: 12px;
+}
+
+.profile-drop-login-prompt__btn {
+  width: 100%;
+  padding: 9px;
+  background: #e85d04;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.15s;
+}
+
+.profile-drop-login-prompt__btn:hover { background: #bf3b00; }
