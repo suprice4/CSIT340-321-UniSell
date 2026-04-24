@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/NotificationBell.css";
-
-// ─── Mock Data ────────────────────────────────────────────────────────────────
 
 const MOCK_NOTIFICATIONS = [
   { id: 1, type: "order",   message: "New order #ORD-1042 from Maria Santos",      time: "2 min ago",  read: false },
@@ -18,16 +17,14 @@ const TYPE_ICONS = {
   success: { icon: "✅", bg: "#f0fff4" },
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
-export default function NotificationBell() {
+export default function NotificationBell({ isLoggedIn }) {
   const [open, setOpen]                   = useState(false);
   const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
-  const ref = useRef(null);
+  const ref      = useRef(null);
+  const navigate = useNavigate();
 
   const unread = notifications.filter((n) => !n.read).length;
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClick = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -35,6 +32,15 @@ export default function NotificationBell() {
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
+
+  // If not logged in, redirect to login instead of opening the dropdown
+  const handleBellClick = () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+    setOpen((o) => !o);
+  };
 
   const markAllRead = () =>
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
@@ -47,24 +53,21 @@ export default function NotificationBell() {
   return (
     <div className="notif-wrap" ref={ref}>
 
-      {/* ── Bell Button ── */}
       <button
         className="notif-btn"
-        onClick={() => setOpen((o) => !o)}
-        title="Notifications"
+        onClick={handleBellClick}
+        title={isLoggedIn ? "Notifications" : "Login to view notifications"}
         aria-label="Notifications"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
-        {unread > 0 && <span className="notif-badge">{unread}</span>}
+        {isLoggedIn && unread > 0 && <span className="notif-badge">{unread}</span>}
       </button>
 
-      {/* ── Dropdown ── */}
-      {open && (
+      {isLoggedIn && open && (
         <div className="notif-dropdown">
-
           <div className="notif-header">
             <span className="notif-header__title">
               Notifications {unread > 0 && `(${unread})`}
@@ -102,7 +105,6 @@ export default function NotificationBell() {
           </div>
 
           <div className="notif-footer">View all notifications →</div>
-
         </div>
       )}
 

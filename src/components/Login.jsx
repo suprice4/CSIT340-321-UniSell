@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Login.css";
+
+// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const IconEmail = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8">
@@ -31,6 +34,31 @@ const IconEye = ({ show }) => (
   </svg>
 );
 
+// ─── Hardcoded admin account ──────────────────────────────────────────────────
+// This account always works — even in incognito — because it's in the code itself.
+// Username: admin   Password: admin123
+// Email:    admin@ecommerce.com  Password: admin123
+
+const ADMIN_ACCOUNT = {
+  email:    "admin@ecommerce.com",
+  username: "admin",
+  password: "admin123",
+};
+
+// ─── Helper: get all registered accounts from localStorage ───────────────────
+// Register.jsx saves new accounts here so Login can verify them.
+
+const getRegisteredAccounts = () => {
+  try {
+    const data = localStorage.getItem("registeredAccounts");
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -40,6 +68,7 @@ export default function Login() {
   const [rememberMe, setRememberMe]     = useState(false);
   const [isLoading, setIsLoading]       = useState(false);
 
+  // Pre-fill remembered user
   useEffect(() => {
     const savedUser = localStorage.getItem("rememberedUser");
     if (savedUser) {
@@ -48,6 +77,7 @@ export default function Login() {
     }
   }, []);
 
+  // Clear errors when user types
   useEffect(() => {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [formData]);
@@ -61,6 +91,7 @@ export default function Login() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Basic format validation
   const validate = () => {
     const newErrors = {};
     if (!formData.emailOrUsername) newErrors.emailOrUsername = "Email or username is required.";
@@ -69,19 +100,62 @@ export default function Login() {
     return newErrors;
   };
 
+  // Credential verification — checks admin account first, then registered accounts
+  const verifyCredentials = (emailOrUsername, password) => {
+    const input = emailOrUsername.toLowerCase().trim();
+
+    // Check hardcoded admin account
+    if (
+      (input === ADMIN_ACCOUNT.email || input === ADMIN_ACCOUNT.username) &&
+      password === ADMIN_ACCOUNT.password
+    ) {
+      return { valid: true, user: ADMIN_ACCOUNT };
+    }
+
+    // Check registered accounts saved by Register.jsx
+    const accounts = getRegisteredAccounts();
+    const found = accounts.find(
+      (acc) =>
+        (acc.email.toLowerCase() === input || acc.username.toLowerCase() === input) &&
+        acc.password === password
+    );
+
+    if (found) return { valid: true, user: found };
+
+    return { valid: false };
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Step 1: format check
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
+
+    // Step 2: credential check
+    const { valid, user } = verifyCredentials(formData.emailOrUsername, formData.password);
+    if (!valid) {
+      setErrors({ emailOrUsername: "Incorrect email/username or password." });
+      return;
+    }
+
+    // Step 3: save session + remember me
     if (rememberMe) {
       localStorage.setItem("rememberedUser", formData.emailOrUsername);
     } else {
       localStorage.removeItem("rememberedUser");
     }
+
+    // Save logged in user info so other pages can read it
     localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("loggedInUser", JSON.stringify({
+      email:    user.email,
+      username: user.username,
+    }));
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -95,9 +169,10 @@ export default function Login() {
     card:         { background: "var(--card-bg, #fff)", borderRadius: "10px", border: "1px solid var(--border-color, #e0e0e0)", padding: "36px 40px", width: "100%", maxWidth: "420px", display: "flex", flexDirection: "column", alignItems: "center" },
     cardLogo:     { width: "56px", height: "56px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px", color: "white", marginBottom: "12px" },
     subtitle:     { fontSize: "13px", color: "var(--text-muted, #777)", marginBottom: "24px", textAlign: "center" },
+    hint:         { fontSize: "12px", color: "#888", background: "#f9f5f0", border: "1px solid #e85d0433", borderRadius: "6px", padding: "8px 12px", width: "100%", marginBottom: "16px", lineHeight: "1.6" },
     formGroup:    { width: "100%", marginBottom: "14px" },
     label:        { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "var(--text-primary, #333)" },
-    inputWrapper: (hasError) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid var(--border-color, ${hasError ? "#e53e3e" : "#ccc"}`, borderRadius: "6px", padding: "9px 12px", background: "var(--section-alt-bg, #fafafa)" }),
+    inputWrapper: (hasError) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid ${hasError ? "#e53e3e" : "var(--border-color, #ccc)"}`, borderRadius: "6px", padding: "9px 12px", background: "var(--section-alt-bg, #fafafa)" }),
     input:        { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "var(--text-primary, #333)" },
     errorText:    { fontSize: "12px", color: "#e53e3e", marginTop: "4px" },
     rememberRow:  { display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: "18px" },
@@ -108,22 +183,24 @@ export default function Login() {
     bottomLink:   { marginTop: "14px", fontSize: "13px", color: "var(--text-muted, #777)" },
     anchor:       { color: "#e85d04", textDecoration: "none", fontWeight: "600", cursor: "pointer", background: "none", border: "none", fontSize: "13px" },
     footer:       { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
-    footerGrid:   { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
     footerBottom: { borderTop: "1px solid var(--border-color, #1e2d3d)", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
     <div style={st.page}>
 
-      {/* ── SHARED NAVBAR ── */}
       <Navbar activePage="/login" />
 
-      {/* ── LOGIN FORM ── */}
       <div style={st.section}>
         <div style={st.card}>
           <div style={st.cardLogo}>🛍</div>
           <h2 style={{ fontSize: "22px", fontWeight: "700", marginBottom: "4px" }}>Welcome Back</h2>
           <p style={st.subtitle}>Login to your E-Commerce Market Place account</p>
+
+          {/* Demo hint for professor/testing */}
+          <div style={st.hint}>
+            🔑 <strong>Demo account:</strong> username <code>admin</code> / password <code>admin123</code>
+          </div>
 
           <form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <div style={st.formGroup}>
@@ -164,53 +241,8 @@ export default function Login() {
           </form>
         </div>
       </div>
-
-      {/* ── FOOTER ── */}
-      <footer style={st.footer}>
-        <div style={st.footerGrid}>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>About Us</h4>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              {["f", "t", "ig", "yt"].map((s) => (
-                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-muted, #aaa)", cursor: "pointer" }}>{s}</span>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Quick Links</h4>
-            {[
-              { label: "Home",       route: "/"          },
-              { label: "About Us",   route: "/about"     },
-              { label: "Contact Us", route: "/contact"   },
-              { label: "Dashboard",  route: "/dashboard" },
-              { label: "Register",   route: "/register"  },
-            ].map((l) => (
-              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
-            ))}
-          </div>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Platforms</h4>
-            {["Shopee", "Lazada", "TikTok Shop", "Returns & Refunds", "FAQs"].map((l) => (
-              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
-            ))}
-          </div>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Contact Us</h4>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)" }}>✉ ecommercemarketplace@gmail.com</p>
-          </div>
-        </div>
-        <div style={st.footerBottom}>
-          <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
-          <div>
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* ── SHARED FOOTER ── */}
+      <Footer />
 
     </div>
   );

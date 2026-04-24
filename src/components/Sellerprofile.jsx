@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Sellerprofile.css";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -191,8 +192,6 @@ export default function SellerProfile() {
     infoLabel:     { fontSize: "12px", color: "var(--text-muted, #aaa)", fontWeight: "600", textTransform: "uppercase", letterSpacing: "0.5px", marginBottom: "3px" },
     infoValue:     { fontSize: "14px", color: "var(--text-primary, #333)", fontWeight: "500" },
     toast:         { position: "fixed", bottom: "24px", right: "24px", background: "#276749", color: "white", padding: "12px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", zIndex: 300, display: "flex", alignItems: "center", gap: "8px" },
-    footer:        { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "24px 40px", marginTop: "40px" },
-    footerBottom:  { display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
@@ -389,16 +388,8 @@ export default function SellerProfile() {
       )}
 
       {/* FOOTER */}
-      <footer style={s.footer}>
-        <div style={s.footerBottom}>
-          <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
-          <div>
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* ── SHARED FOOTER ── */}
+      <Footer />
 
     </div>
   );

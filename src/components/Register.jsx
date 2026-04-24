@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Register.css";
+
+// ─── Icons ───────────────────────────────────────────────────────────────────
 
 const IconEmail = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8">
@@ -37,14 +40,31 @@ const IconEye = ({ show }) => (
   </svg>
 );
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+const getRegisteredAccounts = () => {
+  try {
+    const data = localStorage.getItem("registeredAccounts");
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveRegisteredAccounts = (accounts) => {
+  localStorage.setItem("registeredAccounts", JSON.stringify(accounts));
+};
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function Register() {
   const navigate = useNavigate();
 
-  const [formData, setFormData]                         = useState({ email: "", username: "", password: "", confirmPassword: "" });
-  const [errors, setErrors]                             = useState({});
-  const [showPassword, setShowPassword]                 = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword]   = useState(false);
-  const [isLoading, setIsLoading]                       = useState(false);
+  const [formData, setFormData]                       = useState({ email: "", username: "", password: "", confirmPassword: "" });
+  const [errors, setErrors]                           = useState({});
+  const [showPassword, setShowPassword]               = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading]                     = useState(false);
 
   useEffect(() => {
     if (Object.keys(errors).length > 0) setErrors({});
@@ -61,14 +81,41 @@ export default function Register() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.email) newErrors.email = "Email is required.";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Enter a valid email address.";
-    if (!formData.username) newErrors.username = "Username is required.";
-    else if (formData.username.length < 3) newErrors.username = "Username must be at least 3 characters.";
-    if (!formData.password) newErrors.password = "Password is required.";
-    else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
-    if (!formData.confirmPassword) newErrors.confirmPassword = "Please confirm your password.";
-    else if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = "Passwords do not match.";
+    const existingAccounts = getRegisteredAccounts();
+
+    if (!formData.email) {
+      newErrors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Enter a valid email address.";
+    } else if (existingAccounts.some((acc) => acc.email.toLowerCase() === formData.email.toLowerCase())) {
+      // Check if email is already taken
+      newErrors.email = "This email is already registered.";
+    }
+
+    if (!formData.username) {
+      newErrors.username = "Username is required.";
+    } else if (formData.username.length < 3) {
+      newErrors.username = "Username must be at least 3 characters.";
+    } else if (formData.username.toLowerCase() === "admin") {
+      // Reserve the admin username
+      newErrors.username = "This username is already taken.";
+    } else if (existingAccounts.some((acc) => acc.username.toLowerCase() === formData.username.toLowerCase())) {
+      // Check if username is already taken
+      newErrors.username = "This username is already taken.";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters.";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your password.";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
     return newErrors;
   };
 
@@ -79,6 +126,16 @@ export default function Register() {
       setErrors(validationErrors);
       return;
     }
+
+    // Save the new account to localStorage so Login can verify it
+    const existingAccounts = getRegisteredAccounts();
+    const newAccount = {
+      email:    formData.email,
+      username: formData.username,
+      password: formData.password,
+    };
+    saveRegisteredAccounts([...existingAccounts, newAccount]);
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -94,7 +151,7 @@ export default function Register() {
     subtitle:     { fontSize: "13px", color: "var(--text-muted, #777)", marginBottom: "24px", textAlign: "center" },
     formGroup:    { width: "100%", marginBottom: "14px" },
     label:        { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "var(--text-primary, #333)" },
-    inputWrapper: (hasError) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid var(--border-color, ${hasError ? "#e53e3e" : "#ccc"}`, borderRadius: "6px", padding: "9px 12px", background: "var(--section-alt-bg, #fafafa)" }),
+    inputWrapper: (hasError) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid ${hasError ? "#e53e3e" : "var(--border-color, #ccc)"}`, borderRadius: "6px", padding: "9px 12px", background: "var(--section-alt-bg, #fafafa)" }),
     input:        { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "var(--text-primary, #333)" },
     errorText:    { fontSize: "12px", color: "#e53e3e", marginTop: "4px" },
     terms:        { fontSize: "12px", color: "var(--text-muted, #777)", marginBottom: "18px", width: "100%" },
@@ -103,17 +160,14 @@ export default function Register() {
     bottomLink:   { marginTop: "14px", fontSize: "13px", color: "var(--text-muted, #777)" },
     anchor:       { color: "#e85d04", textDecoration: "none", fontWeight: "600", cursor: "pointer", background: "none", border: "none", fontSize: "13px" },
     footer:       { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
-    footerGrid:   { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
     footerBottom: { borderTop: "1px solid var(--border-color, #1e2d3d)", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
     <div style={st.page}>
 
-      {/* ── SHARED NAVBAR ── */}
       <Navbar activePage="/register" />
 
-      {/* ── REGISTER FORM ── */}
       <div style={st.section}>
         <div style={st.card}>
           <div style={st.cardLogo}>🛍</div>
@@ -174,53 +228,8 @@ export default function Register() {
           </form>
         </div>
       </div>
-
-      {/* ── FOOTER ── */}
-      <footer style={st.footer}>
-        <div style={st.footerGrid}>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>About Us</h4>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", lineHeight: "1.6" }}>Your trusted centralized platform for managing products across Shopee, Lazada, and TikTok Shop.</p>
-            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-              {["f", "t", "ig", "yt"].map((s) => (
-                <span key={s} style={{ width: "28px", height: "28px", background: "#1e2d3d", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "12px", color: "var(--text-muted, #aaa)", cursor: "pointer" }}>{s}</span>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Quick Links</h4>
-            {[
-              { label: "Home",       route: "/"          },
-              { label: "About Us",   route: "/about"     },
-              { label: "Contact Us", route: "/contact"   },
-              { label: "Dashboard",  route: "/dashboard" },
-              { label: "Register",   route: "/register"  },
-            ].map((l) => (
-              <button key={l.label} onClick={() => navigate(l.route)} style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}>{l.label}</button>
-            ))}
-          </div>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Platforms</h4>
-            {["Shopee", "Lazada", "TikTok Shop", "Returns & Refunds", "FAQs"].map((l) => (
-              <a key={l} href="#" style={{ display: "block", fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px", textDecoration: "none" }}>{l}</a>
-            ))}
-          </div>
-          <div>
-            <h4 style={{ color: "#fff", fontSize: "14px", fontWeight: "700", marginBottom: "12px" }}>Contact Us</h4>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📍 123 Commerce Street, New York, NY 10001</p>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)", marginBottom: "6px" }}>📞 +1 (555) 123-4567</p>
-            <p style={{ fontSize: "13px", color: "var(--text-muted, #aaa)" }}>✉ ecommercemarketplace@gmail.com</p>
-          </div>
-        </div>
-        <div style={st.footerBottom}>
-          <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
-          <div>
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* ── SHARED FOOTER ── */}
+      <Footer />
 
     </div>
   );

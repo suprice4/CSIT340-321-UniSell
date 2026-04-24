@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Dashboard.css";
 
 
@@ -191,8 +192,6 @@ export default function Dashboard() {
     pagination: { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "var(--text-muted, #888)" },
     pageBtn:    (active) => ({ padding: "5px 11px", borderRadius: "6px", border: "1px solid var(--border-color, #ddd)", background: active ? "#e85d04" : "#fff", color: active ? "#fff" : "#555", cursor: "pointer", fontSize: "13px", fontWeight: active ? "600" : "400", marginLeft: "4px" }),
     emptyRow:   { textAlign: "center", padding: "32px", color: "var(--text-muted, #aaa)", fontSize: "14px" },
-    footer:     { background: "#0f1923", color: "#ccc", padding: "24px 40px", marginTop: "40px" },
-    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
 
@@ -299,17 +298,8 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-
-      <footer style={s.footer}>
-        <div style={s.footerBottom}>
-          <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
-          <div>
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* ── SHARED FOOTER ── */}
+      <Footer />
 
     </div>
   );

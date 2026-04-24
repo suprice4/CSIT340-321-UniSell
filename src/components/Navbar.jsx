@@ -25,6 +25,11 @@ const NAV_LINKS = [
   { label: "Contact Us", route: "/contact"   },
 ];
 
+// ─── Routes that require login ─────────────────────────────────────────────
+// If user is not logged in and clicks these, redirect to /login
+
+const PROTECTED_ROUTES = ["/products", "/dashboard", "/orders"];
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Navbar({ activePage }) {
@@ -32,14 +37,30 @@ export default function Navbar({ activePage }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoggedIn, setIsLoggedIn]   = useState(false);
 
+  // Re-check login status on every render so it stays in sync
   useEffect(() => {
-    setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    const checkLogin = () =>
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    checkLogin();
+    // Also listen for storage changes (e.g. logout in another tab)
+    window.addEventListener("storage", checkLogin);
+    return () => window.removeEventListener("storage", checkLogin);
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
     navigate("/login");
+  };
+
+  // Guard nav click — if route is protected and not logged in, go to /login
+  const handleNavClick = (link) => {
+    if (!link.route) return;
+    if (PROTECTED_ROUTES.includes(link.route) && !isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+    navigate(link.route);
   };
 
   return (
@@ -67,7 +88,8 @@ export default function Navbar({ activePage }) {
         <div className="navbar-right">
           <DarkModeToggle />
           <div className="navbar-divider" />
-          <NotificationBell />
+          {/* Pass isLoggedIn so bell can guard itself too */}
+          <NotificationBell isLoggedIn={isLoggedIn} />
           <div className="navbar-divider" />
           <UserProfileDropdown isLoggedIn={isLoggedIn} onLogout={handleLogout} />
         </div>
@@ -80,7 +102,7 @@ export default function Navbar({ activePage }) {
           <button
             key={link.label}
             className={`navbar-link${activePage === link.route ? " active" : ""}`}
-            onClick={() => link.route && navigate(link.route)}
+            onClick={() => handleNavClick(link)}
           >
             {link.label}
           </button>

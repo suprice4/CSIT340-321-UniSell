@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Ordercrud.css";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
@@ -209,8 +210,6 @@ export default function OrderCRUD() {
     viewLabel:  { color: "var(--text-muted, #888)" },
     viewVal:    { fontWeight: "600", color: "var(--text-primary, #222)" },
     toast:      (type) => ({ position: "fixed", bottom: "24px", right: "24px", background: type === "success" ? "#276749" : "#9b2c2c", color: "white", padding: "12px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", zIndex: 300 }),
-    footer:     { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "24px 40px", marginTop: "40px" },
-    footerBottom:{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   // ── Reusable Form Fields ──────────────────────────────────────────────────
@@ -419,16 +418,8 @@ export default function OrderCRUD() {
       {toast && <div style={s.toast(toast.type)}>{toast.msg}</div>}
 
       {/* FOOTER */}
-      <footer style={s.footer}>
-        <div style={s.footerBottom}>
-          <span>© 2026 E-Commerce Marketplace. All rights reserved.</span>
-          <div>
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((l) => (
-              <a key={l} href="#" style={{ color: "var(--text-muted, #666)", textDecoration: "none", marginLeft: "16px" }}>{l}</a>
-            ))}
-          </div>
-        </div>
-      </footer>
+      {/* ── SHARED FOOTER ── */}
+      <Footer />
 
     </div>
   );

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 import "../styles/Products.css";
 
 const CATEGORIES = ["All", "Electronics", "Clothing", "Shoes", "Accessories"];
