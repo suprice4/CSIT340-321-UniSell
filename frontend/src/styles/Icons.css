@@ -1,0 +1,13 @@
+/* ============================================================
+   Icons.css — Styles for Icons.jsx
+   ============================================================ */
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon--muted { color: #aaa; }
+.icon--clickable { cursor: pointer; }

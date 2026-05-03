@@ -1,0 +1,307 @@
+/* ============================================================
+   Dashboard.css — Styles for Dashboard.jsx
+   ============================================================ */
+
+.dashboard-page {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f5f5f5;
+  color: #222;
+  min-height: 100vh;
+}
+
+.dashboard-main {
+  padding: 32px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Greeting ─────────────────────────────────────────────── */
+.dashboard-greeting { margin-bottom: 28px; }
+.dashboard-greeting__title { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.dashboard-greeting__sub   { font-size: 14px; color: #777; }
+
+/* ── Section title ────────────────────────────────────────── */
+.dashboard-section-title { font-size: 16px; font-weight: 700; color: #222; margin-bottom: 16px; }
+
+/* ── Summary cards ────────────────────────────────────────── */
+.dashboard-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dashboard-summary-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard-summary-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-summary-card__label { font-size: 13px; color: #888; font-weight: 500; }
+
+.dashboard-summary-card__icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-summary-card__value { font-size: 24px; font-weight: 700; color: #1a1a1a; }
+
+.dashboard-summary-card__change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #16a34a;
+}
+
+/* ── Platform breakdown ───────────────────────────────────── */
+.dashboard-platform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.dashboard-platform-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.dashboard-platform-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.dashboard-platform-card__badge {
+  font-size: 11px;
+  background: #f0fff4;
+  color: #276749;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+.dashboard-platform-card__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.dashboard-platform-card__val { font-weight: 600; color: #222; }
+
+.dashboard-platform-card__growth {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #16a34a;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+/* ── Orders table card ────────────────────────────────────── */
+.dashboard-table-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.dashboard-table-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.dashboard-filter-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.dashboard-filter-select {
+  font-size: 13px;
+  padding: 7px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #444;
+  outline: none;
+  cursor: pointer;
+}
+
+.dashboard-order-search {
+  font-size: 13px;
+  padding: 7px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fafafa;
+  color: #444;
+  outline: none;
+  width: 200px;
+}
+
+/* ── Data table ───────────────────────────────────────────── */
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.dashboard-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: #888;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dashboard-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f7f7f7;
+  color: #333;
+}
+
+.dashboard-table td.order-id  { font-weight: 600; color: #e85d04; }
+.dashboard-table td.amount    { font-weight: 600; }
+.dashboard-table td.date-cell { color: #888; }
+
+.dashboard-table .empty-row {
+  text-align: center;
+  padding: 32px;
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Status */
+.badge--delivered  { background: #f0fff4; color: #276749; }
+.badge--shipped    { background: #ebf8ff; color: #2b6cb0; }
+.badge--pending    { background: #fefce8; color: #854d0e; }
+.badge--processing { background: #faf5ff; color: #6b21a8; }
+.badge--cancelled  { background: #fff5f5; color: #9b2c2c; }
+
+/* Platform */
+.badge--shopee { background: #fff1ee; color: #ee4d2d; }
+.badge--lazada { background: #eef0ff; color: #0f146b; }
+.badge--tiktok { background: #f3f3f3; color: #010101; }
+
+/* ── Pagination ───────────────────────────────────────────── */
+.dashboard-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: #888;
+}
+
+.dashboard-page-btn {
+  padding: 5px 11px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #555;
+  cursor: pointer;
+  font-size: 13px;
+  margin-left: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.dashboard-page-btn.active { background: #e85d04; color: #fff; font-weight: 600; }
+
+/* ── Footer ───────────────────────────────────────────────── */
+.dashboard-footer {
+  background: #0f1923;
+  color: #ccc;
+  padding: 24px 40px;
+  margin-top: 40px;
+}
+
+.dashboard-footer__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #666;
+}
+
+.dashboard-footer__bottom a { color: #666; text-decoration: none; margin-left: 16px; }
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .dashboard-cards-grid    { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-platform-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .dashboard-main          { padding: 24px 16px; }
+  .dashboard-cards-grid    { grid-template-columns: 1fr; }
+  .dashboard-platform-grid { grid-template-columns: 1fr; }
+}
+/* ── Revenue chart legend ─────────────────────────────────── */
+.revenue-chart__legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.revenue-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted, #666);
+}
+
+.revenue-chart__legend-line {
+  width: 18px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* ── Product link button ──────────────────────────────────── */
+.dashboard-product-link {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
