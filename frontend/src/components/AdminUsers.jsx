@@ -5,6 +5,7 @@ import { useToast } from "./Toast";
 import "../styles/AdminUsers.css";
 
 import { IconX, IconPlus, IconEdit, IconTrash } from "./Icons";
+import API_BASE from "../config";
 
 const EMPTY_FORM = { email: "", username: "", password: "", role: "USER" };
 
@@ -23,7 +24,7 @@ export default function AdminUsers() {
   useEffect(() => { fetchUsers(); }, []);
 
   const fetchUsers = () => {
-    fetch("http://localhost:8080/api/users")
+    fetch(`${API_BASE}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error("Failed to fetch users:", err));
@@ -40,7 +41,7 @@ export default function AdminUsers() {
   const handleAdd = () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) { setFormErrors(errors); return; }
-    fetch("http://localhost:8080/api/users", {
+    fetch(`${API_BASE}/api/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -58,7 +59,7 @@ export default function AdminUsers() {
   const handleEdit = () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) { setFormErrors(errors); return; }
-    fetch(`http://localhost:8080/api/users/${selectedUser.id}`, {
+    fetch(`${API_BASE}/api/users/${selectedUser.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
@@ -73,7 +74,7 @@ export default function AdminUsers() {
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:8080/api/users/${selectedUser.id}`, { method: "DELETE" })
+    fetch(`${API_BASE}/api/users/${selectedUser.id}`, { method: "DELETE" })
       .then(() => {
         setUsers(users.filter(u => u.id !== selectedUser.id));
         setShowDeleteModal(false);

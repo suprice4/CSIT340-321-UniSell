@@ -6,6 +6,7 @@ import { useToast } from "./Toast";
 import "../styles/Sellerprofile.css";
 
 import { IconUser, IconEdit, IconSave, IconLock, IconEyeToggle, IconCheck } from "./Icons";
+import API_BASE from "../config";
 
 
 
@@ -38,9 +39,6 @@ export default function SellerProfile() {
   const toast                 = useToast();
   const [loading, setLoading] = useState(true);
 
-
-
-  // Clear profile errors on change
   useEffect(() => {
     if (Object.keys(profileErrors).length > 0) setProfileErrors({});
   }, [editProfile]);
@@ -49,7 +47,7 @@ export default function SellerProfile() {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   if (!loggedInUser) return;
 
-  fetch(`http://localhost:8080/api/users`)
+  fetch(`${API_BASE}/api/users`)
     .then(res => res.json())
     .then(users => {
       const found = users.find(u => u.email === loggedInUser.email);
@@ -104,12 +102,12 @@ export default function SellerProfile() {
   if (Object.keys(errors).length > 0) { setProfileErrors(errors); return; }
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  fetch(`http://localhost:8080/api/users`)
+  fetch(`${API_BASE}/api/users`)
     .then(res => res.json())
     .then(users => {
       const found = users.find(u => u.email === loggedInUser.email);
       if (!found) return;
-      return fetch(`http://localhost:8080/api/users/${found.id}`, {
+      return fetch(`${API_BASE}/api/users/${found.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -155,7 +153,6 @@ export default function SellerProfile() {
     });
   };
 
-  // ── Styles ────────────────────────────────────────────────────────────────
 
   const s = {
     page:          { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
@@ -197,15 +194,12 @@ export default function SellerProfile() {
   return (
     <div style={s.page}>
 
-      {/* ── SHARED NAVBAR — no active page since profile isn't in nav ── */}
       <Navbar activePage="/profile" />
 
-      {/* MAIN */}
       <div style={s.main}>
         <h2 style={s.pageTitle}>Seller Profile</h2>
         <p style={s.pageSub}>View and manage your account information and store settings.</p>
 
-        {/* Profile Header Card */}
         <div style={s.profileHeader}>
           <div style={s.avatar}><IconUser /></div>
           <div className="profile-bio-wrap">
@@ -219,14 +213,12 @@ export default function SellerProfile() {
           </div>
         </div>
 
-        {/* Tabs */}
         <div style={s.tabs}>
           <button style={s.tab(activeTab === "profile")}   onClick={() => setActiveTab("profile")}>Profile Information</button>
           <button style={s.tab(activeTab === "password")}  onClick={() => setActiveTab("password")}>Change Password</button>
           <button style={s.tab(activeTab === "platforms")} onClick={() => setActiveTab("platforms")}>Platform Settings</button>
         </div>
 
-        {/* ── TAB: Profile Information ── */}
         {activeTab === "profile" && (
           <div style={s.card}>
             <div style={s.cardHeader}>
@@ -298,7 +290,6 @@ export default function SellerProfile() {
           </div>
         )}
 
-        {/* ── TAB: Change Password ── */}
         {activeTab === "password" && (
           <div style={s.card}>
             <div style={s.cardHeader}>
@@ -338,7 +329,6 @@ export default function SellerProfile() {
           </div>
         )}
 
-        {/* ── TAB: Platform Settings ── */}
         {activeTab === "platforms" && (
           <div style={s.card}>
             <div style={s.cardHeader}>
@@ -368,8 +358,6 @@ export default function SellerProfile() {
         )}
       </div>
 
-      {/* FOOTER */}
-      {/* ── SHARED FOOTER ── */}
       <Footer />
 
     </div>

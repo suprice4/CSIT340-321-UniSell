@@ -2,44 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { IconLock, IconUser, IconEyeToggle, IconEmail } from "./Icons";
 import "../styles/Register.css";
-
-
-const IconEmail = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-    <polyline points="22,6 12,13 2,6"/>
-  </svg>
-);
-const IconUser = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8">
-    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
-  </svg>
-);
-const IconLock = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8">
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-    <path d="M7 11V7a5 5 0 0110 0v4"/>
-  </svg>
-);
-const IconEye = ({ show }) => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="1.8" style={{ cursor: "pointer" }}>
-    {show ? (
-      <>
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </>
-    ) : (
-      <>
-        <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
-        <line x1="1" y1="1" x2="23" y2="23"/>
-      </>
-    )}
-  </svg>
-);
-
-
 
 export default function Register() {
   const navigate = useNavigate();
@@ -54,9 +18,7 @@ export default function Register() {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [formData]);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,7 +40,7 @@ export default function Register() {
       newErrors.username = "Username must be at least 3 characters.";
     } else if (formData.username.toLowerCase() === "admin") {
       newErrors.username = "This username is already taken.";
-    } 
+    }
 
     if (!formData.password) {
       newErrors.password = "Password is required.";
@@ -95,131 +57,150 @@ export default function Register() {
     return newErrors;
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) { setErrors(validationErrors); return; }
 
-  const validationErrors = validate();
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    return;
-  }
+    setIsLoading(true);
+    try {
+      const res = await fetch("http://localhost:8080/api/users/register", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email:    formData.email,
+          username: formData.username,
+          password: formData.password,
+          role:     "VENDOR",
+        }),
+      });
 
-  setIsLoading(true);
+      if (res.status === 409) {
+        const message = await res.text();
+        if (message.toLowerCase().includes("email")) {
+          setErrors({ email: message });
+        } else {
+          setErrors({ username: message });
+        }
+        setIsLoading(false);
+        return;
+      }
 
-  try {
-    const res = await fetch("http://localhost:8080/api/users", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email:    formData.email,
-        username: formData.username,
-        password: formData.password,
-        role:     "USER",
-      }),
-    });
+      if (!res.ok) {
+        setErrors({ email: "Registration failed. Please try again." });
+        setIsLoading(false);
+        return;
+      }
 
-    if (!res.ok) {
-      setErrors({ email: "Registration failed. Email or username may already exist." });
       setIsLoading(false);
-      return;
+      navigate("/login");
+
+    } catch (err) {
+      setErrors({ email: "Cannot connect to server. Is Spring Boot running?" });
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
-    navigate("/login");
-
-  } catch (err) {
-    setErrors({ email: "Cannot connect to server. Is Spring Boot running?" });
-    setIsLoading(false);
-  }
-};
-
-  const st = {
-    page:         { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
-    section:      { display: "flex", justifyContent: "center", alignItems: "flex-start", padding: "48px 20px", background: "var(--page-bg, #f5f5f5)" },
-    card:         { background: "var(--card-bg, #fff)", borderRadius: "10px", border: "1px solid var(--border-color, #e0e0e0)", padding: "36px 40px", width: "100%", maxWidth: "420px", display: "flex", flexDirection: "column", alignItems: "center" },
-    cardLogo:     { width: "56px", height: "56px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px", color: "white", marginBottom: "12px" },
-    subtitle:     { fontSize: "13px", color: "var(--text-muted, #777)", marginBottom: "24px", textAlign: "center" },
-    formGroup:    { width: "100%", marginBottom: "14px" },
-    label:        { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "var(--text-primary, #333)" },
-    inputWrapper: (hasError) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid ${hasError ? "#e53e3e" : "var(--border-color, #ccc)"}`, borderRadius: "6px", padding: "9px 12px", background: "var(--section-alt-bg, #fafafa)" }),
-    input:        { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "var(--text-primary, #333)" },
-    errorText:    { fontSize: "12px", color: "#e53e3e", marginTop: "4px" },
-    terms:        { fontSize: "12px", color: "var(--text-muted, #777)", marginBottom: "18px", width: "100%" },
-    termsLink:    { color: "#e85d04", textDecoration: "none" },
-    submitBtn:    (loading) => ({ width: "100%", background: loading ? "#f0a070" : "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "13px", fontSize: "15px", fontWeight: "700", letterSpacing: "0.5px", cursor: loading ? "not-allowed" : "pointer" }),
-    bottomLink:   { marginTop: "14px", fontSize: "13px", color: "var(--text-muted, #777)" },
-    anchor:       { color: "#e85d04", textDecoration: "none", fontWeight: "600", cursor: "pointer", background: "none", border: "none", fontSize: "13px" },
-    footer:       { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
-    footerBottom: { borderTop: "1px solid var(--border-color, #1e2d3d)", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
-    <div style={st.page}>
-
+    <div className="register-page">
       <Navbar activePage="/register" />
 
-      <div style={st.section}>
-        <div style={st.card}>
-          <div style={st.cardLogo}>🛍</div>
-          <h2 style={{ fontSize: "22px", fontWeight: "700", marginBottom: "4px" }}>Create Account</h2>
-          <p style={st.subtitle}>Sign up for E-Commerce Market Place</p>
+      <div className="register-section">
+        <div className="register-card">
 
-          <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-            <div style={st.formGroup}>
-              <label style={st.label}>Email</label>
-              <div style={st.inputWrapper(!!errors.email)}>
+          <div className="register-card__logo">🛍</div>
+          <h2 className="register-card__title">Create Account</h2>
+          <p className="register-card__subtitle">Sign up for E-Commerce Market Place</p>
+
+          <form className="register-form" onSubmit={handleSubmit}>
+
+            <div className="register-form-group">
+              <label className="register-label">Email</label>
+              <div className={`register-input-wrapper${errors.email ? " register-input-wrapper--error" : ""}`}>
                 <IconEmail />
-                <input type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} style={st.input} />
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
               </div>
-              {errors.email && <p style={st.errorText}>{errors.email}</p>}
+              {errors.email && <p className="register-error-text">{errors.email}</p>}
             </div>
 
-            <div style={st.formGroup}>
-              <label style={st.label}>Username</label>
-              <div style={st.inputWrapper(!!errors.username)}>
+            <div className="register-form-group">
+              <label className="register-label">Username</label>
+              <div className={`register-input-wrapper${errors.username ? " register-input-wrapper--error" : ""}`}>
                 <IconUser />
-                <input type="text" name="username" placeholder="Choose a username" value={formData.username} onChange={handleChange} style={st.input} />
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Choose a username"
+                  value={formData.username}
+                  onChange={handleChange}
+                />
               </div>
-              {errors.username && <p style={st.errorText}>{errors.username}</p>}
+              {errors.username && <p className="register-error-text">{errors.username}</p>}
             </div>
 
-            <div style={st.formGroup}>
-              <label style={st.label}>Password</label>
-              <div style={st.inputWrapper(!!errors.password)}>
+            <div className="register-form-group">
+              <label className="register-label">Password</label>
+              <div className={`register-input-wrapper${errors.password ? " register-input-wrapper--error" : ""}`}>
                 <IconLock />
-                <input type={showPassword ? "text" : "password"} name="password" placeholder="Create a password" value={formData.password} onChange={handleChange} style={st.input} />
-                <span onClick={() => setShowPassword((p) => !p)}><IconEye show={showPassword} /></span>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <span onClick={() => setShowPassword((p) => !p)}>
+                  <IconEyeToggle show={showPassword} />
+                </span>
               </div>
-              {errors.password && <p style={st.errorText}>{errors.password}</p>}
+              {errors.password && <p className="register-error-text">{errors.password}</p>}
             </div>
 
-            <div style={st.formGroup}>
-              <label style={st.label}>Confirm Password</label>
-              <div style={st.inputWrapper(!!errors.confirmPassword)}>
+            <div className="register-form-group">
+              <label className="register-label">Confirm Password</label>
+              <div className={`register-input-wrapper${errors.confirmPassword ? " register-input-wrapper--error" : ""}`}>
                 <IconLock />
-                <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" placeholder="Confirm your password" value={formData.confirmPassword} onChange={handleChange} style={st.input} />
-                <span onClick={() => setShowConfirmPassword((p) => !p)}><IconEye show={showConfirmPassword} /></span>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                />
+                <span onClick={() => setShowConfirmPassword((p) => !p)}>
+                  <IconEyeToggle show={showConfirmPassword} />
+                </span>
               </div>
-              {errors.confirmPassword && <p style={st.errorText}>{errors.confirmPassword}</p>}
+              {errors.confirmPassword && <p className="register-error-text">{errors.confirmPassword}</p>}
             </div>
 
-            <p style={st.terms}>
-              By signing up, you agree to our <a href="#" style={st.termsLink}>Terms of Service</a> and <a href="#" style={st.termsLink}>Privacy Policy</a>
+            <p className="register-terms">
+              By signing up, you agree to our{" "}
+              <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
             </p>
 
-            <button type="submit" style={st.submitBtn(isLoading)} disabled={isLoading}>
+            <button type="submit" className="register-submit-btn" disabled={isLoading}>
               {isLoading ? "Creating account..." : "SIGN UP"}
             </button>
 
-            <p style={st.bottomLink}>
+            <p className="register-bottom-link">
               Already have an account?{" "}
-              <button type="button" style={st.anchor} onClick={() => navigate("/login")}>Log in</button>
+              <button type="button" className="register-anchor" onClick={() => navigate("/login")}>
+                Log in
+              </button>
             </p>
+
           </form>
         </div>
       </div>
-      <Footer />
 
+      <Footer />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { useToast } from "./Toast";
 import "../styles/Dashboard.css";
 
 import { IconTrendUp, IconRevenue, IconOrders, IconBox, IconCustomers, IconSearch, IconExternalLink } from "./Icons";
+import API_BASE from "../config";
 
 const CHART_MONTHS = ["Nov", "Dec", "Jan", "Feb", "Mar", "Apr"];
 const CHART_SERIES = {
@@ -161,10 +162,10 @@ export default function Dashboard() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/orders")
+    fetch(`${API_BASE}/api/orders`)
       .then(res => res.json()).then(data => setOrders(data))
       .catch(err => console.error("Failed to fetch orders:", err));
-    fetch("http://localhost:8080/api/products")
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json()).then(data => setProducts(data))
       .catch(err => console.error("Failed to fetch products:", err));
   }, []);
@@ -248,13 +249,11 @@ export default function Dashboard() {
       <Navbar activePage="/dashboard" />
       <div className="dashboard-main">
 
-        {/* Greeting */}
         <div className="dashboard-greeting">
           <h2 className="dashboard-greeting__title">{greeting}, Admin 👋</h2>
           <p className="dashboard-greeting__sub">Here's what's happening across your platforms today.</p>
         </div>
 
-        {/* Summary Cards */}
         <p className="dashboard-section-title">Sales Overview</p>
         <div className="dashboard-cards-grid">
           {SUMMARY_CARDS.map((card) => (
@@ -271,7 +270,6 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Revenue Chart */}
         <div className="dashboard-chart-card" style={{ background: "var(--card-bg,#fff)", border: "1px solid var(--border-color,#e0e0e0)", borderRadius: "10px", padding: "20px", marginBottom: "32px" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
             <p className="dashboard-section-title" style={{ margin: 0 }}>Revenue Trend (6 months)</p>
@@ -289,7 +287,6 @@ export default function Dashboard() {
           <RevenueChart activePlatform={chartPlatform} />
         </div>
 
-        {/* Platform Filter + Breakdown */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px", flexWrap: "wrap", gap: "10px" }}>
           <p className="dashboard-section-title" style={{ margin: 0 }}>Platform Breakdown</p>
           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>

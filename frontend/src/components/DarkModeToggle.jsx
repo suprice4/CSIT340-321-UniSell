@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import "../styles/DarkModeToggle.css";
 
-// Injected style tag beats inline styles with !important
 const DARK_OVERRIDE_STYLE = `
   body, #root, [class*="-page"], [class*="-section"] {
     background-color: #0d0d0d !important;

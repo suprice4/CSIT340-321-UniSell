@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useToast } from "./Toast";
 import "../styles/Products.css";
+import API_BASE from "../config";
 
 const CATEGORIES = ["All", "Electronics", "Clothing", "Shoes", "Accessories"];
 
@@ -18,15 +19,13 @@ export default function Products() {
   const [filterCategory, setFilterCategory] = useState("All");
   const [search, setSearch]                 = useState("");
 
-  // Fetch products from Spring Boot
   useEffect(() => {
-    fetch("http://localhost:8080/api/products")
+    fetch(`${API_BASE}/api/products`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error("Failed to fetch products:", err));
   }, []);
 
-  // Read ?search= from URL (order-to-product link)
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const q = params.get("search");
@@ -48,8 +47,7 @@ export default function Products() {
     const payload = { name: form.name, price: Number(form.price), category: form.category };
 
     if (editProduct !== null) {
-      // UPDATE
-      fetch(`http://localhost:8080/api/products/${editProduct.id}`, {
+      fetch(`${API_BASE}/api/products/${editProduct.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -63,8 +61,7 @@ export default function Products() {
         })
         .catch(() => toast.error("Failed to update product."));
     } else {
-      // CREATE
-      fetch("http://localhost:8080/api/products", {
+      fetch(`${API_BASE}/api/products`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -86,7 +83,7 @@ export default function Products() {
   };
 
   const handleDelete = (product) => {
-    fetch(`http://localhost:8080/api/products/${product.id}`, { method: "DELETE" })
+    fetch(`${API_BASE}/api/products/${product.id}`, { method: "DELETE" })
       .then(() => {
         setProducts(products.filter(p => p.id !== product.id));
         toast.error(`"${product.name}" removed from products.`);
@@ -145,7 +142,6 @@ export default function Products() {
         </div>
 
         <div style={s.grid}>
-          {/* ── LEFT: Add/Edit form ── */}
           <div style={s.card}>
             <p style={s.title}>{editProduct !== null ? "✏️ Edit Product" : "➕ Add Product"}</p>
             <form onSubmit={handleSubmit}>
@@ -173,7 +169,6 @@ export default function Products() {
             </form>
           </div>
 
-          {/* ── RIGHT: Product list ── */}
           <div style={s.card}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", paddingBottom: "12px", borderBottom: "1px solid var(--border-color,#f0f0f0)" }}>
               <p style={{ ...s.title, marginBottom: 0, paddingBottom: 0, border: "none" }}>

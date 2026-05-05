@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import "../styles/Exportorders.css";
 
 import { IconDownload, IconSearch, IconCheck, IconFilter } from "./Icons";
+import API_BASE from "../config";
 
 const STATUS_COLORS = {
   Delivered:  { bg: "#f0fff4", color: "#276749" },
@@ -20,7 +21,6 @@ const PLATFORM_BADGE = {
   "TikTok Shop": { bg: "#f3f3f3", color: "#010101" },
 };
 
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export default function ExportOrders() {
   const navigate = useNavigate();
@@ -33,13 +33,12 @@ export default function ExportOrders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/orders")
+    fetch(`${API_BASE}/api/orders`)
       .then(res => res.json())
       .then(data => setOrders(data))
       .catch(err => console.error("Failed to fetch orders:", err));
   }, []);
 
-  // Auto-hide toast after 3 seconds
   useEffect(() => {
     if (exportSuccess) {
       const timer = setTimeout(() => setExportSuccess(false), 3000);
@@ -47,7 +46,6 @@ export default function ExportOrders() {
     }
   }, [exportSuccess]);
 
-  // Filter orders
   const filteredOrders = orders.filter((order) => {
     const matchesPlatform = filterPlatform === "All" || order.platform === filterPlatform;
     const matchesStatus   = filterStatus   === "All" || order.status   === filterStatus;
@@ -58,14 +56,12 @@ export default function ExportOrders() {
     return matchesPlatform && matchesStatus && matchesSearch;
   });
 
-  // Toggle single row checkbox
   const toggleSelect = (id) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
   };
 
-  // Toggle select all visible rows
   const toggleSelectAll = () => {
     if (selectedIds.length === filteredOrders.length) {
       setSelectedIds([]);
@@ -74,7 +70,6 @@ export default function ExportOrders() {
     }
   };
 
-  // Export to CSV — real file download
   const handleExport = () => {
     const toExport = selectedIds.length > 0
       ? filteredOrders.filter((o) => selectedIds.includes(o.id))
@@ -132,7 +127,6 @@ export default function ExportOrders() {
   return (
     <div style={s.page}>
 
-      {/* ── SHARED NAVBAR — Orders is the active page ── */}
       <Navbar activePage="/export" />
 
       {/* MAIN CONTENT */}
@@ -178,7 +172,6 @@ export default function ExportOrders() {
             </button>
           </div>
 
-          {/* Table */}
           <table style={s.table}>
             <thead>
               <tr>
@@ -213,7 +206,6 @@ export default function ExportOrders() {
             </tbody>
           </table>
 
-          {/* Summary Bar */}
           <div style={s.summaryBar}>
             <span>{filteredOrders.length} orders shown · {selectedIds.length} selected</span>
             {selectedIds.length > 0 && (
@@ -225,15 +217,12 @@ export default function ExportOrders() {
         </div>
       </div>
 
-      {/* Success Toast */}
       {exportSuccess && (
         <div style={s.toast}>
           <IconCheck /> CSV downloaded successfully!
         </div>
       )}
 
-      {/* FOOTER */}
-      {/* ── SHARED FOOTER ── */}
       <Footer />
 
     </div>

@@ -6,6 +6,7 @@ import { useToast } from "./Toast";
 import "../styles/Ordercrud.css";
 
 import { IconPlus, IconEdit, IconTrash, IconEye, IconX, IconSearch } from "./Icons";
+import API_BASE from "../config";
 
 const EMPTY_FORM = { customer: "", platform: "Shopee", product: "", amount: "", status: "Pending", date: "" };
 const ITEMS_PER_PAGE = 5;
@@ -31,7 +32,7 @@ export default function OrderCRUD() {
   const toast                             = useToast();
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/orders")
+    fetch(`${API_BASE}/api/orders`)
       .then(res => res.json()).then(data => setOrders(data))
       .catch(err => console.error("Failed to fetch orders:", err));
   }, []);
@@ -67,7 +68,7 @@ export default function OrderCRUD() {
   const handleAdd = () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) { setFormErrors(errors); return; }
-    fetch("http://localhost:8080/api/orders", {
+    fetch(`${API_BASE}/api/orders`, {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData),
     }).then(res => res.json()).then(newOrder => {
       setOrders([newOrder, ...orders]); setShowAddModal(false); setFormData(EMPTY_FORM);
@@ -78,7 +79,7 @@ export default function OrderCRUD() {
   const handleEdit = () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) { setFormErrors(errors); return; }
-    fetch(`http://localhost:8080/api/orders/${selectedOrder.id}`, {
+    fetch(`${API_BASE}/api/orders/${selectedOrder.id}`, {
       method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData),
     }).then(res => res.json()).then(updated => {
       setOrders(orders.map(o => o.id === updated.id ? updated : o));
@@ -87,7 +88,7 @@ export default function OrderCRUD() {
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:8080/api/orders/${selectedOrder.id}`, { method: "DELETE" })
+    fetch(`${API_BASE}/api/orders/${selectedOrder.id}`, { method: "DELETE" })
       .then(() => {
         setOrders(orders.filter(o => o.id !== selectedOrder.id));
         setShowDeleteModal(false); toast.success("Order deleted successfully!");
@@ -222,7 +223,6 @@ export default function OrderCRUD() {
         </div>
       </div>
 
-      {/* ADD MODAL */}
       {showAddModal && (
         <div className="ordercrud-overlay">
           <div className="ordercrud-modal">
@@ -237,7 +237,6 @@ export default function OrderCRUD() {
         </div>
       )}
 
-      {/* EDIT MODAL */}
       {showEditModal && (
         <div className="ordercrud-overlay">
           <div className="ordercrud-modal">
@@ -252,7 +251,6 @@ export default function OrderCRUD() {
         </div>
       )}
 
-      {/* VIEW MODAL */}
       {showViewModal && selectedOrder && (
         <div className="ordercrud-overlay">
           <div className="ordercrud-modal">
@@ -280,7 +278,6 @@ export default function OrderCRUD() {
         </div>
       )}
 
-      {/* DELETE MODAL */}
       {showDeleteModal && selectedOrder && (
         <div className="ordercrud-overlay">
           <div className="ordercrud-modal">

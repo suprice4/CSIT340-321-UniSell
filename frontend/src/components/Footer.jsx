@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../styles/Footer.css";
 
-// ─── Shared Footer Component ──────────────────────────────────────────────────
-// Used across all pages for consistency.
 
 export default function Footer() {
   const navigate = useNavigate();

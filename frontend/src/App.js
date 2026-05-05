@@ -18,6 +18,14 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+function AdminRoute({ children }) {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const user = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+  if (!isLoggedIn) return <Navigate to="/login" replace />;
+  if (user.role !== "ADMIN") return <Navigate to="/dashboard" replace />;
+  return children;
+}
+
 export default function App() {
   return (
     <ToastProvider>
@@ -34,7 +42,7 @@ export default function App() {
           <Route path="/orders"      element={<ProtectedRoute><OrderCRUD /></ProtectedRoute>} />
           <Route path="/export"      element={<ProtectedRoute><ExportOrders /></ProtectedRoute>} />
           <Route path="/profile"     element={<ProtectedRoute><SellerProfile /></ProtectedRoute>} />
-          <Route path="/admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+          <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
