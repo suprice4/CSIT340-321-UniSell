@@ -27,9 +27,9 @@ const IconUsers = () => (
 );
 
 const TEAM = [
-  { name: "Alex Rivera",  role: "Project Lead & Frontend", initial: "AR", color: "#e85d04" },
-  { name: "Jamie Santos", role: "Backend & Database",       initial: "JS", color: "#2563eb" },
-  { name: "Chris Reyes",  role: "UI/UX & Frontend",         initial: "CR", color: "#16a34a" },
+  { name: "Prince Jason Capendit",  role: "Project Lead & Frontend", initial: "AR", color: "#e85d04" },
+  { name: "Jezer Malubay", role: "Backend & Database",       initial: "JS", color: "#2563eb" },
+  { name: "John Miklos Capuras",  role: "UI/UX & Frontend",         initial: "CR", color: "#16a34a" },
 ];
 
 const VALUES = [
