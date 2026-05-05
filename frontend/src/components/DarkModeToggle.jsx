@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import "../styles/DarkModeToggle.css";
 
 const DARK_OVERRIDE_STYLE = `
-  body, #root, [class*="-page"], [class*="-section"] {
+  body, #root, [class*="-page"] {
+    background-color: #0d0d0d !important;
+    color: #e8e8e8 !important;
+  }
+  .login-section, .register-section, .about-section, .contact-section {
     background-color: #0d0d0d !important;
     color: #e8e8e8 !important;
   }
   .navbar-top, .navbar-main {
-    background: #111 !important;
-    border-bottom-color: #333 !important;
+    background: #000 !important;
+    border-bottom-color: #222 !important;
   }
   .navbar-search-bar {
     background: #222 !important;
@@ -18,7 +22,7 @@ const DARK_OVERRIDE_STYLE = `
     color: #e8e8e8 !important;
   }
   /* Cards & panels */
-  [class*="-card"], [class*="-modal"], [class*="login-card"],
+  [class*="-card"]:not([class*="lp-"]):not([class*="lp-hero"]), [class*="-modal"], [class*="login-card"],
   [class*="register-card"], [class*="profile-header"],
   [class*="profile-tabs"], [class*="profile-tab"],
   [class*="-wrap"], [class*="hero-card"],
@@ -41,10 +45,7 @@ const DARK_OVERRIDE_STYLE = `
     color: #e8e8e8 !important;
   }
   /* Table rows */
-  td { 
-    border-bottom-color: #333 !important;
-    color: #e8e8e8 !important;
-  }
+  td { border-bottom-color: #333 !important; color: #e8e8e8 !important; }
   th { border-bottom-color: #333 !important; }
   /* Pagination */
   [class*="page-btn"], [class*="nav-btn"] {
@@ -54,16 +55,15 @@ const DARK_OVERRIDE_STYLE = `
   }
   [class*="page-btn"].active { background: #e85d04 !important; color: #fff !important; }
   /* Footer */
-  [class*="-footer"] { background: #050505 !important; }
+  [class*="-footer"] { background: #000 !important; }
   /* Stats bars */
-  [class*="stats-bar"] { background: #0a0a0a !important; }
+  [class*="stats-bar"] { background: #000 !important; }
   /* FAQ */
   [class*="faq__item"] { background: #1a1a1a !important; border-color: #333 !important; }
   [class*="faq__question"] { background: #1a1a1a !important; color: #e8e8e8 !important; }
   [class*="faq__question--open"] { background: #1f1008 !important; color: #e85d04 !important; }
-  /* Section alt */
-  [class*="section--alt"], [class*="-section--alt"],
-  .login-section, .register-section { background: #151515 !important; }
+  /* Section alt — non-landing */
+  .about-section--alt, .login-section, .register-section { background: #151515 !important; }
   /* General text */
   p, h1, h2, h3, h4, span:not(.navbar-logo-circle):not(.dark-toggle__knob):not([class*="badge"]):not([class*="status"]) {
     color: inherit;
@@ -75,25 +75,29 @@ const DARK_OVERRIDE_STYLE = `
   [class*="-overlay"] { background: rgba(0,0,0,0.7) !important; }
   /* Products */
   .products-container { background: #0d0d0d !important; }
-  /* Landing page white bg */
-  .landing-page { background: #0d0d0d !important; }
-  /* Navbar: true black (not navy) */
-  .navbar-top, .navbar-main {
-    background: #000 !important;
-    border-bottom-color: #222 !important;
-  }
-  /* Stats bar & footer: true black */
-  [class*="stats-bar"] { background: #000 !important; }
-  [class*="-footer"] { background: #000 !important; }
-  /* Platform landing cards — inline bg can't be beaten by class selector alone */
-  .platform-landing-card {
-    background: #1a1a1a !important;
-    border-color: #333 !important;
-  }
-  .platform-landing-card p,
-  .platform-landing-card__desc { color: #ccc !important; }
-  /* Section alt on landing page */
-  .landing-section--alt { background: #111 !important; }
+  /* Landing page */
+  .lp-page { background: #0d0d0d !important; }
+  .lp-section { background: #0d0d0d !important; color: #e8e8e8 !important; }
+  .lp-section--alt { background: #111 !important; color: #e8e8e8 !important; }
+  .lp-section__tag { color: #e85d04 !important; }
+  .lp-section__title { color: #e8e8e8 !important; }
+  .lp-section__sub { color: #aaa !important; }
+  .lp-feat-card { background: #1a1a1a !important; border-color: #333 !important; }
+  .lp-feat-card__title { color: #e8e8e8 !important; }
+  .lp-feat-card__desc { color: #aaa !important; }
+  .lp-plat-card--shopee, .lp-plat-card--lazada, .lp-plat-card--tiktok { background: #1a1a1a !important; }
+  .lp-plat-card__name--shopee { color: #f97316 !important; }
+  .lp-plat-card__name--lazada { color: #818cf8 !important; }
+  .lp-plat-card__name--tiktok { color: #e8e8e8 !important; }
+  .lp-plat-card__desc { color: #aaa !important; }
+  .lp-test-card { background: #1a1a1a !important; border-color: #333 !important; }
+  .lp-test-card__review, .lp-test-card__name { color: #e8e8e8 !important; }
+  .lp-test-card__role { color: #aaa !important; }
+  .lp-included-item { color: #e8e8e8 !important; }
+  .lp-step__title { color: #e8e8e8 !important; }
+  .lp-step__desc { color: #aaa !important; }
+  .lp-stat-item__label { color: #aaa !important; }
+  .lp-hero-card { background: rgba(255,255,255,0.1) !important; }
   /* Footer social icons & divider */
   .landing-footer__social-icon { background: #222 !important; }
   .landing-footer__bottom { border-top-color: #222 !important; }

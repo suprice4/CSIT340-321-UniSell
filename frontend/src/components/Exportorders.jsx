@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import "../styles/Exportorders.css";
 
 import { IconDownload, IconSearch, IconCheck, IconFilter } from "./Icons";
-import API_BASE from "../config";
+import API_BASE from "../Config";
 
 const STATUS_COLORS = {
   Delivered:  { bg: "#f0fff4", color: "#276749" },

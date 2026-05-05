@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useToast } from "./Toast";
 import "../styles/Products.css";
-import API_BASE from "../config";
+import API_BASE from "../Config";
 
 const CATEGORIES = ["All", "Electronics", "Clothing", "Shoes", "Accessories"];
 

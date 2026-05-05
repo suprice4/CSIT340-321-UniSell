@@ -6,7 +6,7 @@ import { useToast } from "./Toast";
 import "../styles/Dashboard.css";
 
 import { IconTrendUp, IconRevenue, IconOrders, IconBox, IconCustomers, IconSearch, IconExternalLink } from "./Icons";
-import API_BASE from "../config";
+import API_BASE from "../Config";
 
 const CHART_MONTHS = ["Nov", "Dec", "Jan", "Feb", "Mar", "Apr"];
 const CHART_SERIES = {

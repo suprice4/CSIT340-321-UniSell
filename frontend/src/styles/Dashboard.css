@@ -1,12 +1,21 @@
-/* ============================================================
-   Dashboard.css — Styles for Dashboard.jsx
-   ============================================================ */
-
 .dashboard-page {
   font-family: 'Segoe UI', sans-serif;
   background: #f5f5f5;
   color: #222;
   min-height: 100vh;
+}
+
+.dashboard-chart-card {
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 32px;
+}
+
+.revenue-chart {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .dashboard-main {

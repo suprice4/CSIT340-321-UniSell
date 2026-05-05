@@ -6,7 +6,7 @@ import { useToast } from "./Toast";
 import "../styles/Sellerprofile.css";
 
 import { IconUser, IconEdit, IconSave, IconLock, IconEyeToggle, IconCheck } from "./Icons";
-import API_BASE from "../config";
+import API_BASE from "../Config";
 
 
 
@@ -45,27 +45,24 @@ export default function SellerProfile() {
 
   useEffect(() => {
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (!loggedInUser) return;
+  if (!loggedInUser?.id) { setLoading(false); return; }
 
-  fetch(`${API_BASE}/api/users`)
+  fetch(`${API_BASE}/api/users/${loggedInUser.id}`)
     .then(res => res.json())
-    .then(users => {
-      const found = users.find(u => u.email === loggedInUser.email);
-      if (found) {
-        const mapped = {
-          firstName: found.username,
-          lastName:  "",
-          email:     found.email,
-          username:  found.username,
-          phone:     "",
-          storeName: "E-Commerce Market Place",
-          address:   "",
-          bio:       "",
-          platforms: ["Shopee", "Lazada", "TikTok Shop"],
-        };
-        setProfile(mapped);
-        setEditProfile(mapped);
-      }
+    .then(found => {
+      const mapped = {
+        firstName: found.username,
+        lastName:  "",
+        email:     found.email,
+        username:  found.username,
+        phone:     "",
+        storeName: "E-Commerce Market Place",
+        address:   "",
+        bio:       "",
+        platforms: ["Shopee", "Lazada", "TikTok Shop"],
+      };
+      setProfile(mapped);
+      setEditProfile(mapped);
       setLoading(false);
     })
     .catch(() => setLoading(false));
@@ -79,10 +76,12 @@ export default function SellerProfile() {
 
   const validateProfile = () => {
     const errors = {};
-    if (!editProfile.email)     errors.email     = "Email is required.";
-    else if (!/\S+@\S+\.\S+/.test(editProfile.email)) errors.email = "Enter a valid email.";
-    if (!editProfile.username)  errors.username  = "Username is required.";
-    if (!editProfile.storeName) errors.storeName = "Store name is required.";
+    if (editProfile.email && !/\S+@\S+\.\S+/.test(editProfile.email)) {
+      errors.email = "Enter a valid email.";
+    }
+    if (!editProfile.username) {
+      errors.username = "Username is required.";
+    }
     return errors;
   };
 
@@ -102,26 +101,25 @@ export default function SellerProfile() {
   if (Object.keys(errors).length > 0) { setProfileErrors(errors); return; }
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  fetch(`${API_BASE}/api/users`)
-    .then(res => res.json())
-    .then(users => {
-      const found = users.find(u => u.email === loggedInUser.email);
-      if (!found) return;
-      return fetch(`${API_BASE}/api/users/${found.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email:    editProfile.email,
-          username: editProfile.username,
-          password: found.password,
-          role:     found.role,
-        }),
-      });
+  if (!loggedInUser?.id) { toast.error("Session expired. Please log in again."); return; }
+
+  fetch(`${API_BASE}/api/users/${loggedInUser.id}/profile`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email:    editProfile.email,
+      username: editProfile.username,
+    }),
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
     })
     .then(() => {
       setProfile(editProfile);
       setIsEditing(false);
       localStorage.setItem("loggedInUser", JSON.stringify({
+        ...loggedInUser,
         email:    editProfile.email,
         username: editProfile.username,
       }));

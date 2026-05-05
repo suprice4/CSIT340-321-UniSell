@@ -1,16 +1,11 @@
-/* ============================================================
-   LandingPage.css — Styles for LandingPage.jsx
-   ============================================================ */
-
-.landing-page {
+.lp-page {
   font-family: 'Segoe UI', sans-serif;
   background: #fff;
   color: #222;
   min-height: 100vh;
 }
 
-/* ── Hero ─────────────────────────────────────────────────── */
-.landing-hero {
+.lp-hero {
   background: linear-gradient(135deg, #e85d04 0%, #bf3b00 60%, #7c2000 100%);
   padding: 80px 60px;
   color: #fff;
@@ -21,12 +16,12 @@
   flex-wrap: wrap;
 }
 
-.landing-hero__left  { flex: 1; min-width: 280px; }
-.landing-hero__right { flex: 1; min-width: 260px; display: flex; justify-content: center; }
+.lp-hero__left  { flex: 1; min-width: 280px; }
+.lp-hero__right { flex: 1; min-width: 260px; display: flex; justify-content: center; }
 
-.landing-hero__tag {
+.lp-hero__tag {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255,255,255,0.2);
   color: #fff;
   font-size: 12px;
   font-weight: 600;
@@ -37,76 +32,32 @@
   text-transform: uppercase;
 }
 
-.landing-hero__title {
-  font-size: 44px;
-  font-weight: 800;
-  line-height: 1.15;
-  margin-bottom: 16px;
-}
+.lp-hero__title { font-size: 44px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+.lp-hero__sub   { font-size: 16px; opacity: 0.88; line-height: 1.7; margin-bottom: 28px; max-width: 480px; }
+.lp-hero__btns  { display: flex; gap: 14px; flex-wrap: wrap; }
 
-.landing-hero__subtitle {
-  font-size: 16px;
-  opacity: 0.88;
-  line-height: 1.7;
-  margin-bottom: 28px;
-  max-width: 480px;
-}
+.lp-btn { border-radius: 8px; padding: 13px 28px; font-size: 15px; font-weight: 700; cursor: pointer; border: none; font-family: 'Segoe UI', sans-serif; }
+.lp-btn--primary   { background: #fff; color: #e85d04; }
+.lp-btn--secondary { background: transparent; color: #fff; border: 2px solid #fff; }
+.lp-btn--outline   { background: transparent; color: #fff; border: 2px solid #fff; padding: 14px 36px; font-size: 16px; margin-left: 14px; }
 
-.landing-hero__btns { display: flex; gap: 14px; flex-wrap: wrap; }
-
-.btn-hero-primary {
-  background: #fff;
-  color: #e85d04;
-  border: none;
-  border-radius: 8px;
-  padding: 13px 28px;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.btn-hero-secondary {
-  background: transparent;
-  color: #fff;
-  border: 2px solid #fff;
-  border-radius: 8px;
-  padding: 13px 28px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-/* Hero preview card */
-.hero-card {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+.lp-hero-card {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
   border-radius: 14px;
   padding: 24px;
   width: 300px;
 }
+.lp-hero-card__title      { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 14px; font-weight: 600; }
+.lp-hero-card__row        { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.lp-hero-card__label      { font-size: 13px; color: rgba(255,255,255,0.7); }
+.lp-hero-card__val        { font-size: 13px; color: #fff; font-weight: 700; }
+.lp-hero-card__sub        { font-size: 11px; color: rgba(255,255,255,0.6); }
+.lp-hero-card__divider    { border-top: 1px solid rgba(255,255,255,0.15); margin: 10px 0; }
+.lp-hero-card__total-label{ font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; }
+.lp-hero-card__total-val  { font-size: 16px; color: #ffb347; font-weight: 700; }
 
-.hero-card__title {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 14px;
-  font-weight: 600;
-}
-
-.hero-card__stat-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.hero-card__stat-label { font-size: 13px; color: rgba(255, 255, 255, 0.7); }
-.hero-card__stat-val   { font-size: 13px; color: #fff; font-weight: 700; }
-.hero-card__stat-orders { font-size: 11px; color: rgba(255, 255, 255, 0.7); }
-.hero-card__stat-total  { font-weight: 700; color: #fff; }
-.hero-card__stat-total-val { font-size: 16px; color: #ffb347; font-weight: 700; }
-.hero-card__divider { border-top: 1px solid rgba(255, 255, 255, 0.15); margin: 14px 0; }
-
-/* ── Stats bar ────────────────────────────────────────────── */
-.landing-stats-bar {
+.lp-stats-bar {
   background: #000;
   padding: 32px 60px;
   display: flex;
@@ -114,224 +65,79 @@
   flex-wrap: wrap;
   gap: 20px;
 }
+.lp-stat-item        { text-align: center; }
+.lp-stat-item__val   { font-size: 28px; font-weight: 800; color: #e85d04; }
+.lp-stat-item__label { font-size: 13px; color: #aaa; margin-top: 4px; }
 
-.landing-stat-item { text-align: center; }
-.landing-stat-item__value { font-size: 28px; font-weight: 800; color: #e85d04; }
-.landing-stat-item__label { font-size: 13px; color: #aaa; margin-top: 4px; }
+.lp-section      { padding: 64px 60px; }
+.lp-section--alt { padding: 64px 60px; background: #fafafa; }
+.lp-section__tag   { font-size: 12px; font-weight: 700; color: #e85d04; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+.lp-section__title { font-size: 30px; font-weight: 800; color: #1a1a1a; margin-bottom: 12px; }
+.lp-section__sub   { font-size: 15px; color: #777; max-width: 520px; line-height: 1.7; margin-bottom: 40px; }
 
-/* ── Sections ─────────────────────────────────────────────── */
-.landing-section      { padding: 64px 60px; }
-.landing-section--alt { padding: 64px 60px; background: #fafafa; }
-
-.landing-section__tag {
-  font-size: 12px;
-  font-weight: 700;
-  color: #e85d04;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-
-.landing-section__title {
-  font-size: 30px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin-bottom: 12px;
-}
-
-.landing-section__subtitle {
-  font-size: 15px;
-  color: #777;
-  max-width: 520px;
-  line-height: 1.7;
-  margin-bottom: 40px;
-}
-
-/* ── Features grid ────────────────────────────────────────── */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-
-.feature-card {
+.lp-feat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.lp-feat-card {
   background: #fff;
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   padding: 24px;
   border-top: 3px solid #e85d04;
 }
+.lp-feat-card__icon  { margin-bottom: 14px; }
+.lp-feat-card__title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+.lp-feat-card__desc  { font-size: 13px; color: #777; line-height: 1.6; }
 
-.feature-card__icon  { margin-bottom: 14px; }
-.feature-card__title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
-.feature-card__desc  { font-size: 13px; color: #777; line-height: 1.6; }
+.lp-plat-grid          { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.lp-plat-card          { border-radius: 12px; padding: 28px; }
+.lp-plat-card--shopee  { background: #fff1ee; }
+.lp-plat-card--lazada  { background: #eef0ff; }
+.lp-plat-card--tiktok  { background: #f3f3f3; }
 
-/* ── Platforms grid ───────────────────────────────────────── */
-.platforms-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.lp-plat-card__name         { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+.lp-plat-card__name--shopee { color: #ee4d2d; }
+.lp-plat-card__name--lazada { color: #0f146b; }
+.lp-plat-card__name--tiktok { color: #333; }
+.lp-plat-card__desc         { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 16px; }
 
-.platform-landing-card {
-  border-radius: 12px;
-  padding: 28px;
-}
+.lp-plat-card__link         { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; cursor: pointer; background: none; border: none; padding: 0; font-family: 'Segoe UI', sans-serif; }
+.lp-plat-card__link--shopee { color: #ee4d2d; }
+.lp-plat-card__link--lazada { color: #0f146b; }
+.lp-plat-card__link--tiktok { color: #333; }
 
-.platform-landing-card__desc { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 16px; }
-
-.platform-landing-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* ── How it works steps ───────────────────────────────────── */
-.steps-row { display: flex; align-items: flex-start; flex-wrap: wrap; }
-
-.step { flex: 1; min-width: 180px; text-align: center; padding: 0 16px; }
-
-.step__number {
-  width: 48px;
-  height: 48px;
-  background: #e85d04;
-  color: #fff;
+.lp-steps-row { display: flex; align-items: flex-start; flex-wrap: wrap; }
+.lp-step      { flex: 1; min-width: 180px; text-align: center; padding: 0 16px; }
+.lp-step__num {
+  width: 48px; height: 48px;
+  background: #e85d04; color: #fff;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800;
   margin: 0 auto 16px;
 }
+.lp-step__title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
+.lp-step__desc  { font-size: 13px; color: #777; line-height: 1.6; }
 
-.step__title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 8px; }
-.step__desc  { font-size: 13px; color: #777; line-height: 1.6; }
+.lp-included-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 600px; }
+.lp-included-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #444; }
 
-/* ── Included list ────────────────────────────────────────── */
-.included-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  max-width: 600px;
-}
+.lp-test-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.lp-test-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 24px; }
+.lp-test-card__stars  { display: flex; gap: 2px; margin-bottom: 12px; }
+.lp-test-card__review { font-size: 14px; color: #444; line-height: 1.7; margin-bottom: 16px; font-style: italic; }
+.lp-test-card__name   { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+.lp-test-card__role   { font-size: 12px; color: #999; }
 
-.included-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: #444;
-}
+.lp-cta { background: linear-gradient(135deg, #e85d04, #bf3b00); padding: 64px 60px; text-align: center; color: #fff; }
+.lp-cta__title { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
+.lp-cta__sub   { font-size: 16px; opacity: 0.88; margin-bottom: 28px; }
 
-/* ── Testimonials ─────────────────────────────────────────── */
-.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-
-.testimonial-card {
-  background: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 24px;
-}
-
-.testimonial-card__stars  { display: flex; gap: 2px; margin-bottom: 12px; }
-.testimonial-card__review { font-size: 14px; color: #444; line-height: 1.7; margin-bottom: 16px; font-style: italic; }
-.testimonial-card__name   { font-size: 14px; font-weight: 700; color: #1a1a1a; }
-.testimonial-card__role   { font-size: 12px; color: #999; }
-
-/* ── CTA ──────────────────────────────────────────────────── */
-.landing-cta {
-  background: linear-gradient(135deg, #e85d04, #bf3b00);
-  padding: 64px 60px;
-  text-align: center;
-  color: #fff;
-}
-
-.landing-cta__title    { font-size: 32px; font-weight: 800; margin-bottom: 12px; }
-.landing-cta__subtitle { font-size: 16px; opacity: 0.88; margin-bottom: 28px; }
-
-.landing-cta .btn-hero-primary  { padding: 14px 36px; font-size: 16px; }
-.landing-cta .btn-hero-secondary { padding: 14px 36px; font-size: 16px; margin-left: 14px; }
-
-/* ── Footer ───────────────────────────────────────────────── */
-.landing-footer {
-  background: #000;
-  color: #ccc;
-  padding: 40px 60px 20px;
-}
-
-.landing-footer__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 32px;
-  margin-bottom: 32px;
-}
-
-.landing-footer__col-heading { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
-.landing-footer__col-text    { font-size: 13px; color: #aaa; line-height: 1.6; }
-
-.landing-footer__col-link {
-  display: block;
-  font-size: 13px;
-  color: #aaa;
-  margin-bottom: 6px;
-  text-decoration: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  text-align: left;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.landing-footer__social { display: flex; gap: 10px; margin-top: 10px; }
-
-.landing-footer__social-icon {
-  width: 28px;
-  height: 28px;
-  background: #222;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: #aaa;
-  cursor: pointer;
-}
-
-.landing-footer__bottom {
-  border-top: 1px solid #222;
-  padding-top: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
-  color: #666;
-}
-
-.landing-footer__bottom a { color: #666; text-decoration: none; margin-left: 16px; }
-
-/* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .features-grid    { grid-template-columns: repeat(2, 1fr); }
-  .landing-footer__grid { grid-template-columns: repeat(2, 1fr); }
+  .lp-feat-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 768px) {
-  .landing-hero      { padding: 40px 24px; }
-  .landing-section,
-  .landing-section--alt { padding: 40px 24px; }
-  .landing-stats-bar { padding: 24px; }
-
-  .features-grid       { grid-template-columns: 1fr; }
-  .platforms-grid      { grid-template-columns: 1fr; }
-  .testimonials-grid   { grid-template-columns: 1fr; }
-  .landing-footer__grid{ grid-template-columns: 1fr; }
-  .included-grid       { grid-template-columns: 1fr; }
-
-  .hero-card { width: 100%; max-width: 360px; }
-  .landing-footer { padding: 32px 24px 16px; }
+  .lp-hero, .lp-section, .lp-section--alt, .lp-cta { padding: 40px 24px; }
+  .lp-stats-bar    { padding: 24px; }
+  .lp-feat-grid, .lp-plat-grid, .lp-test-grid, .lp-included-grid { grid-template-columns: 1fr; }
+  .lp-hero-card    { width: 100%; max-width: 360px; }
 }

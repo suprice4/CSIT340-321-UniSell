@@ -5,7 +5,7 @@ import { useToast } from "./Toast";
 import "../styles/AdminUsers.css";
 
 import { IconX, IconPlus, IconEdit, IconTrash } from "./Icons";
-import API_BASE from "../config";
+import API_BASE from "../Config";
 
 const EMPTY_FORM = { email: "", username: "", password: "", role: "USER" };
 

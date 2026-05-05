@@ -2,9 +2,27 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { IconLock, IconEyeToggle, IconEmail } from "./Icons";
-import { saveSession } from "./utils/auth";
 import "../styles/Login.css";
+import API_BASE from "../Config";
+
+import { IconEmail, IconLock, IconEyeToggle } from "./Icons";
+
+const ADMIN_ACCOUNT = {
+  email:    "admin@ecommerce.com",
+  username: "admin",
+  password: "admin123",
+};
+
+
+const getRegisteredAccounts = () => {
+  try {
+    const data = localStorage.getItem("registeredAccounts");
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+};
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -27,7 +45,9 @@ export default function Login() {
     if (Object.keys(errors).length > 0) setErrors({});
   }, [formData]);
 
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,126 +57,146 @@ export default function Login() {
   const validate = () => {
     const newErrors = {};
     if (!formData.emailOrUsername) newErrors.emailOrUsername = "Email or username is required.";
-    if (!formData.password)        newErrors.password = "Password is required.";
+    if (!formData.password) newErrors.password = "Password is required.";
     else if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters.";
     return newErrors;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) { setErrors(validationErrors); return; }
+  
 
-    setIsLoading(true);
-    try {
-      const res = await fetch("http://localhost:8080/api/users/login", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          emailOrUsername: formData.emailOrUsername,
-          password:        formData.password,
-        }),
-      });
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      if (!res.ok) {
-        setErrors({ emailOrUsername: "Incorrect email/username or password." });
-        setIsLoading(false);
-        return;
-      }
+  const validationErrors = validate();
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
 
-      const session = await res.json();
+  setIsLoading(true);
 
-      saveSession(session);
+  try {
+    const res = await fetch(`${API_BASE}/api/users/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        emailOrUsername: formData.emailOrUsername,
+        password: formData.password,
+      }),
+    });
 
-      if (rememberMe) {
-        localStorage.setItem("rememberedUser", formData.emailOrUsername);
-      } else {
-        localStorage.removeItem("rememberedUser");
-      }
-
+    if (!res.ok) {
+      setErrors({ emailOrUsername: "Incorrect email/username or password." });
       setIsLoading(false);
-      navigate("/dashboard");
-
-    } catch (err) {
-      setErrors({ emailOrUsername: "Cannot connect to server. Is Spring Boot running?" });
-      setIsLoading(false);
+      return;
     }
+
+    const user = await res.json();
+
+    if (rememberMe) {
+      localStorage.setItem("rememberedUser", formData.emailOrUsername);
+    } else {
+      localStorage.removeItem("rememberedUser");
+    }
+
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("loggedInUser", JSON.stringify({
+      id:       user.id,
+      email:    user.email,
+      username: user.username,
+      role:     user.role,
+    }));
+
+    setIsLoading(false);
+    navigate("/dashboard");
+
+  } catch (err) {
+    setErrors({ emailOrUsername: "Cannot connect to server. Is Spring Boot running?" });
+    setIsLoading(false);
+  }
+};
+
+  const st = {
+    page:         { fontFamily: "'Segoe UI', sans-serif", background: "var(--page-bg, #f5f5f5)", color: "var(--text-primary, #222)", minHeight: "100vh" },
+    section:      { display: "flex", justifyContent: "center", alignItems: "flex-start", padding: "48px 20px", background: "var(--page-bg, #f5f5f5)" },
+    card:         { background: "var(--card-bg, #fff)", borderRadius: "10px", border: "1px solid var(--border-color, #e0e0e0)", padding: "36px 40px", width: "100%", maxWidth: "420px", display: "flex", flexDirection: "column", alignItems: "center" },
+    cardLogo:     { width: "56px", height: "56px", background: "#e85d04", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "26px", color: "white", marginBottom: "12px" },
+    subtitle:     { fontSize: "13px", color: "var(--text-muted, #777)", marginBottom: "24px", textAlign: "center" },
+    hint:         { fontSize: "12px", color: "#888", background: "#f9f5f0", border: "1px solid #e85d0433", borderRadius: "6px", padding: "8px 12px", width: "100%", marginBottom: "16px", lineHeight: "1.6" },
+    formGroup:    { width: "100%", marginBottom: "14px" },
+    label:        { display: "block", fontSize: "13px", fontWeight: "600", marginBottom: "6px", color: "var(--text-primary, #333)" },
+    inputWrapper: (hasError) => ({ display: "flex", alignItems: "center", gap: "8px", border: `1px solid ${hasError ? "#e53e3e" : "var(--border-color, #ccc)"}`, borderRadius: "6px", padding: "9px 12px", background: "var(--section-alt-bg, #fafafa)" }),
+    input:        { border: "none", background: "transparent", outline: "none", width: "100%", fontSize: "14px", color: "var(--text-primary, #333)" },
+    errorText:    { fontSize: "12px", color: "#e53e3e", marginTop: "4px" },
+    rememberRow:  { display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: "18px" },
+    rememberLeft: { display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" },
+    rememberLabel:{ fontSize: "14px", fontWeight: "500", color: "var(--text-primary, #333)", cursor: "pointer" },
+    forgotBtn:    { fontSize: "13px", color: "#e85d04", textDecoration: "none", cursor: "pointer", background: "none", border: "none" },
+    submitBtn:    (loading) => ({ width: "100%", background: loading ? "#f0a070" : "#e85d04", color: "white", border: "none", borderRadius: "6px", padding: "13px", fontSize: "15px", fontWeight: "700", letterSpacing: "0.5px", cursor: loading ? "not-allowed" : "pointer" }),
+    bottomLink:   { marginTop: "14px", fontSize: "13px", color: "var(--text-muted, #777)" },
+    anchor:       { color: "#e85d04", textDecoration: "none", fontWeight: "600", cursor: "pointer", background: "none", border: "none", fontSize: "13px" },
+    footer:       { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
+    footerBottom: { borderTop: "1px solid var(--border-color, #1e2d3d)", paddingTop: "16px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "12px", color: "var(--text-muted, #666)" },
   };
 
   return (
-    <div className="login-page">
+    <div style={st.page}>
+
       <Navbar activePage="/login" />
 
-      <div className="login-section">
-        <div className="login-card">
+      <div style={st.section}>
+        <div style={st.card}>
+          <div style={st.cardLogo}>🛍</div>
+          <h2 style={{ fontSize: "22px", fontWeight: "700", marginBottom: "4px" }}>Welcome Back</h2>
+          <p style={st.subtitle}>Login to your E-Commerce Market Place account</p>
 
-          <div className="login-card__logo">🛍</div>
-          <h2 className="login-card__title">Welcome Back</h2>
-          <p className="login-card__subtitle">Login to your E-Commerce Market Place account</p>
-
-          <div className="login-hint">
+          {/* Demo hint for professor/testing */}
+          <div style={st.hint}>
             🔑 <strong>Demo account:</strong> username <code>admin</code> / password <code>admin123</code>
           </div>
 
-          <form className="login-form" onSubmit={handleSubmit}>
-
-            <div className="login-form-group">
-              <label className="login-label">Email or Username</label>
-              <div className={`login-input-wrapper${errors.emailOrUsername ? " login-input-wrapper--error" : ""}`}>
+          <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+            <div style={st.formGroup}>
+              <label style={st.label}>Email or Username</label>
+              <div style={st.inputWrapper(!!errors.emailOrUsername)}>
                 <IconEmail />
-                <input
-                  type="text"
-                  name="emailOrUsername"
-                  placeholder="Enter your email or username"
-                  value={formData.emailOrUsername}
-                  onChange={handleChange}
-                />
+                <input type="text" name="emailOrUsername" placeholder="Enter your email or username" value={formData.emailOrUsername} onChange={handleChange} style={st.input} />
               </div>
-              {errors.emailOrUsername && <p className="login-error-text">{errors.emailOrUsername}</p>}
+              {errors.emailOrUsername && <p style={st.errorText}>{errors.emailOrUsername}</p>}
             </div>
 
-            <div className="login-form-group">
-              <label className="login-label">Password</label>
-              <div className={`login-input-wrapper${errors.password ? " login-input-wrapper--error" : ""}`}>
+            <div style={st.formGroup}>
+              <label style={st.label}>Password</label>
+              <div style={st.inputWrapper(!!errors.password)}>
                 <IconLock />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                <span onClick={() => setShowPassword((p) => !p)}>
-                  <IconEyeToggle show={showPassword} />
-                </span>
+                <input type={showPassword ? "text" : "password"} name="password" placeholder="Enter your password" value={formData.password} onChange={handleChange} style={st.input} />
+                <span onClick={() => setShowPassword((p) => !p)}><IconEyeToggle show={showPassword} /></span>
               </div>
-              {errors.password && <p className="login-error-text">{errors.password}</p>}
+              {errors.password && <p style={st.errorText}>{errors.password}</p>}
             </div>
 
-            <div className="login-remember-row">
-              <label className="login-remember-left">
+            <div style={st.rememberRow}>
+              <label style={st.rememberLeft}>
                 <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-                <span className="login-remember-label">Remember me</span>
+                <span style={st.rememberLabel}>Remember me</span>
               </label>
-              <button type="button" className="login-forgot-btn">Forgot password?</button>
+              <button type="button" style={st.forgotBtn}>Forgot password?</button>
             </div>
 
-            <button type="submit" className="login-submit-btn" disabled={isLoading}>
+            <button type="submit" style={st.submitBtn(isLoading)} disabled={isLoading}>
               {isLoading ? "Logging in..." : "LOG IN"}
             </button>
 
-            <p className="login-bottom-link">
+            <p style={st.bottomLink}>
               Don't have an account?{" "}
-              <button type="button" className="login-anchor" onClick={() => navigate("/register")}>
-                Sign up
-              </button>
+              <button type="button" style={st.anchor} onClick={() => navigate("/register")}>Sign up</button>
             </p>
-
           </form>
         </div>
       </div>
-
+      {/* ── SHARED FOOTER ── */}
       <Footer />
+
     </div>
   );
 }

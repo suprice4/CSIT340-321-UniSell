@@ -6,7 +6,7 @@ import { useToast } from "./Toast";
 import "../styles/Ordercrud.css";
 
 import { IconPlus, IconEdit, IconTrash, IconEye, IconX, IconSearch } from "./Icons";
-import API_BASE from "../config";
+import API_BASE from "../Config";
 
 const EMPTY_FORM = { customer: "", platform: "Shopee", product: "", amount: "", status: "Pending", date: "" };
 const ITEMS_PER_PAGE = 5;
