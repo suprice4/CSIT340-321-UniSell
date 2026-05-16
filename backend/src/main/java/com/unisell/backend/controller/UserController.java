@@ -52,10 +52,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        String input = body.get("emailOrUsername").toLowerCase().trim();
+
+        String input = body.get("emailOrUsername").trim();
         String password = body.get("password");
 
-        return userRepository.findByEmail(input)
+        return userRepository.findByEmail(input.toLowerCase())
                 .or(() -> userRepository.findByUsername(input))
                 .filter(u -> u.getPassword().equals(password))
                 .map(u -> ResponseEntity.ok((Object) u))

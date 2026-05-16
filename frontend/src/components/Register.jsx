@@ -5,6 +5,7 @@ import Footer from "./Footer";
 import "../styles/Register.css";
 
 import { IconEmail, IconLock, IconEyeToggle, IconUser } from "./Icons";
+import API_BASE from "../Config";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ export default function Register() {
   setIsLoading(true);
 
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE}/api/users`, {
+    const res = await fetch(`${API_BASE}/api/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
