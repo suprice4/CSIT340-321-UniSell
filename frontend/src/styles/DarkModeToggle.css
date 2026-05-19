@@ -116,6 +116,11 @@
   color: var(--text-primary);
 }
 
+/* Keep hero gradient intact in dark mode — don't let page-bg bleed through */
+[data-theme="dark"] .lp-hero {
+  background: linear-gradient(135deg, #c44e02 0%, #9a2f00 60%, #5e1800 100%) !important;
+}
+
 /* ── Cards ────────────────────────────────────────────────── */
 [data-theme="dark"] .dashboard-summary-card,
 [data-theme="dark"] .dashboard-platform-card,
@@ -325,4 +330,19 @@
 [data-theme="dark"] .ordercrud-footer,
 [data-theme="dark"] .profile-footer {
   background: #050505;
+}
+
+/* Platforms page dark mode */
+[data-theme="dark"] .platforms-page {
+  background: var(--page-bg);
+}
+[data-theme="dark"] .platforms-form-card,
+[data-theme="dark"] .platforms-list-card,
+[data-theme="dark"] .platforms-modal {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+[data-theme="dark"] .platforms-item {
+  background: var(--section-alt-bg);
+  border-color: var(--border-color);
 }

@@ -1,12 +1,16 @@
 package com.unisell.backend.controller;
 
 import com.unisell.backend.model.Order;
+import com.unisell.backend.model.User;
 import com.unisell.backend.repository.OrderRepository;
+import com.unisell.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -16,8 +20,20 @@ public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    private boolean isAdmin(Long userId) {
+        return userRepository.findById(userId)
+                .map(u -> u.getRole() == User.Role.ADMIN)
+                .orElse(false);
+    }
+
     @GetMapping
-    public List<Order> getAll() {
+    public List<Order> getAll(@RequestParam(required = false) Long userId) {
+        if (userId != null && !isAdmin(userId)) {
+            return orderRepository.findByUserId(userId);
+        }
         return orderRepository.findAll();
     }
 
@@ -29,8 +45,25 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order create(@RequestBody Order order) {
-        return orderRepository.save(order);
+    public ResponseEntity<?> create(@RequestBody Order order) {
+        List<Order> scope = order.getUserId() != null
+                ? orderRepository.findByUserId(order.getUserId())
+                : orderRepository.findAll();
+
+        boolean duplicate = scope.stream().anyMatch(o ->
+            o.getCustomer().equalsIgnoreCase(order.getCustomer()) &&
+            o.getPlatform().equalsIgnoreCase(order.getPlatform()) &&
+            o.getProduct().equalsIgnoreCase(order.getProduct()) &&
+            o.getAmount().equals(order.getAmount()) &&
+            o.getStatus().equalsIgnoreCase(order.getStatus()) &&
+            o.getDate() != null && o.getDate().equals(order.getDate())
+        );
+        if (duplicate) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "A duplicate order with the same details already exists."));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderRepository.save(order));
     }
 
     @PutMapping("/{id}")

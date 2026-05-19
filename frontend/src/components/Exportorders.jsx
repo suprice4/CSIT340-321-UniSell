@@ -30,14 +30,23 @@ export default function ExportOrders() {
   const [selectedIds, setSelectedIds]       = useState([]);
   const [exportSuccess, setExportSuccess]   = useState(false);
 
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders]       = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+
+  const currentUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+  const userId = currentUser.id;
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/orders`)
+    const params = userId ? `?userId=${userId}` : "";
+    fetch(`${API_BASE}/api/orders${params}`)
       .then(res => res.json())
       .then(data => setOrders(data))
       .catch(err => console.error("Failed to fetch orders:", err));
-  }, []);
+    fetch(`${API_BASE}/api/platforms${params}`)
+      .then(res => res.json())
+      .then(data => setPlatforms(data))
+      .catch(err => console.error("Failed to fetch platforms:", err));
+  }, [userId]);
 
   useEffect(() => {
     if (exportSuccess) {
@@ -119,7 +128,7 @@ export default function ExportOrders() {
     th:          { padding: "10px 14px", textAlign: "left", fontWeight: "600", color: "var(--text-muted, #888)", borderBottom: "1px solid var(--border-color, #f0f0f0)", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.5px" },
     td:          { padding: "12px 14px", borderBottom: "1px solid var(--border-color, #f7f7f7)", color: "var(--text-primary, #333)" },
     badge:       (bg, color) => ({ display: "inline-block", background: bg, color, padding: "3px 10px", borderRadius: "12px", fontSize: "11px", fontWeight: "600" }),
-    selectedRow: { background: "#fff8f5" },
+    selectedRow: {},
     summaryBar:  { display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "16px", fontSize: "13px", color: "var(--text-muted, #888)", flexWrap: "wrap", gap: "8px" },
     toast:       { position: "fixed", bottom: "24px", right: "24px", background: "#276749", color: "white", padding: "12px 20px", borderRadius: "8px", fontSize: "14px", fontWeight: "600", zIndex: 300, display: "flex", alignItems: "center", gap: "8px" },
   };
@@ -149,9 +158,9 @@ export default function ExportOrders() {
               </div>
               <select value={filterPlatform} onChange={(e) => setFilterPlatform(e.target.value)} style={s.select}>
                 <option value="All">All Platforms</option>
-                <option value="Shopee">Shopee</option>
-                <option value="Lazada">Lazada</option>
-                <option value="TikTok Shop">TikTok Shop</option>
+                {platforms.map((p) => (
+                  <option key={p.id} value={p.name}>{p.name}</option>
+                ))}
               </select>
               <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} style={s.select}>
                 <option value="All">All Status</option>
@@ -187,7 +196,7 @@ export default function ExportOrders() {
               {filteredOrders.length > 0 ? filteredOrders.map((order) => {
                 const isSelected = selectedIds.includes(order.id);
                 return (
-                  <tr key={order.id} style={isSelected ? s.selectedRow : {}}>
+                  <tr key={order.id} className={isSelected ? "export-row--selected" : ""}>
                     <td style={s.td}>
                       <input type="checkbox" checked={isSelected} onChange={() => toggleSelect(order.id)} />
                     </td>

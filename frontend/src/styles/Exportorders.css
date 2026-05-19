@@ -333,3 +333,16 @@
   font-weight: 600;
   font-family: 'Segoe UI', sans-serif;
 }
+
+/* Selected row — works in both light and dark mode */
+.export-row--selected {
+  background: #fff3ee;
+}
+[data-theme="dark"] .export-row--selected {
+  background: #2a1200;
+}
+
+/* Checkbox visibility in dark mode */
+[data-theme="dark"] input[type="checkbox"] {
+  accent-color: #e85d04;
+}

@@ -7,6 +7,7 @@ import {
   IconDashboard, IconSync, IconChart, IconShield,
 } from "./Icons";
 import "../styles/Landingpage.css";
+import API_BASE from "../Config";
 
 
 const FEATURES = [
@@ -35,12 +36,6 @@ const STATS = [
   { value: "₱284K+", label: "Revenue Tracked" },
 ];
 
-const PLATFORM_OVERVIEW = [
-  { name: "Shopee",      orders: 580, rev: "₱118,200" },
-  { name: "Lazada",      orders: 420, rev: "₱96,700"  },
-  { name: "TikTok Shop", orders: 340, rev: "₱69,600"  },
-];
-
 const INCLUDED_FEATURES = [
   "Centralized order management",
   "Multi-platform sales tracking",
@@ -54,8 +49,30 @@ const INCLUDED_FEATURES = [
 export default function LandingPage() {
   const navigate   = useNavigate();
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const currentUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+  const userId = currentUser.id;
+
+  const [platformOverview, setPlatformOverview] = useState([]);
+  const [totalRevenue, setTotalRevenue]         = useState(0);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn || !userId) return;
+    Promise.all([
+      fetch(`${API_BASE}/api/orders?userId=${userId}`).then(r => r.json()),
+      fetch(`${API_BASE}/api/platforms?userId=${userId}`).then(r => r.json()),
+    ]).then(([orders, platforms]) => {
+      const overview = platforms.map(p => {
+        const platOrders = orders.filter(o => o.platform === p.name);
+        const rev = platOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0);
+        return { name: p.name, orders: platOrders.length, rev };
+      }).filter(p => p.orders > 0);
+      const total = orders.reduce((sum, o) => sum + Number(o.amount || 0), 0);
+      setPlatformOverview(overview);
+      setTotalRevenue(total);
+    }).catch(() => {});
+  }, [isLoggedIn, userId]);
 
   const handleViewDashboard = () => {
     if (!isLoggedIn) { navigate("/login"); return; }
@@ -92,21 +109,33 @@ export default function LandingPage() {
         <div className="lp-hero__right">
           <div className="lp-hero-card">
             <p className="lp-hero-card__title">📊 Platform Overview</p>
-            {PLATFORM_OVERVIEW.map((p) => (
-              <div key={p.name}>
-                <div className="lp-hero-card__row">
-                  <span className="lp-hero-card__label">{p.name}</span>
-                  <span className="lp-hero-card__val">{p.rev}</span>
+            {!isLoggedIn ? (
+              <p className="lp-hero-card__label" style={{ opacity: 0.7, fontSize: "13px", marginBottom: "12px" }}>
+                Log in to see your platform stats.
+              </p>
+            ) : platformOverview.length === 0 ? (
+              <p className="lp-hero-card__label" style={{ opacity: 0.7, fontSize: "13px", marginBottom: "12px" }}>
+                No orders yet. Add orders to see your breakdown.
+              </p>
+            ) : (
+              platformOverview.map((p) => (
+                <div key={p.name}>
+                  <div className="lp-hero-card__row">
+                    <span className="lp-hero-card__label">{p.name}</span>
+                    <span className="lp-hero-card__val">₱{p.rev.toLocaleString()}</span>
+                  </div>
+                  <div className="lp-hero-card__row">
+                    <span className="lp-hero-card__sub">{p.orders} orders</span>
+                  </div>
+                  <div className="lp-hero-card__divider" />
                 </div>
-                <div className="lp-hero-card__row">
-                  <span className="lp-hero-card__sub">{p.orders} orders</span>
-                </div>
-                <div className="lp-hero-card__divider" />
-              </div>
-            ))}
+              ))
+            )}
             <div className="lp-hero-card__row">
               <span className="lp-hero-card__total-label">Total Revenue</span>
-              <span className="lp-hero-card__total-val">₱284,500</span>
+              <span className="lp-hero-card__total-val">
+                {isLoggedIn ? `₱${totalRevenue.toLocaleString()}` : "—"}
+              </span>
             </div>
           </div>
         </div>

@@ -48,17 +48,17 @@
   padding: 24px;
   width: 300px;
 }
-.lp-hero-card__title      { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 14px; font-weight: 600; }
-.lp-hero-card__row        { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.lp-hero-card__label      { font-size: 13px; color: rgba(255,255,255,0.7); }
-.lp-hero-card__val        { font-size: 13px; color: #fff; font-weight: 700; }
-.lp-hero-card__sub        { font-size: 11px; color: rgba(255,255,255,0.6); }
-.lp-hero-card__divider    { border-top: 1px solid rgba(255,255,255,0.15); margin: 10px 0; }
-.lp-hero-card__total-label{ font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; }
-.lp-hero-card__total-val  { font-size: 16px; color: #ffb347; font-weight: 700; }
+.lp-hero-card__title      { font-size: 14px; color: rgba(255,255,255,0.8); margin-bottom: 14px; font-weight: 600; background: transparent; }
+.lp-hero-card__row        { display: flex; justify-content: space-between; margin-bottom: 6px; background: transparent; }
+.lp-hero-card__label      { font-size: 13px; color: rgba(255,255,255,0.7); background: transparent; }
+.lp-hero-card__val        { font-size: 13px; color: #fff; font-weight: 700; background: transparent; }
+.lp-hero-card__sub        { font-size: 11px; color: rgba(255,255,255,0.6); background: transparent; }
+.lp-hero-card__divider    { border-top: 1px solid rgba(255,255,255,0.15); margin: 10px 0; background: transparent; }
+.lp-hero-card__total-label{ font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 600; background: transparent; }
+.lp-hero-card__total-val  { font-size: 16px; color: #ffb347; font-weight: 700; background: transparent; }
 
 .lp-stats-bar {
-  background: #000;
+  background: #1a1a1a;
   padding: 32px 60px;
   display: flex;
   justify-content: space-around;

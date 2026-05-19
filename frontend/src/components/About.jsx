@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import "../styles/About.css";
+import "../styles/Landingpage.css";
 
 const IconTarget = () => (
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#e85d04" strokeWidth="1.8">
@@ -48,6 +49,7 @@ const STATS = [
 
 export default function About() {
   const navigate = useNavigate();
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -61,10 +63,10 @@ export default function About() {
     heroTitle:   { fontSize: "40px", fontWeight: "800", marginBottom: "12px" },
     heroSub:     { fontSize: "16px", opacity: 0.88, maxWidth: "520px", lineHeight: "1.7" },
 
-    statsBar:    { background: "#1a1a2e", padding: "28px 60px", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" },
+    statsBar:    { background: "#0d0d0d", padding: "28px 60px", display: "flex", justifyContent: "space-around", flexWrap: "wrap", gap: "20px" },
     statItem:    { textAlign: "center" },
     statVal:     { fontSize: "26px", fontWeight: "800", color: "#e85d04" },
-    statLabel:   { fontSize: "13px", color: "var(--text-muted, #aaa)", marginTop: "4px" },
+    statLabel:   { fontSize: "13px", color: "#aaa", marginTop: "4px" },
 
     section:     { padding: "60px 60px" },
     sectionAlt:  { padding: "60px 60px", background: "var(--card-bg, #fff)" },
@@ -92,8 +94,9 @@ export default function About() {
     cta:         { background: "linear-gradient(135deg, #e85d04, #bf3b00)", padding: "56px 60px", textAlign: "center", color: "white" },
     ctaTitle:    { fontSize: "28px", fontWeight: "800", marginBottom: "10px" },
     ctaSub:      { fontSize: "15px", opacity: 0.88, marginBottom: "24px" },
-    ctaBtn:      { background: "var(--card-bg, #fff)", color: "#e85d04", border: "none", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
+    ctaBtn:      { background: "#0d0d0d", color: "#e85d04", border: "1px solid #e85d04", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
     ctaBtnSec:   { background: "transparent", color: "white", border: "2px solid white", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "600", cursor: "pointer", marginLeft: "12px" },
+    ctaBtnDash:  { background: "#0d0d0d", color: "#e85d04", border: "1px solid #e85d04", borderRadius: "8px", padding: "12px 32px", fontSize: "15px", fontWeight: "700", cursor: "pointer" },
 
     footer:      { background: "#0f1923", color: "var(--text-muted, #ccc)", padding: "40px 60px 20px" },
     footerGrid:  { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "32px", marginBottom: "32px" },
@@ -194,8 +197,14 @@ export default function About() {
       <section style={st.cta}>
         <h2 style={st.ctaTitle}>Ready to simplify your selling?</h2>
         <p style={st.ctaSub}>Join hundreds of sellers managing their stores smarter with our platform.</p>
-        <button style={st.ctaBtn} onClick={() => navigate("/register")}>Create Free Account</button>
-        <button style={st.ctaBtnSec} onClick={() => navigate("/login")}>Log In</button>
+        {isLoggedIn ? (
+          <button className="lp-btn lp-btn--primary" onClick={() => navigate("/dashboard")}>Go to Dashboard</button>
+        ) : (
+          <>
+            <button className="lp-btn lp-btn--primary" onClick={() => navigate("/register")}>Create Free Account</button>
+            <button className="lp-btn lp-btn--outline" onClick={() => navigate("/login")}>Log In</button>
+          </>
+        )}
       </section>
       {/* ── SHARED FOOTER ── */}
       <Footer />

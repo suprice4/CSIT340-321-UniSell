@@ -8,7 +8,7 @@ import "../styles/Ordercrud.css";
 import { IconPlus, IconEdit, IconTrash, IconEye, IconX, IconSearch } from "./Icons";
 import API_BASE from "../Config";
 
-const EMPTY_FORM = { customer: "", platform: "Shopee", product: "", amount: "", status: "Pending", date: "" };
+const EMPTY_FORM = { customer: "", platform: "", product: "", amount: "", status: "Pending", date: "" };
 const ITEMS_PER_PAGE = 5;
 
 const STATUS_SLUG = { Delivered: "delivered", Shipped: "shipped", Pending: "pending", Processing: "processing", Cancelled: "cancelled" };
@@ -18,6 +18,8 @@ export default function OrderCRUD() {
   const navigate = useNavigate();
 
   const [orders, setOrders]               = useState([]);
+  const [platforms, setPlatforms]         = useState([]);
+  const [products, setProducts]           = useState([]);
   const [search, setSearch]               = useState("");
   const [filterPlatform, setFilterPlatform] = useState("All");
   const [filterStatus, setFilterStatus]   = useState("All");
@@ -31,14 +33,29 @@ export default function OrderCRUD() {
   const [formErrors, setFormErrors]       = useState({});
   const toast                             = useToast();
 
+  const currentUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+  const userId = currentUser.id;
+
   useEffect(() => {
-    fetch(`${API_BASE}/api/orders`)
+    const params = userId ? `?userId=${userId}` : "";
+    fetch(`${API_BASE}/api/orders${params}`)
       .then(res => res.json()).then(data => setOrders(data))
       .catch(err => console.error("Failed to fetch orders:", err));
-  }, []);
+    fetch(`${API_BASE}/api/platforms${params}`)
+      .then(res => res.json()).then(data => setPlatforms(data))
+      .catch(err => console.error("Failed to fetch platforms:", err));
+    fetch(`${API_BASE}/api/products${params}`)
+      .then(res => res.json()).then(data => setProducts(data))
+      .catch(err => console.error("Failed to fetch products:", err));
+  }, [userId]);
 
   useEffect(() => { setCurrentPage(1); }, [search, filterPlatform, filterStatus]);
   useEffect(() => { if (Object.keys(formErrors).length > 0) setFormErrors({}); }, [formData]);
+  useEffect(() => {
+    if (platforms.length > 0 && !formData.platform) {
+      setFormData((prev) => ({ ...prev, platform: platforms[0].name }));
+    }
+  }, [platforms]);
 
   const filteredOrders = orders.filter((order) => {
     const matchesPlatform = filterPlatform === "All" || order.platform === filterPlatform;
@@ -68,8 +85,23 @@ export default function OrderCRUD() {
   const handleAdd = () => {
     const errors = validate();
     if (Object.keys(errors).length > 0) { setFormErrors(errors); return; }
+
+    // Duplicate check: exact same customer+platform+product+amount+status+date
+    const duplicate = orders.find(o =>
+      o.customer.trim().toLowerCase() === formData.customer.trim().toLowerCase() &&
+      o.platform === formData.platform &&
+      o.product.trim().toLowerCase() === formData.product.trim().toLowerCase() &&
+      String(o.amount) === String(formData.amount) &&
+      o.status === formData.status &&
+      o.date === formData.date
+    );
+    if (duplicate) {
+      toast.error("A duplicate order with the same details already exists.");
+      return;
+    }
+
     fetch(`${API_BASE}/api/orders`, {
-      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData),
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...formData, userId }),
     }).then(res => res.json()).then(newOrder => {
       setOrders([newOrder, ...orders]); setShowAddModal(false); setFormData(EMPTY_FORM);
       toast.success("Order added successfully!");
@@ -111,15 +143,20 @@ export default function OrderCRUD() {
       <div className="ordercrud-form-group">
         <label className="ordercrud-form-label">Platform</label>
         <select className="ordercrud-form-input" value={formData.platform} onChange={(e) => setFormData({ ...formData, platform: e.target.value })}>
-          <option value="Shopee">Shopee</option>
-          <option value="Lazada">Lazada</option>
-          <option value="TikTok Shop">TikTok Shop</option>
+          {platforms.map((p) => (
+            <option key={p.id} value={p.name}>{p.name}</option>
+          ))}
         </select>
       </div>
       <div className="ordercrud-form-group">
         <label className="ordercrud-form-label">Product</label>
-        <input className={`ordercrud-form-input${formErrors.product ? " ordercrud-form-input--error" : ""}`}
-          value={formData.product} onChange={(e) => setFormData({ ...formData, product: e.target.value })} placeholder="Enter product name" />
+        <select className={`ordercrud-form-input${formErrors.product ? " ordercrud-form-input--error" : ""}`}
+          value={formData.product} onChange={(e) => setFormData({ ...formData, product: e.target.value })}>
+          <option value="">-- Select a product --</option>
+          {products.map((p) => (
+            <option key={p.id} value={p.name}>{p.name}</option>
+          ))}
+        </select>
         {formErrors.product && <p className="ordercrud-error-text">{formErrors.product}</p>}
       </div>
       <div className="ordercrud-form-group">
@@ -164,9 +201,9 @@ export default function OrderCRUD() {
               </div>
               <select className="ordercrud-select" value={filterPlatform} onChange={(e) => setFilterPlatform(e.target.value)}>
                 <option value="All">All Platforms</option>
-                <option value="Shopee">Shopee</option>
-                <option value="Lazada">Lazada</option>
-                <option value="TikTok Shop">TikTok Shop</option>
+                {platforms.map((p) => (
+                  <option key={p.id} value={p.name}>{p.name}</option>
+                ))}
               </select>
               <select className="ordercrud-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
                 <option value="All">All Status</option>

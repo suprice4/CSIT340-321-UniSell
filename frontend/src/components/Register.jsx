@@ -7,6 +7,68 @@ import "../styles/Register.css";
 import { IconEmail, IconLock, IconEyeToggle, IconUser } from "./Icons";
 import API_BASE from "../Config";
 
+// Seed data for newly registered accounts
+const SEED_ORDERS = [
+  { customer: "Maria Santos",   platform: "Shopee",      product: "Wireless Earbuds",    amount: 1299, status: "Delivered",  date: "2026-04-20" },
+  { customer: "Juan dela Cruz", platform: "Lazada",      product: "Phone Case",           amount: 299,  status: "Shipped",    date: "2026-04-22" },
+  { customer: "Ana Reyes",      platform: "TikTok Shop", product: "Laptop Stand",         amount: 850,  status: "Pending",    date: "2026-04-25" },
+  { customer: "Carlos Bautista",platform: "Shopee",      product: "USB-C Hub",            amount: 650,  status: "Processing", date: "2026-04-27" },
+  { customer: "Liza Gonzales",  platform: "Lazada",      product: "Bluetooth Speaker",    amount: 1800, status: "Delivered",  date: "2026-04-28" },
+  { customer: "Mark Villanueva",platform: "TikTok Shop", product: "Wireless Earbuds",     amount: 1299, status: "Cancelled",  date: "2026-04-29" },
+  { customer: "Rosa Mendoza",   platform: "Shopee",      product: "Mechanical Keyboard",  amount: 2400, status: "Delivered",  date: "2026-05-01" },
+  { customer: "Ben Aquino",     platform: "Lazada",      product: "Laptop Stand",         amount: 850,  status: "Shipped",    date: "2026-05-03" },
+];
+
+const SEED_PRODUCTS = [
+  { name: "Wireless Earbuds",   price: 1299, category: "Electronics" },
+  { name: "Phone Case",         price: 299,  category: "Accessories" },
+  { name: "Laptop Stand",       price: 850,  category: "Electronics" },
+  { name: "USB-C Hub",          price: 650,  category: "Electronics" },
+  { name: "Bluetooth Speaker",  price: 1800, category: "Electronics" },
+  { name: "Mechanical Keyboard",price: 2400, category: "Electronics" },
+  { name: "Running Shoes",      price: 1500, category: "Shoes"       },
+  { name: "Cotton T-Shirt",     price: 350,  category: "Clothing"    },
+];
+
+const SEED_PLATFORMS = [
+  { name: "Shopee",      url: "https://shopee.ph",     status: "Active",   description: "Leading e-commerce platform in Southeast Asia." },
+  { name: "Lazada",      url: "https://lazada.com.ph", status: "Active",   description: "Multi-category online marketplace." },
+  { name: "TikTok Shop", url: "https://tiktok.com",   status: "Active",   description: "Social commerce platform integrated with TikTok." },
+];
+
+async function seedDataForUser() {
+  // Seed products (skip if already exists — backend handles 409)
+  for (const p of SEED_PRODUCTS) {
+    try {
+      await fetch(`${API_BASE}/api/products`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(p),
+      });
+    } catch (_) {}
+  }
+  // Seed orders
+  for (const o of SEED_ORDERS) {
+    try {
+      await fetch(`${API_BASE}/api/orders`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(o),
+      });
+    } catch (_) {}
+  }
+  // Seed platforms
+  for (const pl of SEED_PLATFORMS) {
+    try {
+      await fetch(`${API_BASE}/api/platforms`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pl),
+      });
+    } catch (_) {}
+  }
+}
+
 export default function Register() {
   const navigate = useNavigate();
 
@@ -80,7 +142,7 @@ export default function Register() {
         email:    formData.email,
         username: formData.username,
         password: formData.password,
-        role:     "VENDOR",  
+        role:     "VENDOR",
       }),
     });
 
@@ -90,8 +152,22 @@ export default function Register() {
       return;
     }
 
+    const newUser = await res.json();
+
+    // Auto-login the new user
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("loggedInUser", JSON.stringify({
+      id:       newUser.id,
+      email:    newUser.email,
+      username: newUser.username,
+      role:     newUser.role,
+    }));
+
+    // Seed sample data in background (don't wait for it to block navigation)
+    seedDataForUser().catch(() => {});
+
     setIsLoading(false);
-    navigate("/login");
+    navigate("/dashboard");
 
   } catch (err) {
     setErrors({ email: "Cannot connect to server. Is Spring Boot running?" });

@@ -11,6 +11,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
+
     private String customer;
     private String platform;
     private String product;
@@ -20,6 +22,9 @@ public class Order {
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public Long getUserId() { return userId; }
+    public void setUserId(Long userId) { this.userId = userId; }
 
     public String getCustomer() { return customer; }
     public void setCustomer(String customer) { this.customer = customer; }

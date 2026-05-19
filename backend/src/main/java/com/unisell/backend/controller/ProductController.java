@@ -1,12 +1,16 @@
 package com.unisell.backend.controller;
 
 import com.unisell.backend.model.Product;
+import com.unisell.backend.model.User;
 import com.unisell.backend.repository.ProductRepository;
+import com.unisell.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -16,8 +20,20 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    private boolean isAdmin(Long userId) {
+        return userRepository.findById(userId)
+                .map(u -> u.getRole() == User.Role.ADMIN)
+                .orElse(false);
+    }
+
     @GetMapping
-    public List<Product> getAll() {
+    public List<Product> getAll(@RequestParam(required = false) Long userId) {
+        if (userId != null && !isAdmin(userId)) {
+            return productRepository.findByUserId(userId);
+        }
         return productRepository.findAll();
     }
 
@@ -29,8 +45,21 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return productRepository.save(product);
+    public ResponseEntity<?> create(@RequestBody Product product) {
+        List<Product> scope = product.getUserId() != null
+                ? productRepository.findByUserId(product.getUserId())
+                : productRepository.findAll();
+
+        boolean duplicate = scope.stream().anyMatch(p ->
+            p.getName().equalsIgnoreCase(product.getName()) &&
+            p.getCategory().equalsIgnoreCase(product.getCategory())
+        );
+        if (duplicate) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "A product named \"" + product.getName() + "\" in \"" + product.getCategory() + "\" already exists."));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(product));
     }
 
     @PutMapping("/{id}")

@@ -7,6 +7,7 @@ import Dashboard     from "./components/Dashboard";
 import About         from "./components/About";
 import Contact       from "./components/Contact";
 import Products      from "./components/Products";
+import Platforms     from "./components/Platforms";
 import OrderCRUD     from "./components/Ordercrud";
 import ExportOrders  from "./components/Exportorders";
 import SellerProfile from "./components/Sellerprofile";
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/contact"  element={<Contact />} />
           <Route path="/dashboard"   element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/products"    element={<ProtectedRoute><Products /></ProtectedRoute>} />
+          <Route path="/platforms"   element={<ProtectedRoute><Platforms /></ProtectedRoute>} />
           <Route path="/orders"      element={<ProtectedRoute><OrderCRUD /></ProtectedRoute>} />
           <Route path="/export"      element={<ProtectedRoute><ExportOrders /></ProtectedRoute>} />
           <Route path="/profile"     element={<ProtectedRoute><SellerProfile /></ProtectedRoute>} />

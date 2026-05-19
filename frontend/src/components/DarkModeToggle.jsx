@@ -97,7 +97,31 @@ const DARK_OVERRIDE_STYLE = `
   .lp-step__title { color: #e8e8e8 !important; }
   .lp-step__desc { color: #aaa !important; }
   .lp-stat-item__label { color: #aaa !important; }
-  .lp-hero-card { background: rgba(255,255,255,0.1) !important; }
+  /* Hero section — always orange gradient, keep all text white */
+  .lp-hero { color: #fff !important; }
+  .lp-hero p, .lp-hero h1, .lp-hero h2, .lp-hero h3, .lp-hero h4,
+  .lp-hero span { color: inherit !important; background: transparent !important; }
+  /* Hero card dark mode */
+  .lp-hero-card {
+    background: rgba(0,0,0,0.35) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+    color: #fff !important;
+  }
+  .lp-hero-card__title { color: rgba(255,255,255,0.85) !important; background: transparent !important; }
+  .lp-hero-card__label { color: rgba(255,255,255,0.65) !important; background: transparent !important; }
+  .lp-hero-card__val { color: #fff !important; background: transparent !important; }
+  .lp-hero-card__sub { color: rgba(255,255,255,0.5) !important; background: transparent !important; }
+  .lp-hero-card__divider { border-color: rgba(255,255,255,0.12) !important; }
+  .lp-hero-card__total-label { color: rgba(255,255,255,0.8) !important; background: transparent !important; }
+  .lp-hero-card__total-val { color: #ffb347 !important; background: transparent !important; }
+  .lp-hero-card__row { background: transparent !important; }
+  /* Go to Dashboard button in hero (lp-btn--primary inside hero) */
+  .lp-hero .lp-btn--primary { background: #fff !important; color: #e85d04 !important; }
+  .lp-hero .lp-btn--secondary { background: transparent !important; color: #fff !important; border-color: #fff !important; }
+  /* CTA section — keep the orange gradient, make buttons consistent */
+  .lp-cta { background: linear-gradient(135deg, #e85d04, #bf3b00) !important; color: #fff !important; }
+  .lp-cta .lp-btn--primary { background: #fff !important; color: #e85d04 !important; }
+  .lp-cta .lp-btn--outline { background: transparent !important; color: #fff !important; border-color: #fff !important; }
   /* Footer social icons & divider */
   .landing-footer__social-icon { background: #222 !important; }
   .landing-footer__bottom { border-top-color: #222 !important; }

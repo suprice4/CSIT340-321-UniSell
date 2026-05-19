@@ -1,14 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/NotificationBell.css";
-
-const MOCK_NOTIFICATIONS = [
-  { id: 1, type: "order",   message: "New order #ORD-1042 from Maria Santos",      time: "2 min ago",  read: false },
-  { id: 2, type: "ship",    message: "Order #ORD-1038 has been shipped",            time: "15 min ago", read: false },
-  { id: 3, type: "alert",   message: "Low stock alert: Wireless Earbuds (3 left)",  time: "1 hr ago",   read: false },
-  { id: 4, type: "order",   message: "New order #ORD-1041 from Juan dela Cruz",     time: "2 hr ago",   read: true  },
-  { id: 5, type: "success", message: "Payment confirmed for #ORD-1039",             time: "3 hr ago",   read: true  },
-];
+import API_BASE from "../Config";
 
 const TYPE_ICONS = {
   order:   { icon: "🛒", bg: "#fff1ee" },
@@ -17,11 +10,56 @@ const TYPE_ICONS = {
   success: { icon: "✅", bg: "#f0fff4" },
 };
 
+function timeAgo(dateStr) {
+  if (!dateStr) return "recently";
+  const date = new Date(dateStr);
+  if (isNaN(date)) return "recently";
+  const diffMs   = Date.now() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHrs  = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHrs / 24);
+  if (diffMins < 1)   return "just now";
+  if (diffMins < 60)  return `${diffMins} min ago`;
+  if (diffHrs < 24)   return `${diffHrs} hr ago`;
+  if (diffDays === 1) return "yesterday";
+  return `${diffDays} days ago`;
+}
+
+function buildNotificationsFromOrders(orders) {
+  if (!orders || orders.length === 0) return [];
+  const recent = [...orders].reverse().slice(0, 5);
+  return recent.map((o, i) => {
+    const time = timeAgo(o.date);
+    if (o.status === "Pending") {
+      return { id: o.id, type: "order",   message: `New order #${o.id} from ${o.customer}`,          time, read: i > 1 };
+    } else if (o.status === "Shipped") {
+      return { id: o.id, type: "ship",    message: `Order #${o.id} (${o.product}) has been shipped`,  time, read: i > 1 };
+    } else if (o.status === "Delivered") {
+      return { id: o.id, type: "success", message: `Payment confirmed for order #${o.id}`,             time, read: i > 0 };
+    } else if (o.status === "Cancelled") {
+      return { id: o.id, type: "alert",   message: `Order #${o.id} was cancelled by ${o.customer}`,   time, read: true  };
+    } else {
+      return { id: o.id, type: "order",   message: `Order #${o.id} is being processed`,               time, read: i > 1 };
+    }
+  });
+}
+
 export default function NotificationBell({ isLoggedIn }) {
   const [open, setOpen]                   = useState(false);
-  const [notifications, setNotifications] = useState(MOCK_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState([]);
   const ref      = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    const currentUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+    const userId = currentUser.id;
+    const params = userId ? `?userId=${userId}` : "";
+    fetch(`${API_BASE}/api/orders${params}`)
+      .then(res => res.json())
+      .then(orders => setNotifications(buildNotificationsFromOrders(orders)))
+      .catch(() => {});
+  }, [isLoggedIn]);
 
   const unread = notifications.filter((n) => !n.read).length;
 
@@ -33,12 +71,8 @@ export default function NotificationBell({ isLoggedIn }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // If not logged in, redirect to login instead of opening the dropdown
   const handleBellClick = () => {
-    if (!isLoggedIn) {
-      navigate("/login");
-      return;
-    }
+    if (!isLoggedIn) { navigate("/login"); return; }
     setOpen((o) => !o);
   };
 
@@ -104,7 +138,7 @@ export default function NotificationBell({ isLoggedIn }) {
             )}
           </div>
 
-          <div className="notif-footer">View all notifications →</div>
+          <div className="notif-footer">Showing your 5 most recent orders →</div>
         </div>
       )}
 

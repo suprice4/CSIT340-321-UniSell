@@ -5,6 +5,18 @@ import Footer from "./Footer";
 import { IconPin, IconPhone, IconMail, IconClock } from "./Icons";
 import "../styles/Contact.css";
 
+// ─── EmailJS Configuration ──────────────────────────────────────────────────
+// 1. Go to https://www.emailjs.com/ and create a free account.
+// 2. Add an Email Service (Gmail, Outlook, etc.) → copy the Service ID below.
+// 3. Create an Email Template with variables: {{from_name}}, {{from_email}},
+//    {{subject}}, {{message}} → copy the Template ID below.
+// 4. Copy your Public Key from Account → API Keys.
+// Replace the placeholder strings with your real values:
+const EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";   // e.g. "service_abc123"
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";  // e.g. "template_xyz789"
+const EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";   // e.g. "abcDEFghiJKL"
+// ────────────────────────────────────────────────────────────────────────────
+
 
 const CONTACT_INFO = [
   { icon: <IconPin />,   label: "Address",       value: "123 Commerce Street, New York, NY 10001" },
@@ -45,11 +57,46 @@ export default function Contact() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const [sending, setSending] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) { setErrors(validationErrors); return; }
-    setSubmitted(true);
+
+    setSending(true);
+    try {
+      // Dynamically load EmailJS SDK (avoids installing npm package)
+      if (!window.emailjs) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+        window.emailjs.init(EMAILJS_PUBLIC_KEY);
+      }
+
+      await window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        from_name:  form.name,
+        from_email: form.email,
+        subject:    form.subject,
+        message:    form.message,
+      });
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("EmailJS error:", err);
+      // If EmailJS is not configured yet, still show success for dev/demo
+      if (EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID") {
+        setSubmitted(true); // demo mode
+      } else {
+        setErrors({ submit: "Failed to send message. Please try again or email us directly." });
+      }
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -149,7 +196,10 @@ export default function Contact() {
                 {errors.message && <p className="contact-error-text">{errors.message}</p>}
               </div>
 
-              <button type="submit" className="contact-submit-btn">Send Message</button>
+              {errors.submit && <p className="contact-error-text" style={{ marginBottom: "12px" }}>{errors.submit}</p>}
+              <button type="submit" className="contact-submit-btn" disabled={sending}>
+                {sending ? "Sending…" : "Send Message"}
+              </button>
             </form>
           )}
         </div>

@@ -1,53 +1,76 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { useToast } from "./Toast";
 import "../styles/Dashboard.css";
 
-import { IconTrendUp, IconRevenue, IconOrders, IconBox, IconCustomers, IconSearch, IconExternalLink } from "./Icons";
+import { IconTrendUp, IconRevenue, IconOrders, IconBox, IconCustomers, IconSearch, IconExternalLink, IconChart } from "./Icons";
 import API_BASE from "../Config";
 
-const CHART_MONTHS = ["Nov", "Dec", "Jan", "Feb", "Mar", "Apr"];
-const CHART_SERIES = {
-  Shopee:        [82000, 95000, 78000, 101000, 118200, 124000],
-  Lazada:        [61000, 74000, 58000,  80000,  96700, 103000],
-  "TikTok Shop": [38000, 52000, 45000,  56000,  69600,  78000],
-};
 const PLATFORM_LINE_COLORS = {
   Shopee: "#ee4d2d", Lazada: "#0f146b", "TikTok Shop": "#888",
 };
-const STATUS_COLORS = {
-  Delivered:  { bg: "#f0fff4", color: "#276749" },
-  Shipped:    { bg: "#ebf8ff", color: "#2b6cb0" },
-  Pending:    { bg: "#fefce8", color: "#854d0e" },
-  Processing: { bg: "#faf5ff", color: "#6b21a8" },
-  Cancelled:  { bg: "#fff5f5", color: "#9b2c2c" },
-};
-const PLATFORM_BADGE = {
-  Shopee:        { bg: "#fff1ee", color: "#ee4d2d" },
-  Lazada:        { bg: "#eef0ff", color: "#0f146b" },
-  "TikTok Shop": { bg: "#f3f3f3", color: "#555" },
-};
-const PLATFORM_FILTERS = ["All", "Shopee", "Lazada", "TikTok Shop"];
-const TAB_COLORS = { All: "#e85d04", Shopee: "#ee4d2d", Lazada: "#0f146b", "TikTok Shop": "#555" };
+const PLATFORM_TAB_COLOR_BASE = { All: "#e85d04", Shopee: "#ee4d2d", Lazada: "#0f146b", "TikTok Shop": "#555" };
 const ORDERS_PER_PAGE = 5;
 
-function RevenueChart({ activePlatform }) {
+function getPlatformColor(name) {
+  return PLATFORM_LINE_COLORS[name] || "#888";
+}
+function getPlatformTabColor(name) {
+  return PLATFORM_TAB_COLOR_BASE[name] || "#e85d04";
+}
+
+// Returns the last N months as short labels (e.g. "Jan", "Feb")
+function getLastNMonths(n) {
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const result = [];
+  const now = new Date();
+  for (let i = n - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    result.push({ label: months[d.getMonth()], year: d.getFullYear(), month: d.getMonth() });
+  }
+  return result;
+}
+
+// Build chart series from real order data
+function buildChartSeries(orders, platformNames) {
+  const monthBuckets = getLastNMonths(6);
+  const series = {};
+  platformNames.forEach(p => {
+    series[p] = monthBuckets.map(({ year, month }) => {
+      return orders
+        .filter(o => {
+          if (o.platform !== p) return false;
+          const d = new Date(o.date);
+          return d.getFullYear() === year && d.getMonth() === month;
+        })
+        .reduce((sum, o) => sum + Number(o.amount || 0), 0);
+    });
+  });
+  return { series, labels: monthBuckets.map(m => m.label) };
+}
+
+function RevenueChart({ activePlatform, chartData }) {
   const [tooltip, setTooltip] = useState(null);
   const W = 680, H = 200;
   const pad = { top: 16, right: 16, bottom: 34, left: 58 };
   const cW = W - pad.left - pad.right;
   const cH = H - pad.top - pad.bottom;
 
+  const { series, labels } = chartData;
   const showAll   = activePlatform === "All";
-  const platforms = showAll ? ["Shopee", "Lazada", "TikTok Shop"] : [activePlatform];
+  const platforms = showAll ? Object.keys(series) : [activePlatform];
 
   let maxVal = 0;
-  platforms.forEach((pl) => { const m = Math.max(...CHART_SERIES[pl]); if (m > maxVal) maxVal = m; });
-  maxVal = Math.ceil(maxVal / 50000) * 50000;
+  platforms.forEach((pl) => {
+    if (!series[pl]) return;
+    const m = Math.max(...series[pl]);
+    if (m > maxVal) maxVal = m;
+  });
+  maxVal = Math.ceil((maxVal || 1) / 50000) * 50000 || 50000;
 
-  const toX = (i) => pad.left + (i / (CHART_MONTHS.length - 1)) * cW;
+  const toX = (i) => pad.left + (i / Math.max(labels.length - 1, 1)) * cW;
   const toY = (v) => pad.top + cH - (v / maxVal) * cH;
 
   const smooth = (pts) => {
@@ -70,11 +93,13 @@ function RevenueChart({ activePlatform }) {
   const yTicks = [0, 0.25, 0.5, 0.75, 1];
   const fmtK   = (v) => v >= 1000 ? `₱${(v / 1000).toFixed(0)}k` : `₱${v}`;
 
-  const seriesData = platforms.map((pl) => ({
-    name: pl, color: PLATFORM_LINE_COLORS[pl],
-    pts: CHART_SERIES[pl].map((v, i) => [toX(i), toY(v)]),
-    values: CHART_SERIES[pl],
-  }));
+  const seriesData = platforms
+    .filter(pl => series[pl])
+    .map((pl) => ({
+      name: pl, color: PLATFORM_LINE_COLORS[pl] || "#888",
+      pts: series[pl].map((v, i) => [toX(i), toY(v)]),
+      values: series[pl],
+    }));
 
   return (
     <div className="revenue-chart">
@@ -112,14 +137,14 @@ function RevenueChart({ activePlatform }) {
             <g key={`d-${s.name}-${i}`}>
               <circle cx={x} cy={y} r="3.5" fill={s.color} stroke="white" strokeWidth="2"/>
               <circle cx={x} cy={y} r="14" fill="transparent"
-                onMouseEnter={() => setTooltip({ x, y, name: s.name, val: s.values[i], month: CHART_MONTHS[i] })}
+                onMouseEnter={() => setTooltip({ x, y, name: s.name, val: s.values[i], month: labels[i] })}
                 onMouseLeave={() => setTooltip(null)}
                 style={{ cursor: "crosshair" }} />
             </g>
           ))
         )}
-        {CHART_MONTHS.map((m, i) => (
-          <text key={m} x={toX(i)} y={H - 6} fontSize="11" fill="#aaa" textAnchor="middle">{m}</text>
+        {labels.map((m, i) => (
+          <text key={m + i} x={toX(i)} y={H - 6} fontSize="11" fill="#aaa" textAnchor="middle">{m}</text>
         ))}
         {tooltip && (
           <g>
@@ -148,6 +173,84 @@ function RevenueChart({ activePlatform }) {
   );
 }
 
+// Compute month-over-month growth % for a platform
+function computeGrowth(orders, platformName) {
+  const now = new Date();
+  const thisMonth = orders.filter(o => {
+    if (o.platform !== platformName) return false;
+    const d = new Date(o.date);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).reduce((sum, o) => sum + Number(o.amount || 0), 0);
+
+  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastMonth = orders.filter(o => {
+    if (o.platform !== platformName) return false;
+    const d = new Date(o.date);
+    return d.getFullYear() === lastMonthDate.getFullYear() && d.getMonth() === lastMonthDate.getMonth();
+  }).reduce((sum, o) => sum + Number(o.amount || 0), 0);
+
+  if (lastMonth === 0) return thisMonth > 0 ? "+100%" : "N/A";
+  const pct = ((thisMonth - lastMonth) / lastMonth) * 100;
+  return (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
+}
+
+// Compute overall revenue growth vs last month
+function computeOverallGrowth(orders) {
+  const now = new Date();
+  const thisMonth = orders.filter(o => {
+    const d = new Date(o.date);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).reduce((sum, o) => sum + Number(o.amount || 0), 0);
+
+  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastMonth = orders.filter(o => {
+    const d = new Date(o.date);
+    return d.getFullYear() === lastMonthDate.getFullYear() && d.getMonth() === lastMonthDate.getMonth();
+  }).reduce((sum, o) => sum + Number(o.amount || 0), 0);
+
+  if (lastMonth === 0) return thisMonth > 0 ? "+100%" : null;
+  const pct = ((thisMonth - lastMonth) / lastMonth) * 100;
+  return (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
+}
+
+// Compute order count growth vs last month
+function computeOrderGrowth(orders) {
+  const now = new Date();
+  const thisMonth = orders.filter(o => {
+    const d = new Date(o.date);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).length;
+
+  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastMonth = orders.filter(o => {
+    const d = new Date(o.date);
+    return d.getFullYear() === lastMonthDate.getFullYear() && d.getMonth() === lastMonthDate.getMonth();
+  }).length;
+
+  if (lastMonth === 0) return thisMonth > 0 ? "+100%" : null;
+  const pct = ((thisMonth - lastMonth) / lastMonth) * 100;
+  return (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
+}
+
+// Compute unique customer growth vs last month
+function computeCustomerGrowth(orders) {
+  const now = new Date();
+  const thisMonthCustomers = new Set(orders.filter(o => {
+    const d = new Date(o.date);
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }).map(o => o.customer)).size;
+
+  const lastMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastMonthCustomers = new Set(orders.filter(o => {
+    const d = new Date(o.date);
+    return d.getFullYear() === lastMonthDate.getFullYear() && d.getMonth() === lastMonthDate.getMonth();
+  }).map(o => o.customer)).size;
+
+  if (lastMonthCustomers === 0) return thisMonthCustomers > 0 ? "+100%" : null;
+  const pct = ((thisMonthCustomers - lastMonthCustomers) / lastMonthCustomers) * 100;
+  return (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const toast    = useToast();
@@ -158,29 +261,55 @@ export default function Dashboard() {
   const [currentPage, setCurrentPage]   = useState(1);
   const [greeting, setGreeting]         = useState("");
   const [chartPlatform, setChartPlatform] = useState("All");
-  const [orders, setOrders]     = useState([]);
-  const [products, setProducts] = useState([]);
+  const [orders, setOrders]         = useState([]);
+  const [products, setProducts]     = useState([]);
+  const [platforms, setPlatforms]   = useState([]);
+  const [showConnectModal, setShowConnectModal] = useState(false);
+  const [connectStep, setConnectStep] = useState(1);
+  const [connectPlatform, setConnectPlatform] = useState("Shopee");
+
+  // Sorting state
+  const [sortField, setSortField]       = useState("date");
+  const [sortDir, setSortDir]           = useState("desc");
+  // Amount filter
+  const [amountOp, setAmountOp]         = useState("any");   // "any" | "lt" | "gt" | "eq"
+  const [amountVal, setAmountVal]       = useState("");
+  // Date filter
+  const [dateFrom, setDateFrom]         = useState("");
+  const [dateTo, setDateTo]             = useState("");
+  // Filter panel open/close
+  const [showFilters, setShowFilters]   = useState(false);
+
+  const currentUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+  const userId = currentUser.id;
 
   useEffect(() => {
-    fetch(`${API_BASE}/api/orders`)
+    const params = userId ? `?userId=${userId}` : "";
+    fetch(`${API_BASE}/api/orders${params}`)
       .then(res => res.json()).then(data => setOrders(data))
       .catch(err => console.error("Failed to fetch orders:", err));
-    fetch(`${API_BASE}/api/products`)
+    fetch(`${API_BASE}/api/products${params}`)
       .then(res => res.json()).then(data => setProducts(data))
       .catch(err => console.error("Failed to fetch products:", err));
-  }, []);
+    fetch(`${API_BASE}/api/platforms${params}`)
+      .then(res => res.json()).then(data => setPlatforms(data))
+      .catch(err => console.error("Failed to fetch platforms:", err));
+  }, [userId]);
 
   const totalRevenue  = orders.reduce((sum, o) => sum + Number(o.amount || 0), 0);
   const totalOrders   = orders.length;
   const totalProducts = products.length;
 
-  const shopeeOrders  = orders.filter(o => o.platform === "Shopee");
-  const lazadaOrders  = orders.filter(o => o.platform === "Lazada");
-  const tiktokOrders  = orders.filter(o => o.platform === "TikTok Shop");
+  // Chart data derived from real orders + real platforms from API
+  const chartData = useMemo(() => {
+    const platformNames = platforms.map(p => p.name);
+    return buildChartSeries(orders, platformNames);
+  }, [orders, platforms]);
 
-  const shopeeRevenue = shopeeOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0);
-  const lazadaRevenue = lazadaOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0);
-  const tiktokRevenue = tiktokOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0);
+  // Growth metrics derived from real orders
+  const revenueGrowth  = useMemo(() => computeOverallGrowth(orders), [orders]);
+  const orderGrowth    = useMemo(() => computeOrderGrowth(orders), [orders]);
+  const customerGrowth = useMemo(() => computeCustomerGrowth(orders), [orders]);
 
   const getTopProduct = (platformOrders) => {
     if (!platformOrders.length) return "N/A";
@@ -189,17 +318,27 @@ export default function Dashboard() {
     return Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0];
   };
 
-  const SUMMARY_CARDS = [
-    { label: "Total Revenue",   value: `₱${totalRevenue.toLocaleString()}`,  change: "+12.4%", icon: <IconRevenue />,   color: "#e85d04" },
-    { label: "Total Orders",    value: totalOrders.toLocaleString(),          change: "+8.1%",  icon: <IconOrders />,    color: "#2563eb" },
-    { label: "Products Sold",   value: totalProducts.toLocaleString(),        change: "+5.3%",  icon: <IconBox />,       color: "#16a34a" },
-    { label: "Total Customers", value: [...new Set(orders.map(o => o.customer))].length.toLocaleString(), change: "+3.7%", icon: <IconCustomers />, color: "#9333ea" },
-  ];
+  // Fully dynamic — only shows platforms that exist in the API
+  const PLATFORM_DATA = useMemo(() => platforms.map(p => {
+    const platOrders = orders.filter(o => o.platform === p.name);
+    const revenue    = platOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0);
+    return {
+      name:       p.name,
+      color:      getPlatformColor(p.name),
+      orders:     platOrders.length,
+      revenue:    `₱${revenue.toLocaleString()}`,
+      growth:     computeGrowth(orders, p.name),
+      topProduct: getTopProduct(platOrders),
+      status:     p.status || "Active",
+    };
+  }), [platforms, orders]);
 
-  const PLATFORM_DATA = [
-    { name: "Shopee",      color: "#ee4d2d", orders: shopeeOrders.length, revenue: `₱${shopeeRevenue.toLocaleString()}`, growth: "+14.2%", topProduct: getTopProduct(shopeeOrders),  status: "Active" },
-    { name: "Lazada",      color: "#0f146b", orders: lazadaOrders.length, revenue: `₱${lazadaRevenue.toLocaleString()}`, growth: "+9.8%",  topProduct: getTopProduct(lazadaOrders),  status: "Active" },
-    { name: "TikTok Shop", color: "#555555", orders: tiktokOrders.length, revenue: `₱${tiktokRevenue.toLocaleString()}`, growth: "+18.5%", topProduct: getTopProduct(tiktokOrders),  status: "Active" },
+  const SUMMARY_CARDS = [
+    { label: "Total Revenue",   value: `₱${totalRevenue.toLocaleString()}`, change: revenueGrowth,  icon: <IconRevenue />,   color: "#e85d04" },
+    { label: "Total Orders",    value: totalOrders.toLocaleString(),         change: orderGrowth,    icon: <IconOrders />,    color: "#2563eb" },
+    { label: "Products Sold",   value: totalProducts.toLocaleString(),       change: null,           icon: <IconBox />,       color: "#16a34a" },
+    { label: "Total Customers", value: [...new Set(orders.map(o => o.customer))].length.toLocaleString(), change: customerGrowth, icon: <IconCustomers />, color: "#9333ea" },
+    { label: "Active Platforms",value: platforms.length.toLocaleString(),    change: null,           icon: <IconChart />,     color: "#0891b2" },
   ];
 
   useEffect(() => {
@@ -207,31 +346,73 @@ export default function Dashboard() {
     setGreeting(h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening");
   }, []);
 
-  useEffect(() => { setCurrentPage(1); }, [activePlatformFilter, filterStatus, searchQuery]);
+  useEffect(() => { setCurrentPage(1); }, [activePlatformFilter, filterStatus, searchQuery, sortField, sortDir, amountOp, amountVal, dateFrom, dateTo]);
 
   const visiblePlatforms = activePlatformFilter === "All"
     ? PLATFORM_DATA
     : PLATFORM_DATA.filter((p) => p.name === activePlatformFilter);
 
-  const filteredOrders = orders.filter((order) => {
-    const matchPlatform = activePlatformFilter === "All" || order.platform === activePlatformFilter;
-    const matchStatus   = filterStatus === "All" || order.status === filterStatus;
-    const q = searchQuery.toLowerCase();
-    const matchSearch = !q ||
-      order.customer.toLowerCase().includes(q) ||
-      String(order.id).includes(q) ||
-      order.product.toLowerCase().includes(q) ||
-      order.platform.toLowerCase().includes(q) ||
-      order.status.toLowerCase().includes(q) ||
-      String(order.amount).includes(q);
-    return matchPlatform && matchStatus && matchSearch;
-  });
+  const filteredOrders = useMemo(() => {
+    const amt = parseFloat(amountVal);
+    return orders
+      .filter((order) => {
+        const matchPlatform = activePlatformFilter === "All" || order.platform === activePlatformFilter;
+        const matchStatus   = filterStatus === "All" || order.status === filterStatus;
+        const q = searchQuery.toLowerCase();
+        const matchSearch = !q ||
+          order.customer.toLowerCase().includes(q) ||
+          String(order.id).includes(q) ||
+          order.product.toLowerCase().includes(q) ||
+          order.platform.toLowerCase().includes(q) ||
+          order.status.toLowerCase().includes(q) ||
+          String(order.amount).includes(q);
+        const orderAmt = Number(order.amount || 0);
+        const matchAmount =
+          amountOp === "any" ? true :
+          amountOp === "lt"  ? (!isNaN(amt) && orderAmt <  amt) :
+          amountOp === "gt"  ? (!isNaN(amt) && orderAmt >  amt) :
+          amountOp === "eq"  ? (!isNaN(amt) && orderAmt === amt) : true;
+        const matchDateFrom = !dateFrom || new Date(order.date) >= new Date(dateFrom);
+        const matchDateTo   = !dateTo   || new Date(order.date) <= new Date(dateTo);
+        return matchPlatform && matchStatus && matchSearch && matchAmount && matchDateFrom && matchDateTo;
+      })
+      .sort((a, b) => {
+        let av, bv;
+        if (sortField === "date")     { av = new Date(a.date);     bv = new Date(b.date); }
+        else if (sortField === "amount")   { av = Number(a.amount);    bv = Number(b.amount); }
+        else if (sortField === "customer") { av = a.customer.toLowerCase(); bv = b.customer.toLowerCase(); }
+        else if (sortField === "platform") { av = a.platform.toLowerCase(); bv = b.platform.toLowerCase(); }
+        else if (sortField === "product")  { av = a.product.toLowerCase();  bv = b.product.toLowerCase(); }
+        else if (sortField === "status")   { av = a.status.toLowerCase();   bv = b.status.toLowerCase(); }
+        else { av = a.id; bv = b.id; }
+        if (av < bv) return sortDir === "asc" ? -1 :  1;
+        if (av > bv) return sortDir === "asc" ?  1 : -1;
+        return 0;
+      });
+  }, [orders, activePlatformFilter, filterStatus, searchQuery, amountOp, amountVal, dateFrom, dateTo, sortField, sortDir]);
 
   const totalPages      = Math.ceil(filteredOrders.length / ORDERS_PER_PAGE);
   const paginatedOrders = filteredOrders.slice(
     (currentPage - 1) * ORDERS_PER_PAGE,
     currentPage * ORDERS_PER_PAGE
   );
+
+  const handleSort = (field) => {
+    if (sortField === field) setSortDir(d => d === "asc" ? "desc" : "asc");
+    else { setSortField(field); setSortDir("asc"); }
+  };
+
+  const SortIcon = ({ field }) => {
+    if (sortField !== field) return <span style={{ opacity: 0.3, marginLeft: 4 }}>↕</span>;
+    return <span style={{ marginLeft: 4, color: "#e85d04" }}>{sortDir === "asc" ? "↑" : "↓"}</span>;
+  };
+
+  const activeFilterCount = [
+    filterStatus !== "All",
+    amountOp !== "any" && amountVal !== "",
+    dateFrom !== "",
+    dateTo !== "",
+  ].filter(Boolean).length;
 
   const handleProductLink = (productName) => {
     navigate(`/products?search=${encodeURIComponent(productName)}`);
@@ -250,7 +431,7 @@ export default function Dashboard() {
       <div className="dashboard-main">
 
         <div className="dashboard-greeting">
-          <h2 className="dashboard-greeting__title">{greeting}, Admin 👋</h2>
+          <h2 className="dashboard-greeting__title">{greeting}, {currentUser.username || "there"} 👋</h2>
           <p className="dashboard-greeting__sub">Here's what's happening across your platforms today.</p>
         </div>
 
@@ -265,7 +446,13 @@ export default function Dashboard() {
                 </div>
               </div>
               <div className="dashboard-summary-card__value">{card.value}</div>
-              <div className="dashboard-summary-card__change"><IconTrendUp />{card.change} this month</div>
+              {card.change ? (
+                <div className="dashboard-summary-card__change"><IconTrendUp />{card.change} vs last month</div>
+              ) : (
+                <div className="dashboard-summary-card__change" style={{ opacity: 0.5 }}>
+                  {card.label === "Active Platforms" ? "Connected platforms" : "All time"}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -274,7 +461,7 @@ export default function Dashboard() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px", flexWrap: "wrap", gap: "10px" }}>
             <p className="dashboard-section-title" style={{ margin: 0 }}>Revenue Trend (6 months)</p>
             <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-              {["All", "Shopee", "Lazada", "TikTok Shop"].map((p) => (
+              {["All", ...platforms.map(p => p.name)].map((p) => (
                 <button key={p}
                   className={`dashboard-chart-tab${chartPlatform === p ? " active" : ""}`}
                   style={{ padding: "5px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: "600", cursor: "pointer", border: "1px solid var(--border-color,#ddd)", background: chartPlatform === p ? "#e85d04" : "var(--card-bg,#fff)", color: chartPlatform === p ? "white" : "var(--text-muted,#555)" }}
@@ -284,19 +471,24 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
-          <RevenueChart activePlatform={chartPlatform} />
+          <RevenueChart activePlatform={chartPlatform} chartData={chartData} />
         </div>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px", flexWrap: "wrap", gap: "10px" }}>
           <p className="dashboard-section-title" style={{ margin: 0 }}>Platform Breakdown</p>
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {PLATFORM_FILTERS.map((pf) => (
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "center" }}>
+            {["All", ...platforms.map(p => p.name)].map((pf) => (
               <button key={pf}
-                style={{ padding: "6px 16px", borderRadius: "20px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: `2px solid ${activePlatformFilter === pf ? TAB_COLORS[pf] : "var(--border-color,#ddd)"}`, background: activePlatformFilter === pf ? TAB_COLORS[pf] : "var(--card-bg,#fff)", color: activePlatformFilter === pf ? "white" : "var(--text-muted,#555)" }}
+                style={{ padding: "6px 16px", borderRadius: "20px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: `2px solid ${activePlatformFilter === pf ? getPlatformTabColor(pf) : "var(--border-color,#ddd)"}`, background: activePlatformFilter === pf ? getPlatformTabColor(pf) : "var(--card-bg,#fff)", color: activePlatformFilter === pf ? "white" : "var(--text-muted,#555)" }}
                 onClick={() => setActivePlatformFilter(pf)}>
                 {pf}
               </button>
             ))}
+            <button
+              onClick={() => { setShowConnectModal(true); setConnectStep(1); }}
+              style={{ padding: "6px 16px", borderRadius: "20px", fontSize: "13px", fontWeight: "600", cursor: "pointer", border: "2px solid #e85d04", background: "#e85d04", color: "white" }}>
+              + Connect Platform
+            </button>
           </div>
         </div>
         <div className="dashboard-platform-grid" style={{ gridTemplateColumns: visiblePlatforms.length === 1 ? "minmax(0,400px)" : "repeat(3,1fr)" }}>
@@ -314,7 +506,10 @@ export default function Dashboard() {
                   {p.topProduct}&nbsp;<IconExternalLink />
                 </button>
               </div>
-              <div className="dashboard-platform-card__growth"><IconTrendUp />{p.growth} vs last month</div>
+              <div className="dashboard-platform-card__growth">
+                <IconTrendUp />
+                {p.growth !== "N/A" ? `${p.growth} vs last month` : "No prior month data"}
+              </div>
             </div>
           ))}
         </div>
@@ -329,21 +524,108 @@ export default function Dashboard() {
                 <input className="dashboard-order-search" type="text" placeholder="Search orders…"
                   value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
               </div>
-              <select className="dashboard-filter-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-                <option value="All">All Status</option>
-                {["Delivered", "Shipped", "Pending", "Processing", "Cancelled"].map((st) => (
-                  <option key={st} value={st}>{st}</option>
-                ))}
-              </select>
+              <button
+                onClick={() => setShowFilters(f => !f)}
+                style={{ display: "flex", alignItems: "center", gap: "6px", padding: "7px 14px", borderRadius: "6px", border: `1px solid ${showFilters || activeFilterCount > 0 ? "#e85d04" : "var(--border-color,#ddd)"}`, background: showFilters || activeFilterCount > 0 ? "#fff5f0" : "var(--section-alt-bg,#fafafa)", color: showFilters || activeFilterCount > 0 ? "#e85d04" : "var(--text-muted,#555)", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>
+                ⚙ Filters {activeFilterCount > 0 && <span style={{ background: "#e85d04", color: "#fff", borderRadius: "10px", padding: "1px 7px", fontSize: "11px" }}>{activeFilterCount}</span>}
+              </button>
             </div>
           </div>
+
+          {/* Expanded filter panel */}
+          {showFilters && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", padding: "14px 0 18px", borderBottom: "1px solid var(--border-color,#eee)", marginBottom: "4px", alignItems: "flex-end" }}>
+
+              {/* Status */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-muted,#888)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Status</label>
+                <select className="dashboard-filter-select" value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+                  <option value="All">All</option>
+                  {["Delivered", "Shipped", "Pending", "Processing", "Cancelled"].map(st => (
+                    <option key={st} value={st}>{st}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Platform */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-muted,#888)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Platform</label>
+                <select className="dashboard-filter-select" value={activePlatformFilter} onChange={(e) => setActivePlatformFilter(e.target.value)}>
+                  <option value="All">All</option>
+                  {platforms.map(p => <option key={p.name} value={p.name}>{p.name}</option>)}
+                </select>
+              </div>
+
+              {/* Amount */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-muted,#888)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Amount</label>
+                <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                  <select className="dashboard-filter-select" value={amountOp} onChange={(e) => setAmountOp(e.target.value)} style={{ width: "110px" }}>
+                    <option value="any">Any</option>
+                    <option value="lt">Less than</option>
+                    <option value="gt">Greater than</option>
+                    <option value="eq">Equal to</option>
+                  </select>
+                  {amountOp !== "any" && (
+                    <input type="number" min="0" placeholder="₱ amount"
+                      value={amountVal} onChange={(e) => setAmountVal(e.target.value)}
+                      style={{ width: "110px", padding: "7px 10px", borderRadius: "6px", border: "1px solid var(--border-color,#ddd)", background: "var(--section-alt-bg,#fafafa)", color: "var(--text-primary,#222)", fontSize: "13px" }} />
+                  )}
+                </div>
+              </div>
+
+              {/* Date range */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-muted,#888)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Date Range</label>
+                <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+                  <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
+                    style={{ padding: "7px 10px", borderRadius: "6px", border: "1px solid var(--border-color,#ddd)", background: "var(--section-alt-bg,#fafafa)", color: "var(--text-primary,#222)", fontSize: "13px" }} />
+                  <span style={{ color: "var(--text-muted,#aaa)", fontSize: "12px" }}>to</span>
+                  <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)}
+                    style={{ padding: "7px 10px", borderRadius: "6px", border: "1px solid var(--border-color,#ddd)", background: "var(--section-alt-bg,#fafafa)", color: "var(--text-primary,#222)", fontSize: "13px" }} />
+                </div>
+              </div>
+
+              {/* Sort by */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+                <label style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-muted,#888)", textTransform: "uppercase", letterSpacing: "0.5px" }}>Sort By</label>
+                <div style={{ display: "flex", gap: "6px" }}>
+                  <select className="dashboard-filter-select" value={sortField} onChange={(e) => { setSortField(e.target.value); }} style={{ width: "130px" }}>
+                    <option value="date">Date</option>
+                    <option value="customer">Customer</option>
+                    <option value="platform">Platform</option>
+                    <option value="product">Product</option>
+                    <option value="amount">Amount</option>
+                    <option value="status">Status</option>
+                  </select>
+                  <button onClick={() => setSortDir(d => d === "asc" ? "desc" : "asc")}
+                    title={sortDir === "asc" ? "Ascending" : "Descending"}
+                    style={{ padding: "7px 12px", borderRadius: "6px", border: "1px solid var(--border-color,#ddd)", background: "var(--section-alt-bg,#fafafa)", color: "#e85d04", fontWeight: "700", fontSize: "14px", cursor: "pointer" }}>
+                    {sortDir === "asc" ? "↑" : "↓"}
+                  </button>
+                </div>
+              </div>
+
+              {/* Clear filters */}
+              {activeFilterCount > 0 && (
+                <button onClick={() => { setFilterStatus("All"); setActivePlatformFilter("All"); setAmountOp("any"); setAmountVal(""); setDateFrom(""); setDateTo(""); }}
+                  style={{ alignSelf: "flex-end", padding: "7px 14px", borderRadius: "6px", border: "1px solid #e85d04", background: "none", color: "#e85d04", fontWeight: "600", fontSize: "13px", cursor: "pointer" }}>
+                  Clear filters
+                </button>
+              )}
+            </div>
+          )}
 
           <table className="dashboard-table">
             <thead>
               <tr>
-                {["Order ID", "Customer", "Platform", "Product", "Amount", "Status", "Date"].map((h) => (
-                  <th key={h}>{h}</th>
-                ))}
+                <th>Order ID</th>
+                <th onClick={() => handleSort("customer")} style={{ cursor: "pointer", userSelect: "none" }}>Customer <SortIcon field="customer" /></th>
+                <th onClick={() => handleSort("platform")} style={{ cursor: "pointer", userSelect: "none" }}>Platform <SortIcon field="platform" /></th>
+                <th onClick={() => handleSort("product")}  style={{ cursor: "pointer", userSelect: "none" }}>Product  <SortIcon field="product"  /></th>
+                <th onClick={() => handleSort("amount")}   style={{ cursor: "pointer", userSelect: "none" }}>Amount   <SortIcon field="amount"   /></th>
+                <th onClick={() => handleSort("status")}   style={{ cursor: "pointer", userSelect: "none" }}>Status   <SortIcon field="status"   /></th>
+                <th onClick={() => handleSort("date")}     style={{ cursor: "pointer", userSelect: "none" }}>Date     <SortIcon field="date"     /></th>
               </tr>
             </thead>
             <tbody>
@@ -383,6 +665,91 @@ export default function Dashboard() {
 
       </div>
       <Footer />
+
+      {/* ── Connect Platform Modal (placeholder) ── */}
+      {showConnectModal && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
+          <div style={{ background: "var(--card-bg,#fff)", borderRadius: "14px", padding: "32px", maxWidth: "460px", width: "90%", boxShadow: "0 12px 40px rgba(0,0,0,0.22)" }}>
+
+            {/* Step indicator */}
+            <div style={{ display: "flex", gap: "8px", marginBottom: "24px", alignItems: "center" }}>
+              {[1,2,3].map(s => (
+                <div key={s} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                  <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: connectStep >= s ? "#e85d04" : "var(--border-color,#ddd)", color: connectStep >= s ? "white" : "var(--text-muted,#999)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", fontWeight: "700" }}>{s}</div>
+                  {s < 3 && <div style={{ width: "32px", height: "2px", background: connectStep > s ? "#e85d04" : "var(--border-color,#ddd)" }} />}
+                </div>
+              ))}
+              <span style={{ fontSize: "12px", color: "var(--text-muted,#888)", marginLeft: "8px" }}>
+                {connectStep === 1 ? "Choose Platform" : connectStep === 2 ? "Authorize Access" : "Done!"}
+              </span>
+            </div>
+
+            {connectStep === 1 && (<>
+              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "var(--text-primary,#1a1a1a)", marginBottom: "8px" }}>Connect Your Store</h3>
+              <p style={{ fontSize: "14px", color: "var(--text-muted,#777)", marginBottom: "20px" }}>Select a platform to link to your UniSell dashboard.</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
+                {[
+                  { name: "Shopee",      icon: "🛒", color: "#ee4d2d", desc: "Connect via Shopee Open Platform API" },
+                  { name: "Lazada",      icon: "🏪", color: "#0f146b", desc: "Connect via Lazada Open Platform API" },
+                  { name: "TikTok Shop", icon: "🎵", color: "#555",    desc: "Connect via TikTok Shop Seller API" },
+                ].map(pl => (
+                  <div key={pl.name}
+                    onClick={() => setConnectPlatform(pl.name)}
+                    style={{ display: "flex", alignItems: "center", gap: "14px", padding: "14px 16px", borderRadius: "10px", border: `2px solid ${connectPlatform === pl.name ? pl.color : "var(--border-color,#e0e0e0)"}`, cursor: "pointer", background: connectPlatform === pl.name ? pl.color + "10" : "var(--section-alt-bg,#fafafa)", transition: "all 0.15s" }}>
+                    <span style={{ fontSize: "24px" }}>{pl.icon}</span>
+                    <div>
+                      <p style={{ fontWeight: "700", color: "var(--text-primary,#1a1a1a)", fontSize: "14px", marginBottom: "2px" }}>{pl.name}</p>
+                      <p style={{ fontSize: "12px", color: "var(--text-muted,#888)" }}>{pl.desc}</p>
+                    </div>
+                    {connectPlatform === pl.name && <span style={{ marginLeft: "auto", fontSize: "18px" }}>✅</span>}
+                  </div>
+                ))}
+              </div>
+            </>)}
+
+            {connectStep === 2 && (<>
+              <h3 style={{ fontSize: "18px", fontWeight: "700", color: "var(--text-primary,#1a1a1a)", marginBottom: "8px" }}>Authorize {connectPlatform}</h3>
+              <p style={{ fontSize: "14px", color: "var(--text-muted,#777)", marginBottom: "20px" }}>You'll be redirected to {connectPlatform} to grant UniSell access to your store data.</p>
+              <div style={{ background: "var(--section-alt-bg,#fafafa)", border: "1px solid var(--border-color,#e0e0e0)", borderRadius: "10px", padding: "16px", marginBottom: "20px" }}>
+                <p style={{ fontSize: "13px", fontWeight: "700", color: "var(--text-primary,#1a1a1a)", marginBottom: "10px" }}>UniSell will request access to:</p>
+                {["Read your orders and order history", "View your product listings", "Access your store revenue data"].map(item => (
+                  <div key={item} style={{ display: "flex", gap: "8px", alignItems: "flex-start", marginBottom: "8px" }}>
+                    <span style={{ color: "#16a34a", fontWeight: "700", marginTop: "1px" }}>✓</span>
+                    <span style={{ fontSize: "13px", color: "var(--text-muted,#555)" }}>{item}</span>
+                  </div>
+                ))}
+                <div style={{ marginTop: "12px", padding: "10px", background: "#fefce8", border: "1px solid #fde047", borderRadius: "6px", fontSize: "12px", color: "#854d0e" }}>
+                  🚧 <strong>Demo mode:</strong> This is a placeholder for the actual OAuth flow. Full integration coming soon.
+                </div>
+              </div>
+            </>)}
+
+            {connectStep === 3 && (<>
+              <div style={{ textAlign: "center", padding: "16px 0" }}>
+                <div style={{ fontSize: "48px", marginBottom: "16px" }}>🎉</div>
+                <h3 style={{ fontSize: "20px", fontWeight: "800", color: "var(--text-primary,#1a1a1a)", marginBottom: "8px" }}>{connectPlatform} Connected!</h3>
+                <p style={{ fontSize: "14px", color: "var(--text-muted,#777)", marginBottom: "8px" }}>Your {connectPlatform} store has been linked to UniSell.</p>
+                <div style={{ background: "#fefce8", border: "1px solid #fde047", borderRadius: "8px", padding: "12px 16px", fontSize: "13px", color: "#854d0e", marginTop: "12px", marginBottom: "20px" }}>
+                  🚧 This is a demo placeholder — actual API sync is not yet implemented.
+                </div>
+              </div>
+            </>)}
+
+            <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+              <button onClick={() => { setShowConnectModal(false); setConnectStep(1); }}
+                style={{ padding: "10px 20px", borderRadius: "8px", border: "1px solid var(--border-color,#ddd)", background: "none", color: "var(--text-muted,#555)", fontWeight: "600", cursor: "pointer", fontSize: "14px" }}>
+                {connectStep === 3 ? "Close" : "Cancel"}
+              </button>
+              {connectStep < 3 && (
+                <button onClick={() => setConnectStep(s => s + 1)}
+                  style={{ padding: "10px 24px", borderRadius: "8px", border: "none", background: "#e85d04", color: "white", fontWeight: "700", cursor: "pointer", fontSize: "14px" }}>
+                  {connectStep === 1 ? "Next →" : "Authorize (Demo)"}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

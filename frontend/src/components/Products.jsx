@@ -19,12 +19,16 @@ export default function Products() {
   const [filterCategory, setFilterCategory] = useState("All");
   const [search, setSearch]                 = useState("");
 
+  const currentUser = JSON.parse(localStorage.getItem("loggedInUser") || "{}");
+  const userId = currentUser.id;
+
   useEffect(() => {
-    fetch(`${API_BASE}/api/products`)
+    const params = userId ? `?userId=${userId}` : "";
+    fetch(`${API_BASE}/api/products${params}`)
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error("Failed to fetch products:", err));
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -44,7 +48,18 @@ export default function Products() {
       return;
     }
 
-    const payload = { name: form.name, price: Number(form.price), category: form.category };
+    const payload = { name: form.name, price: Number(form.price), category: form.category, userId };
+
+    // Duplicate check: same name + same category (case-insensitive), ignoring self when editing
+    const duplicate = products.find(p =>
+      p.name.trim().toLowerCase() === form.name.trim().toLowerCase() &&
+      p.category === form.category &&
+      (editProduct === null || p.id !== editProduct.id)
+    );
+    if (duplicate) {
+      toast.error(`A product named "${form.name}" in "${form.category}" already exists.`);
+      return;
+    }
 
     if (editProduct !== null) {
       fetch(`${API_BASE}/api/products/${editProduct.id}`, {
